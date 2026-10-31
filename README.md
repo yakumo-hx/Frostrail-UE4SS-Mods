@@ -1,4 +1,4 @@
-# Frostrail Mods
+# Frostrail UE4SS Mods
 
 非官方，与游戏开发商无关。
 
@@ -10,11 +10,11 @@ Frostrail（Steam Demo）的 Mod 和 Mod 管理器。作者 Yuuka。
 
 ## 玩家
 
-从 [Releases](https://github.com/yakumo-hx/Frostrail-UE4SS-Mods/releases/latest) 下载 `FrostrailModManager.exe`、Core 和想用的功能 Mod ZIP。Windows 10 22H2 / Windows 11 可直接运行管理器，不需要开发工具。
+从 [Releases](https://github.com/yakumo-hx/Frostrail-UE4SS-Mods/releases/latest) 下载 `FrostrailModManager.exe`、Core 和想用的功能 Mod ZIP。管理器在 Windows 10 22H2 和 Windows 11 上双击就能用，不用另装东西。
 
-退出游戏后，把 ZIP 拖进管理器；也可以点“安装 → GitHub 链接…”，粘贴本仓库地址来选择安装。具体步骤见[安装与配置](docs/安装与配置.md)。
+退出游戏，把 ZIP 拖进管理器就装好了。也可以在管理器里点“安装 → GitHub 链接…”，粘贴本仓库地址，勾选要装的包。具体步骤见[安装与配置](docs/安装与配置.md)。
 
-当前版本面向 Frostrail Steam Demo。多人和完整存档兼容尚未验证；堆叠关闭、卸载或降低倍率前，请在仍启用时拆回目标上限并保存。
+多人游戏和存档兼容还没有完整测过，建议先备份存档。用堆叠 Mod 的话，关闭、卸载或调低倍率之前，先在 Mod 还开着的时候把超过原版上限的堆拆开并存档，否则多出来的数量会丢。
 
 ## Mod 作者
 
@@ -47,7 +47,7 @@ python scripts/package.py --only FrostrailQuickstash
 
 ## 许可
 
-自有源码使用 MIT 许可（[LICENSE](LICENSE)）。UE4SS 和 `mods/shared/Frostrail/json.lua` 保留各自的许可。游戏派生资源不在 MIT 范围内。
+自有源码使用 MIT 许可（[LICENSE](LICENSE)）。UE4SS 和 `mods/shared/Frostrail/json.lua` 保留各自的许可。辅助包里的高亮资源由游戏文件生成，不适用 MIT。
 
 ## English
 
