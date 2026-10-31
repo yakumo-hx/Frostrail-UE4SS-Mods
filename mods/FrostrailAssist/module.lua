@@ -118,16 +118,79 @@ function M:changed()
     end
     self:scan()
 end
+local composites="/Game/Frostrail/UI/Widgets/Composites/"
+local transfer_class=composites.."WBP_Composite_InventoryTransfer.WBP_Composite_InventoryTransfer_C"
+local inventory_class=composites.."WBP_Composite_Inventory+Status.WBP_Composite_Inventory+Status_C"
+local function container_window(C,widget,container)
+    return C.valid(widget) and widget:IsA(transfer_class)
+        and C.valid(widget.ContainerInventory) and C.same(widget.ContainerInventory.ContainerComponent,container)
+end
+local function session_windows(C,hud,pc,container)
+    local transfer,backpacks=nil,{}
+    if not C.valid(hud) then return transfer,backpacks end
+    hud.WidgetStack:ForEach(function(_,p)
+        local widget=p:get()
+        if C.valid(widget) and C.same(widget:GetOwningPlayer(),pc) then
+            if container_window(C,widget,container) then
+                transfer={widget=widget,name=widget:GetFullName()}
+            elseif widget:IsA(inventory_class) then
+                backpacks[#backpacks+1]={widget=widget,name=widget:GetFullName()}
+            end
+        end
+    end)
+    return transfer,backpacks
+end
+local function remove_session_window(C,hud,entry)
+    if not C.instance(entry.widget,entry.name) then return end
+    local index
+    hud.WidgetStack:ForEach(function(i,p)
+        if C.same(p:get(),entry.widget) then index=i-1; return true end
+    end)
+    -- Find the current native index, then mutate only after ForEach has ended.
+    if index~=nil then hud:RemoveWidgetFromStackByIndex(index) end
+end
 function M:take_all()
     local C=self.core
     if not C.pawn_valid() or not C.pawn:HasAuthority() then return end
-    local system=C.pawn.ItemSystemComponent
+    local pc,pawn=C.player,C.pawn
+    local pc_name,pawn_name=pc:GetFullName(),pawn:GetFullName()
+    local system=pawn.ItemSystemComponent
+    if not C.valid(system) then return end
     local container=system:GetSessionContainer()
     if not C.valid(container) or not container.bCanEverRemoveItems then return end
-    local source=container:GetInventory()
-    if not C.valid(source) then return end
-    system:RequestTransferAllContainables(source,system:GetInventory(),false,false)
+    local source,target=container:GetInventory(),system:GetInventory()
+    if not C.valid(source) or not C.valid(target) then return end
+    local system_name,container_name,source_name=system:GetFullName(),container:GetFullName(),source:GetFullName()
+    local hud=pc:GetHUD()
+    local hud_name=C.valid(hud) and hud:GetFullName() or nil
+    local transfer,backpacks=session_windows(C,hud,pc,container)
+    local function same_session()
+        return C.pawn_valid() and C.instance(pc,pc_name) and C.instance(pawn,pawn_name)
+            and C.same(C.player,pc) and C.same(C.pawn,pawn)
+            and C.instance(system,system_name) and C.same(pawn.ItemSystemComponent,system)
+            and C.instance(container,container_name) and C.same(system:GetSessionContainer(),container)
+            and C.instance(source,source_name) and C.same(container:GetInventory(),source)
+            and C.instance(hud,hud_name) and C.same(pc:GetHUD(),hud)
+            and transfer~=nil and C.instance(transfer.widget,transfer.name)
+            and hud:IsWidgetInStack(transfer.widget) and container_window(C,transfer.widget,container)
+    end
+    -- On the supported authority path, native transfer and inventory updates
+    -- complete before this call returns. No delayed UObject references survive R.
+    system:RequestTransferAllContainables(source,target,false,false)
     C.log(self.id,"Take all requested through native open-container session")
+    if same_session() and source:IsEmpty() then
+        -- Remove only backpack pages present at the start of this R operation.
+        -- Each native removal can re-enter Blueprint code and change the stack.
+        for _,entry in ipairs(backpacks) do
+            if not same_session() then break end
+            remove_session_window(C,hud,entry)
+        end
+        if same_session() and source:IsEmpty() then
+            -- OnRemovedFromStack ends the container session and restores input.
+            -- Do not access this window's children after removal.
+            remove_session_window(C,hud,transfer)
+        end
+    end
     self:scan()
 end
 function M:scan()
