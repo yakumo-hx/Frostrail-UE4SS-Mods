@@ -1,0 +1,44 @@
+[
+  {
+    "key": "recipes",
+    "label": {
+      "zh": "种植配方",
+      "en": "Farming recipes"
+    },
+    "columns": [
+      {
+        "key": "item",
+        "label": {
+          "zh": "物品",
+          "en": "Item"
+        }
+      },
+      {
+        "key": "input",
+        "label": {
+          "zh": "投入数量",
+          "en": "Input"
+        },
+        "min": 1,
+        "integer": true
+      },
+      {
+        "key": "seconds",
+        "label": {
+          "zh": "基础秒数",
+          "en": "Base seconds"
+        },
+        "min": 0.1
+      },
+      {
+        "key": "output",
+        "label": {
+          "zh": "产出数量",
+          "en": "Output"
+        },
+        "min": 1,
+        "integer": true
+      }
+    ]
+  }
+]

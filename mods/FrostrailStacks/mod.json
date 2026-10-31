@@ -1,0 +1,31 @@
+{
+  "id": "FrostrailStacks",
+  "name": {
+    "zh": "堆叠",
+    "en": "Stacks"
+  },
+  "version": "0.3.0",
+  "author": "Yuuka",
+  "update": "https://github.com/yakumo-hx/Frostrail-UE4SS-Mods",
+  "requires": [
+    "FrostrailCore"
+  ],
+  "notices": {
+    "enable": {
+      "zh": "本 Mod 扩大堆叠上限。以后降低倍率、关闭或卸载前，须先整理超量堆叠。",
+      "en": "This mod expands stack limits. Split oversized stacks before reducing limits, disabling or uninstalling."
+    },
+    "disable": {
+      "zh": "恢复原版上限或降低倍率可能丢失超量堆叠的物品数量。请在 Mod 仍启用时把大堆拆回目标上限，并实际保存、读档核实后再关闭或卸载。本包不提供自动迁移。",
+      "en": "Reducing stack limits can truncate oversized stacks. While this mod is enabled, split stacks to the target limits, save and reload to verify before disabling or uninstalling. No automatic save migration is provided."
+    },
+    "uninstall": {
+      "zh": "恢复原版上限或降低倍率可能丢失超量堆叠的物品数量。请在 Mod 仍启用时把大堆拆回目标上限，并实际保存、读档核实后再关闭或卸载。本包不提供自动迁移。",
+      "en": "Reducing stack limits can truncate oversized stacks. While this mod is enabled, split stacks to the target limits, save and reload to verify before disabling or uninstalling. No automatic save migration is provided."
+    }
+  },
+  "description": {
+    "zh": "可堆叠物品的上限默认 ×10，可按类别调整，单位重量不变。关闭或降低倍率前，须先把超量堆叠拆回目标上限。",
+    "en": "Multiplies stack limits by 10 by default with per-category overrides; unit weight is unchanged. Split oversized stacks before disabling or lowering limits."
+  }
+}

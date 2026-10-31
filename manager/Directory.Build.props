@@ -1,0 +1,6 @@
+<Project>
+  <PropertyGroup>
+    <BaseIntermediateOutputPath>$(MSBuildThisFileDirectory)../build/manager-obj/</BaseIntermediateOutputPath>
+    <BaseIntermediateOutputPath Condition="'$(MSBuildProjectName)' == 'Frostrail.ModManager.Tests'">$(MSBuildThisFileDirectory)../build/v0.3.0/tests-obj/</BaseIntermediateOutputPath>
+  </PropertyGroup>
+</Project>

@@ -1,0 +1,196 @@
+[
+  {
+    "key": "highlight",
+    "label": {
+      "zh": "穿墙高亮",
+      "en": "Highlights"
+    },
+    "live": true,
+    "group": {
+      "zh": "高亮",
+      "en": "Highlights"
+    }
+  },
+  {
+    "key": "items",
+    "label": {
+      "zh": "地面物品与采集物",
+      "en": "Items and gatherables"
+    },
+    "live": true,
+    "group": {
+      "zh": "高亮",
+      "en": "Highlights"
+    }
+  },
+  {
+    "key": "containers",
+    "label": {
+      "zh": "非空战利品容器",
+      "en": "Non-empty loot containers"
+    },
+    "live": true,
+    "group": {
+      "zh": "高亮",
+      "en": "Highlights"
+    }
+  },
+  {
+    "key": "cellars",
+    "label": {
+      "zh": "地窖入口",
+      "en": "Cellar entrances"
+    },
+    "live": true,
+    "group": {
+      "zh": "高亮",
+      "en": "Highlights"
+    }
+  },
+  {
+    "key": "enemies",
+    "label": {
+      "zh": "活体敌人",
+      "en": "Living enemies"
+    },
+    "live": true,
+    "group": {
+      "zh": "高亮",
+      "en": "Highlights"
+    }
+  },
+  {
+    "key": "range_m",
+    "label": {
+      "zh": "高亮距离（米）",
+      "en": "Highlight range (m)"
+    },
+    "min": 1,
+    "max": 100,
+    "live": true,
+    "group": {
+      "zh": "高亮",
+      "en": "Highlights"
+    }
+  },
+  {
+    "key": "refresh_ms",
+    "label": {
+      "zh": "扫描间隔（毫秒）",
+      "en": "Scan interval (ms)"
+    },
+    "min": 500,
+    "max": 60000,
+    "group": {
+      "zh": "高亮",
+      "en": "Highlights"
+    }
+  },
+  {
+    "key": "colors.items",
+    "label": {
+      "zh": "物品颜色",
+      "en": "Item color"
+    },
+    "type": "color",
+    "live": true,
+    "group": {
+      "zh": "高亮",
+      "en": "Highlights"
+    }
+  },
+  {
+    "key": "colors.containers",
+    "label": {
+      "zh": "容器颜色",
+      "en": "Container color"
+    },
+    "type": "color",
+    "live": true,
+    "group": {
+      "zh": "高亮",
+      "en": "Highlights"
+    }
+  },
+  {
+    "key": "colors.cellars",
+    "label": {
+      "zh": "地窖颜色",
+      "en": "Cellar color"
+    },
+    "type": "color",
+    "live": true,
+    "group": {
+      "zh": "高亮",
+      "en": "Highlights"
+    }
+  },
+  {
+    "key": "colors.enemies",
+    "label": {
+      "zh": "敌人颜色",
+      "en": "Enemy color"
+    },
+    "type": "color",
+    "live": true,
+    "group": {
+      "zh": "高亮",
+      "en": "Highlights"
+    }
+  },
+  {
+    "key": "lamp_intensity",
+    "label": {
+      "zh": "头灯亮度",
+      "en": "Headlamp intensity"
+    },
+    "min": 1,
+    "max": 20000,
+    "live": true,
+    "group": {
+      "zh": "头灯",
+      "en": "Headlamp"
+    }
+  },
+  {
+    "key": "lamp_radius_m",
+    "label": {
+      "zh": "头灯距离（米）",
+      "en": "Headlamp radius (m)"
+    },
+    "min": 1,
+    "max": 100,
+    "live": true,
+    "group": {
+      "zh": "头灯",
+      "en": "Headlamp"
+    }
+  },
+  {
+    "key": "lamp_angle",
+    "label": {
+      "zh": "头灯角度",
+      "en": "Headlamp angle"
+    },
+    "min": 10,
+    "max": 85,
+    "live": true,
+    "group": {
+      "zh": "头灯",
+      "en": "Headlamp"
+    }
+  },
+  {
+    "key": "base_carry_weight",
+    "label": {
+      "zh": "基础负重",
+      "en": "Base carry weight"
+    },
+    "min": 1,
+    "max": 10000,
+    "group": {
+      "zh": "负重",
+      "en": "Carry weight"
+    }
+  }
+]

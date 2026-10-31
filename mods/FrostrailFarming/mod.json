@@ -1,0 +1,17 @@
+{
+  "id": "FrostrailFarming",
+  "name": {
+    "zh": "种植",
+    "en": "Farming"
+  },
+  "version": "0.3.0",
+  "author": "Yuuka",
+  "update": "https://github.com/yakumo-hx/Frostrail-UE4SS-Mods",
+  "requires": [
+    "FrostrailCore"
+  ],
+  "description": {
+    "zh": "分拣台可投入七种莓果、果实和蘑菇：1 个原料 600 秒后产出 5 个同类；配方可在设置中修改。",
+    "en": "Recyclers accept seven berries, fruits and mushrooms: one input yields five of the same after 600 s; recipes are editable."
+  }
+}

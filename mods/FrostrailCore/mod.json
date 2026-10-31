@@ -1,0 +1,18 @@
+{
+  "id": "FrostrailCore",
+  "name": {
+    "zh": "UE4SS-FrostrailCore",
+    "en": "UE4SS-FrostrailCore"
+  },
+  "version": "0.3.0",
+  "author": "Yuuka",
+  "update": "https://github.com/yakumo-hx/Frostrail-UE4SS-Mods",
+  "requires": [],
+  "description": {
+    "zh": "前置：固定版本的 UE4SS、Frostrail 公共 Lua 支持库和 F8 即时设置窗口。使用这些能力的 Mod 需要先装它。",
+    "en": "Prerequisite: the pinned UE4SS build, the shared Frostrail Lua library and the F8 live-settings window."
+  },
+  "keep_existing": [
+    "Frostrail/Binaries/Win64/ue4ss/UE4SS-settings.ini"
+  ]
+}

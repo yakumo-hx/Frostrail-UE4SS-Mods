@@ -1,0 +1,36 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net48</TargetFramework>
+    <OutputType>WinExe</OutputType>
+    <UseWindowsForms>true</UseWindowsForms>
+    <AssemblyName>FrostrailModManager</AssemblyName>
+    <RootNamespace>Frostrail.ModManager</RootNamespace>
+    <LangVersion>latest</LangVersion>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <Prefer32Bit>false</Prefer32Bit>
+    <ApplicationManifest>app.manifest</ApplicationManifest>
+    <ApplicationIcon>Assets/Manager.ico</ApplicationIcon>
+    <Version>0.3.0</Version>
+    <AssemblyTitle>Frostrail mod manager</AssemblyTitle>
+    <Description>Portable Frostrail mod manager</Description>
+    <Company>Yuuka</Company>
+    <Product>Frostrail mod manager</Product>
+    <Copyright>Copyright © 2026 Yuuka</Copyright>
+    <EnableDefaultCompileItems>false</EnableDefaultCompileItems>
+    <OutputPath>../build/v$(Version)/manager/</OutputPath>
+    <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Web.Extensions" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.IO.Compression" />
+    <Reference Include="System.IO.Compression.FileSystem" />
+    <Compile Include="Core/**/*.cs" />
+    <Compile Include="UI/**/*.cs" />
+    <Compile Include="Properties/**/*.cs" />
+    <Compile Include="*.cs" />
+    <EmbeddedResource Include="Assets/Manager.ico" LogicalName="Frostrail.ModManager.Manager.ico" />
+  </ItemGroup>
+</Project>

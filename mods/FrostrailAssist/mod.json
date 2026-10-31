@@ -1,0 +1,17 @@
+{
+  "id": "FrostrailAssist",
+  "name": {
+    "zh": "辅助",
+    "en": "Assist"
+  },
+  "version": "0.3.0",
+  "author": "Yuuka",
+  "update": "https://github.com/yakumo-hx/Frostrail-UE4SS-Mods",
+  "requires": [
+    "FrostrailCore"
+  ],
+  "description": {
+    "zh": "穿墙高亮掉落物与可采集物、非空战利品容器、地窖入口和活体敌人；R 拿取当前容器全部物品，F 开关个人头灯；可调整基础负重。",
+    "en": "Highlights items, non-empty loot containers, cellar entrances and living enemies through walls; R takes everything from the open container, F toggles a personal headlamp; adjustable base carry weight."
+  }
+}

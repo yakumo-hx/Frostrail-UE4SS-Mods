@@ -1,0 +1,19 @@
+{
+  "highlight": true,
+  "items": true,
+  "containers": true,
+  "cellars": true,
+  "enemies": true,
+  "range_m": 60,
+  "refresh_ms": 1500,
+  "colors": {
+    "items": "50D890",
+    "containers": "53B8FF",
+    "cellars": "C58AFF",
+    "enemies": "FF6655"
+  },
+  "lamp_intensity": 2000,
+  "lamp_radius_m": 30,
+  "lamp_angle": 65,
+  "base_carry_weight": 100
+}

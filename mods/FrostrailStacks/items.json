@@ -1,0 +1,922 @@
+[
+  {
+    "path": "/Game/Frostrail/Data/Items/Ammo/ISCH_Ammo_Pistol_Regular.ISCH_Ammo_Pistol_Regular",
+    "category": "Ammo"
+  },
+  {
+    "path": "/Game/Frostrail/Data/Items/Ammo/ISCH_Ammo_Rifle_Regular.ISCH_Ammo_Rifle_Regular",
+    "category": "Ammo"
+  },
+  {
+    "path": "/Game/Frostrail/Data/Items/Ammo/ISCH_Ammo_SMG_Regular.ISCH_Ammo_SMG_Regular",
+    "category": "Ammo"
+  },
+  {
+    "path": "/Game/Frostrail/Data/Items/Ammo/ISCH_Ammo_Scrap.ISCH_Ammo_Scrap",
+    "category": "Ammo"
+  },
+  {
+    "path": "/Game/Frostrail/Data/Items/Ammo/ISCH_Ammo_Shotgun_Regular.ISCH_Ammo_Shotgun_Regular",
+    "category": "Ammo"
+  },
+  {
+    "path": "/Game/Frostrail/Data/Items/Backpacks/ISCH_Backpack_Tier0_Scrap.ISCH_Backpack_Tier0_Scrap",
+    "category": "Backpacks"
+  },
+  {
+    "path": "/Game/Frostrail/Data/Items/Backpacks/ISCH_Backpack_Tier1_Cloth.ISCH_Backpack_Tier1_Cloth",
+    "category": "Backpacks"
+  },
+  {
+    "path": "/Game/Frostrail/Data/Items/Backpacks/ISCH_Backpack_Tier2_Felt.ISCH_Backpack_Tier2_Felt",
+    "category": "Backpacks"
+  },
+  {
+    "path": "/Game/Frostrail/Data/Items/Backpacks/ISCH_Backpack_Tier3_Leather.ISCH_Backpack_Tier3_Leather",
+    "category": "Backpacks"
+  },
+  {
+    "path": "/Game/Frostrail/Data/Items/Backpacks/ISCH_Backpack_Tier4_Oilcloth.ISCH_Backpack_Tier4_Oilcloth",
+    "category": "Backpacks"
+  },
+  {
+    "path": "/Game/Frostrail/Data/Items/Clothes/Legs/ISCH_CottonPants.ISCH_CottonPants",
+    "category": "Clothes"
+  },
+  {
+    "path": "/Game/Frostrail/Data/Items/Clothes/Tier0/ScrapSet/ISCH_Scrap_Head.ISCH_Scrap_Head",
+    "category": "Clothes"
+  },
+  {
+    "path": "/Game/Frostrail/Data/Items/Clothes/Tier0/ScrapSet/ISCH_Scrap_Pants.ISCH_Scrap_Pants",
+    "category": "Clothes"
+  },
+  {
+    "path": "/Game/Frostrail/Data/Items/Clothes/Tier0/ScrapSet/ISCH_Scrap_Torso.ISCH_Scrap_Torso",
+    "category": "Clothes"
+  },
+  {
+    "path": "/Game/Frostrail/Data/Items/Clothes/Tier1/ClothHeavySet/ISCH_ClothHeavy_Head.ISCH_ClothHeavy_Head",
+    "category": "Clothes"
+  },
+  {
+    "path": "/Game/Frostrail/Data/Items/Clothes/Tier1/ClothHeavySet/ISCH_ClothHeavy_Pants.ISCH_ClothHeavy_Pants",
+    "category": "Clothes"
+  },
+  {
+    "path": "/Game/Frostrail/Data/Items/Clothes/Tier1/ClothHeavySet/ISCH_ClothHeavy_Torso.ISCH_ClothHeavy_Torso",
+    "category": "Clothes"
+  },
+  {
+    "path": "/Game/Frostrail/Data/Items/Clothes/Tier1/ClothSet/ISCH_Cloth_Head.ISCH_Cloth_Head",
+    "category": "Clothes"
+  },
+  {
+    "path": "/Game/Frostrail/Data/Items/Clothes/Tier1/ClothSet/ISCH_Cloth_Pants.ISCH_Cloth_Pants",
+    "category": "Clothes"
+  },
+  {
+    "path": "/Game/Frostrail/Data/Items/Clothes/Tier1/ClothSet/ISCH_Cloth_Torso.ISCH_Cloth_Torso",
+    "category": "Clothes"
+  },
+  {
+    "path": "/Game/Frostrail/Data/Items/Clothes/Tier1/MetalSet/ISCH_Metal_Head.ISCH_Metal_Head",
+    "category": "Clothes"
+  },
+  {
+    "path": "/Game/Frostrail/Data/Items/Clothes/Tier2/FeltSet/ISCH_Felt_Head.ISCH_Felt_Head",
+    "category": "Clothes"
+  },
+  {
+    "path": "/Game/Frostrail/Data/Items/Clothes/Tier2/FeltSet/ISCH_Felt_Pants.ISCH_Felt_Pants",
+    "category": "Clothes"
+  },
+  {
+    "path": "/Game/Frostrail/Data/Items/Clothes/Tier2/FeltSet/ISCH_Felt_Torso.ISCH_Felt_Torso",
+    "category": "Clothes"
+  },
+  {
+    "path": "/Game/Frostrail/Data/Items/Clothes/Tier2/LeatherSet/ISCH_Leather_Head.ISCH_Leather_Head",
+    "category": "Clothes"
+  },
+  {
+    "path": "/Game/Frostrail/Data/Items/Clothes/Tier2/LeatherSet/ISCH_Leather_Pants.ISCH_Leather_Pants",
+    "category": "Clothes"
+  },
+  {
+    "path": "/Game/Frostrail/Data/Items/Clothes/Tier2/LeatherSet/ISCH_Leather_Torso.ISCH_Leather_Torso",
+    "category": "Clothes"
+  },
+  {
+    "path": "/Game/Frostrail/Data/Items/Clothes/Tier2/ZealotSet/ISCH_Zealot_Head.ISCH_Zealot_Head",
+    "category": "Clothes"
+  },
+  {
+    "path": "/Game/Frostrail/Data/Items/Clothes/Tier2/ZealotSet/ISCH_Zealot_Pants.ISCH_Zealot_Pants",
+    "category": "Clothes"
+  },
+  {
+    "path": "/Game/Frostrail/Data/Items/Clothes/Tier2/ZealotSet/ISCH_Zealot_Torso.ISCH_Zealot_Torso",
+    "category": "Clothes"
+  },
+  {
+    "path": "/Game/Frostrail/Data/Items/Clothes/Tier3/FurSet/ISCH_Fur_Head.ISCH_Fur_Head",
+    "category": "Clothes"
+  },
+  {
+    "path": "/Game/Frostrail/Data/Items/Clothes/Tier3/FurSet/ISCH_Fur_Pants.ISCH_Fur_Pants",
+    "category": "Clothes"
+  },
+  {
+    "path": "/Game/Frostrail/Data/Items/Clothes/Tier3/FurSet/ISCH_Fur_Torso.ISCH_Fur_Torso",
+    "category": "Clothes"
+  },
+  {
+    "path": "/Game/Frostrail/Data/Items/Clothes/Tier3/InquisitorSet/ISCH_Inquisitor_Head.ISCH_Inquisitor_Head",
+    "category": "Clothes"
+  },
+  {
+    "path": "/Game/Frostrail/Data/Items/Clothes/Tier3/InquisitorSet/ISCH_Inquisitor_Pants.ISCH_Inquisitor_Pants",
+    "category": "Clothes"
+  },
+  {
+    "path": "/Game/Frostrail/Data/Items/Clothes/Tier3/InquisitorSet/ISCH_Inquisitor_Torso.ISCH_Inquisitor_Torso",
+    "category": "Clothes"
+  },
+  {
+    "path": "/Game/Frostrail/Data/Items/Clothes/Tier3/SeekerSet/ISCH_Seeker_Head.ISCH_Seeker_Head",
+    "category": "Clothes"
+  },
+  {
+    "path": "/Game/Frostrail/Data/Items/Clothes/Tier3/SeekerSet/ISCH_Seeker_Pants.ISCH_Seeker_Pants",
+    "category": "Clothes"
+  },
+  {
+    "path": "/Game/Frostrail/Data/Items/Clothes/Tier3/SeekerSet/ISCH_Seeker_Torso.ISCH_Seeker_Torso",
+    "category": "Clothes"
+  },
+  {
+    "path": "/Game/Frostrail/Data/Items/Clothes/Torso/ISCH_CottonShirt.ISCH_CottonShirt",
+    "category": "Clothes"
+  },
+  {
+    "path": "/Game/Frostrail/Data/Items/Clothes/Torso/ISCH_TrenchCoat.ISCH_TrenchCoat",
+    "category": "Clothes"
+  },
+  {
+    "path": "/Game/Frostrail/Data/Items/Compass/ISCH_Compass.ISCH_Compass",
+    "category": "Compass"
+  },
+  {
+    "path": "/Game/Frostrail/Data/Items/Consumables/Medicine/ISCH_Bandages.ISCH_Bandages",
+    "category": "Consumables"
+  },
+  {
+    "path": "/Game/Frostrail/Data/Items/Consumables/Medicine/ISCH_Poultice.ISCH_Poultice",
+    "category": "Consumables"
+  },
+  {
+    "path": "/Game/Frostrail/Data/Items/Consumables/Medicine/ISCH_RagBandages.ISCH_RagBandages",
+    "category": "Consumables"
+  },
+  {
+    "path": "/Game/Frostrail/Data/Items/Consumables/Misc/ISCH_DeerBait.ISCH_DeerBait",
+    "category": "Consumables"
+  },
+  {
+    "path": "/Game/Frostrail/Data/Items/CraftingAugments/ISCH_Augment_AmmoBench_CarvingStation.ISCH_Augment_AmmoBench_CarvingStation",
+    "category": "CraftingAugments"
+  },
+  {
+    "path": "/Game/Frostrail/Data/Items/CraftingAugments/ISCH_Augment_AmmoBench_RifleBoring.ISCH_Augment_AmmoBench_RifleBoring",
+    "category": "CraftingAugments"
+  },
+  {
+    "path": "/Game/Frostrail/Data/Items/CraftingAugments/ISCH_Augment_ClothingWorkbench_FiberPresser.ISCH_Augment_ClothingWorkbench_FiberPresser",
+    "category": "CraftingAugments"
+  },
+  {
+    "path": "/Game/Frostrail/Data/Items/CraftingAugments/ISCH_Augment_ClothingWorkbench_SewingKit.ISCH_Augment_ClothingWorkbench_SewingKit",
+    "category": "CraftingAugments"
+  },
+  {
+    "path": "/Game/Frostrail/Data/Items/CraftingAugments/ISCH_Augment_ClothingWorkbench_TanningRack.ISCH_Augment_ClothingWorkbench_TanningRack",
+    "category": "CraftingAugments"
+  },
+  {
+    "path": "/Game/Frostrail/Data/Items/CraftingAugments/ISCH_Augment_ClothingWorkbench_TenterHooks.ISCH_Augment_ClothingWorkbench_TenterHooks",
+    "category": "CraftingAugments"
+  },
+  {
+    "path": "/Game/Frostrail/Data/Items/CraftingAugments/ISCH_Augment_CookingStation_Grill.ISCH_Augment_CookingStation_Grill",
+    "category": "CraftingAugments"
+  },
+  {
+    "path": "/Game/Frostrail/Data/Items/CraftingAugments/ISCH_Augment_Smelter_OilQuencher.ISCH_Augment_Smelter_OilQuencher",
+    "category": "CraftingAugments"
+  },
+  {
+    "path": "/Game/Frostrail/Data/Items/CraftingAugments/ISCH_Augment_Toolbench_Anvil.ISCH_Augment_Toolbench_Anvil",
+    "category": "CraftingAugments"
+  },
+  {
+    "path": "/Game/Frostrail/Data/Items/CraftingAugments/ISCH_Augment_Toolbench_ScrapperKit.ISCH_Augment_Toolbench_ScrapperKit",
+    "category": "CraftingAugments"
+  },
+  {
+    "path": "/Game/Frostrail/Data/Items/CraftingAugments/ISCH_Augment_WoodPress_TreatmentBath.ISCH_Augment_WoodPress_TreatmentBath",
+    "category": "CraftingAugments"
+  },
+  {
+    "path": "/Game/Frostrail/Data/Items/CraftingAugments/ISCH_CaseTrimmer.ISCH_CaseTrimmer",
+    "category": "CraftingAugments"
+  },
+  {
+    "path": "/Game/Frostrail/Data/Items/CraftingAugments/ISCH_CuringRack.ISCH_CuringRack",
+    "category": "CraftingAugments"
+  },
+  {
+    "path": "/Game/Frostrail/Data/Items/CraftingAugments/ISCH_PowderMeasure.ISCH_PowderMeasure",
+    "category": "CraftingAugments"
+  },
+  {
+    "path": "/Game/Frostrail/Data/Items/CraftingAugments/ISCH_ReloadingPress.ISCH_ReloadingPress",
+    "category": "CraftingAugments"
+  },
+  {
+    "path": "/Game/Frostrail/Data/Items/CraftingAugments/ISCH_RepairStation_AugmentOne.ISCH_RepairStation_AugmentOne",
+    "category": "CraftingAugments"
+  },
+  {
+    "path": "/Game/Frostrail/Data/Items/CraftingAugments/ISCH_RepairStation_AugmentTwo.ISCH_RepairStation_AugmentTwo",
+    "category": "CraftingAugments"
+  },
+  {
+    "path": "/Game/Frostrail/Data/Items/CraftingAugments/ISCH_ToolDrawers.ISCH_ToolDrawers",
+    "category": "CraftingAugments"
+  },
+  {
+    "path": "/Game/Frostrail/Data/Items/CraftingAugments/ISCH_ToolRack.ISCH_ToolRack",
+    "category": "CraftingAugments"
+  },
+  {
+    "path": "/Game/Frostrail/Data/Items/Decor/ISCH_Kurkkumopo.ISCH_Kurkkumopo",
+    "category": "Decor"
+  },
+  {
+    "path": "/Game/Frostrail/Data/Items/Decor/ISCH_Toilet.ISCH_Toilet",
+    "category": "Decor"
+  },
+  {
+    "path": "/Game/Frostrail/Data/Items/Food/ISCH_BerryCompote.ISCH_BerryCompote",
+    "category": "Food"
+  },
+  {
+    "path": "/Game/Frostrail/Data/Items/Food/ISCH_BottleOfVodka.ISCH_BottleOfVodka",
+    "category": "Food"
+  },
+  {
+    "path": "/Game/Frostrail/Data/Items/Food/ISCH_CanOfBeans.ISCH_CanOfBeans",
+    "category": "Food"
+  },
+  {
+    "path": "/Game/Frostrail/Data/Items/Food/ISCH_CanOfBeans_Cooked.ISCH_CanOfBeans_Cooked",
+    "category": "Food"
+  },
+  {
+    "path": "/Game/Frostrail/Data/Items/Food/ISCH_CanOfGoulash.ISCH_CanOfGoulash",
+    "category": "Food"
+  },
+  {
+    "path": "/Game/Frostrail/Data/Items/Food/ISCH_CanOfGoulash_Cooked.ISCH_CanOfGoulash_Cooked",
+    "category": "Food"
+  },
+  {
+    "path": "/Game/Frostrail/Data/Items/Food/ISCH_CanOfMeat.ISCH_CanOfMeat",
+    "category": "Food"
+  },
+  {
+    "path": "/Game/Frostrail/Data/Items/Food/ISCH_CanOfMeat_Cooked.ISCH_CanOfMeat_Cooked",
+    "category": "Food"
+  },
+  {
+    "path": "/Game/Frostrail/Data/Items/Food/ISCH_CanOfPeas.ISCH_CanOfPeas",
+    "category": "Food"
+  },
+  {
+    "path": "/Game/Frostrail/Data/Items/Food/ISCH_CanOfPeas_Cooked.ISCH_CanOfPeas_Cooked",
+    "category": "Food"
+  },
+  {
+    "path": "/Game/Frostrail/Data/Items/Food/ISCH_CanOfPeppers.ISCH_CanOfPeppers",
+    "category": "Food"
+  },
+  {
+    "path": "/Game/Frostrail/Data/Items/Food/ISCH_CanOfPeppers_Cooked.ISCH_CanOfPeppers_Cooked",
+    "category": "Food"
+  },
+  {
+    "path": "/Game/Frostrail/Data/Items/Food/ISCH_CanOfSaltedBeef.ISCH_CanOfSaltedBeef",
+    "category": "Food"
+  },
+  {
+    "path": "/Game/Frostrail/Data/Items/Food/ISCH_CanOfSaltedBeef_Cooked.ISCH_CanOfSaltedBeef_Cooked",
+    "category": "Food"
+  },
+  {
+    "path": "/Game/Frostrail/Data/Items/Food/ISCH_CanOfSoup.ISCH_CanOfSoup",
+    "category": "Food"
+  },
+  {
+    "path": "/Game/Frostrail/Data/Items/Food/ISCH_CanOfSoup_Cooked.ISCH_CanOfSoup_Cooked",
+    "category": "Food"
+  },
+  {
+    "path": "/Game/Frostrail/Data/Items/Food/ISCH_CanOfVegetables.ISCH_CanOfVegetables",
+    "category": "Food"
+  },
+  {
+    "path": "/Game/Frostrail/Data/Items/Food/ISCH_CanOfVegetables_Cooked.ISCH_CanOfVegetables_Cooked",
+    "category": "Food"
+  },
+  {
+    "path": "/Game/Frostrail/Data/Items/Food/ISCH_Chimerelle_Cooked.ISCH_Chimerelle_Cooked",
+    "category": "Food"
+  },
+  {
+    "path": "/Game/Frostrail/Data/Items/Food/ISCH_ChippedVenison.ISCH_ChippedVenison",
+    "category": "Food"
+  },
+  {
+    "path": "/Game/Frostrail/Data/Items/Food/ISCH_DeerJerky.ISCH_DeerJerky",
+    "category": "Food"
+  },
+  {
+    "path": "/Game/Frostrail/Data/Items/Food/ISCH_EmptyCan.ISCH_EmptyCan",
+    "category": "Food"
+  },
+  {
+    "path": "/Game/Frostrail/Data/Items/Food/ISCH_FieryJam.ISCH_FieryJam",
+    "category": "Food"
+  },
+  {
+    "path": "/Game/Frostrail/Data/Items/Food/ISCH_GrilledMeat_Deer.ISCH_GrilledMeat_Deer",
+    "category": "Food"
+  },
+  {
+    "path": "/Game/Frostrail/Data/Items/Food/ISCH_HeartyStew.ISCH_HeartyStew",
+    "category": "Food"
+  },
+  {
+    "path": "/Game/Frostrail/Data/Items/Food/ISCH_HuntsmanStew.ISCH_HuntsmanStew",
+    "category": "Food"
+  },
+  {
+    "path": "/Game/Frostrail/Data/Items/Food/ISCH_MushroomSkewer.ISCH_MushroomSkewer",
+    "category": "Food"
+  },
+  {
+    "path": "/Game/Frostrail/Data/Items/Food/ISCH_MushroomSoup.ISCH_MushroomSoup",
+    "category": "Food"
+  },
+  {
+    "path": "/Game/Frostrail/Data/Items/Food/ISCH_PorkAndBeans.ISCH_PorkAndBeans",
+    "category": "Food"
+  },
+  {
+    "path": "/Game/Frostrail/Data/Items/Food/ISCH_Salt.ISCH_Salt",
+    "category": "Food"
+  },
+  {
+    "path": "/Game/Frostrail/Data/Items/Food/ISCH_ShroomMeat.ISCH_ShroomMeat",
+    "category": "Food"
+  },
+  {
+    "path": "/Game/Frostrail/Data/Items/Food/ISCH_WolfMeat_Cooked.ISCH_WolfMeat_Cooked",
+    "category": "Food"
+  },
+  {
+    "path": "/Game/Frostrail/Data/Items/GasMasks/Filters/ISCH_GasMask_Filter_Tier_1_01.ISCH_GasMask_Filter_Tier_1_01",
+    "category": "GasMasks"
+  },
+  {
+    "path": "/Game/Frostrail/Data/Items/GasMasks/Filters/ISCH_GasMask_Filter_Tier_1_02.ISCH_GasMask_Filter_Tier_1_02",
+    "category": "GasMasks"
+  },
+  {
+    "path": "/Game/Frostrail/Data/Items/GasMasks/ISCH_GasMask_Archetype.ISCH_GasMask_Archetype",
+    "category": "GasMasks"
+  },
+  {
+    "path": "/Game/Frostrail/Data/Items/GasMasks/Masks/ISCH_GasMask_Base_Tier_1_01.ISCH_GasMask_Base_Tier_1_01",
+    "category": "GasMasks"
+  },
+  {
+    "path": "/Game/Frostrail/Data/Items/HeatSources/ISCH_Campfire.ISCH_Campfire",
+    "category": "HeatSources"
+  },
+  {
+    "path": "/Game/Frostrail/Data/Items/LightSources/ISCH_Lantern_01.ISCH_Lantern_01",
+    "category": "LightSources"
+  },
+  {
+    "path": "/Game/Frostrail/Data/Items/QuestItems/Keys/ISCH_Q_GateHouseKey.ISCH_Q_GateHouseKey",
+    "category": "QuestItems"
+  },
+  {
+    "path": "/Game/Frostrail/Data/Items/QuestItems/Keys/ISCH_Q_GeneratorKey_01.ISCH_Q_GeneratorKey_01",
+    "category": "QuestItems"
+  },
+  {
+    "path": "/Game/Frostrail/Data/Items/Relics/ISCH_Relic_Angelic.ISCH_Relic_Angelic",
+    "category": "Relics"
+  },
+  {
+    "path": "/Game/Frostrail/Data/Items/Relics/ISCH_Relic_Broken.ISCH_Relic_Broken",
+    "category": "Relics"
+  },
+  {
+    "path": "/Game/Frostrail/Data/Items/Relics/ISCH_Relic_Mangled.ISCH_Relic_Mangled",
+    "category": "Relics"
+  },
+  {
+    "path": "/Game/Frostrail/Data/Items/Relics/ISCH_Relic_Rough.ISCH_Relic_Rough",
+    "category": "Relics"
+  },
+  {
+    "path": "/Game/Frostrail/Data/Items/Relics/ISCH_Relic_Smooth.ISCH_Relic_Smooth",
+    "category": "Relics"
+  },
+  {
+    "path": "/Game/Frostrail/Data/Items/Relics/ISCH_Relic_Tutorial.ISCH_Relic_Tutorial",
+    "category": "Relics"
+  },
+  {
+    "path": "/Game/Frostrail/Data/Items/Relics/ISCH_Relic_Warm.ISCH_Relic_Warm",
+    "category": "Relics"
+  },
+  {
+    "path": "/Game/Frostrail/Data/Items/Relics/ISCH_SaintsTeeth.ISCH_SaintsTeeth",
+    "category": "Relics"
+  },
+  {
+    "path": "/Game/Frostrail/Data/Items/Resources/Components/ISCH_CoalDust.ISCH_CoalDust",
+    "category": "Resources"
+  },
+  {
+    "path": "/Game/Frostrail/Data/Items/Resources/Components/ISCH_Gunpowder.ISCH_Gunpowder",
+    "category": "Resources"
+  },
+  {
+    "path": "/Game/Frostrail/Data/Items/Resources/Fuel/ISCH_Coal_01.ISCH_Coal_01",
+    "category": "Resources"
+  },
+  {
+    "path": "/Game/Frostrail/Data/Items/Resources/Junk/ISCH_AlarmClock.ISCH_AlarmClock",
+    "category": "Resources"
+  },
+  {
+    "path": "/Game/Frostrail/Data/Items/Resources/Junk/ISCH_Ashtray.ISCH_Ashtray",
+    "category": "Resources"
+  },
+  {
+    "path": "/Game/Frostrail/Data/Items/Resources/Junk/ISCH_BicarbSoda.ISCH_BicarbSoda",
+    "category": "Resources"
+  },
+  {
+    "path": "/Game/Frostrail/Data/Items/Resources/Junk/ISCH_Book.ISCH_Book",
+    "category": "Resources"
+  },
+  {
+    "path": "/Game/Frostrail/Data/Items/Resources/Junk/ISCH_BottleOfGin.ISCH_BottleOfGin",
+    "category": "Resources"
+  },
+  {
+    "path": "/Game/Frostrail/Data/Items/Resources/Junk/ISCH_BottleOfWater.ISCH_BottleOfWater",
+    "category": "Resources"
+  },
+  {
+    "path": "/Game/Frostrail/Data/Items/Resources/Junk/ISCH_Camera.ISCH_Camera",
+    "category": "Resources"
+  },
+  {
+    "path": "/Game/Frostrail/Data/Items/Resources/Junk/ISCH_Candle.ISCH_Candle",
+    "category": "Resources"
+  },
+  {
+    "path": "/Game/Frostrail/Data/Items/Resources/Junk/ISCH_CoatHanger.ISCH_CoatHanger",
+    "category": "Resources"
+  },
+  {
+    "path": "/Game/Frostrail/Data/Items/Resources/Junk/ISCH_Coin.ISCH_Coin",
+    "category": "Resources"
+  },
+  {
+    "path": "/Game/Frostrail/Data/Items/Resources/Junk/ISCH_CopperPot.ISCH_CopperPot",
+    "category": "Resources"
+  },
+  {
+    "path": "/Game/Frostrail/Data/Items/Resources/Junk/ISCH_CoughMedicine.ISCH_CoughMedicine",
+    "category": "Resources"
+  },
+  {
+    "path": "/Game/Frostrail/Data/Items/Resources/Junk/ISCH_DesktopFan.ISCH_DesktopFan",
+    "category": "Resources"
+  },
+  {
+    "path": "/Game/Frostrail/Data/Items/Resources/Junk/ISCH_Doll.ISCH_Doll",
+    "category": "Resources"
+  },
+  {
+    "path": "/Game/Frostrail/Data/Items/Resources/Junk/ISCH_Dress.ISCH_Dress",
+    "category": "Resources"
+  },
+  {
+    "path": "/Game/Frostrail/Data/Items/Resources/Junk/ISCH_DrinkingGlass.ISCH_DrinkingGlass",
+    "category": "Resources"
+  },
+  {
+    "path": "/Game/Frostrail/Data/Items/Resources/Junk/ISCH_EmptyGlassBottle.ISCH_EmptyGlassBottle",
+    "category": "Resources"
+  },
+  {
+    "path": "/Game/Frostrail/Data/Items/Resources/Junk/ISCH_EmptyGlassJar.ISCH_EmptyGlassJar",
+    "category": "Resources"
+  },
+  {
+    "path": "/Game/Frostrail/Data/Items/Resources/Junk/ISCH_Fork.ISCH_Fork",
+    "category": "Resources"
+  },
+  {
+    "path": "/Game/Frostrail/Data/Items/Resources/Junk/ISCH_FryingPan.ISCH_FryingPan",
+    "category": "Resources"
+  },
+  {
+    "path": "/Game/Frostrail/Data/Items/Resources/Junk/ISCH_HandMirror.ISCH_HandMirror",
+    "category": "Resources"
+  },
+  {
+    "path": "/Game/Frostrail/Data/Items/Resources/Junk/ISCH_Hat.ISCH_Hat",
+    "category": "Resources"
+  },
+  {
+    "path": "/Game/Frostrail/Data/Items/Resources/Junk/ISCH_Kettle.ISCH_Kettle",
+    "category": "Resources"
+  },
+  {
+    "path": "/Game/Frostrail/Data/Items/Resources/Junk/ISCH_Knife.ISCH_Knife",
+    "category": "Resources"
+  },
+  {
+    "path": "/Game/Frostrail/Data/Items/Resources/Junk/ISCH_MantleClock.ISCH_MantleClock",
+    "category": "Resources"
+  },
+  {
+    "path": "/Game/Frostrail/Data/Items/Resources/Junk/ISCH_OilCan.ISCH_OilCan",
+    "category": "Resources"
+  },
+  {
+    "path": "/Game/Frostrail/Data/Items/Resources/Junk/ISCH_PictureFrame.ISCH_PictureFrame",
+    "category": "Resources"
+  },
+  {
+    "path": "/Game/Frostrail/Data/Items/Resources/Junk/ISCH_Record.ISCH_Record",
+    "category": "Resources"
+  },
+  {
+    "path": "/Game/Frostrail/Data/Items/Resources/Junk/ISCH_RecordPlayer.ISCH_RecordPlayer",
+    "category": "Resources"
+  },
+  {
+    "path": "/Game/Frostrail/Data/Items/Resources/Junk/ISCH_Saucepan.ISCH_Saucepan",
+    "category": "Resources"
+  },
+  {
+    "path": "/Game/Frostrail/Data/Items/Resources/Junk/ISCH_Shoe.ISCH_Shoe",
+    "category": "Resources"
+  },
+  {
+    "path": "/Game/Frostrail/Data/Items/Resources/Junk/ISCH_Soap.ISCH_Soap",
+    "category": "Resources"
+  },
+  {
+    "path": "/Game/Frostrail/Data/Items/Resources/Junk/ISCH_Spoon.ISCH_Spoon",
+    "category": "Resources"
+  },
+  {
+    "path": "/Game/Frostrail/Data/Items/Resources/Junk/ISCH_Suit.ISCH_Suit",
+    "category": "Resources"
+  },
+  {
+    "path": "/Game/Frostrail/Data/Items/Resources/Junk/ISCH_TableLamp.ISCH_TableLamp",
+    "category": "Resources"
+  },
+  {
+    "path": "/Game/Frostrail/Data/Items/Resources/Junk/ISCH_Toothbrush.ISCH_Toothbrush",
+    "category": "Resources"
+  },
+  {
+    "path": "/Game/Frostrail/Data/Items/Resources/Junk/ISCH_Typewriter.ISCH_Typewriter",
+    "category": "Resources"
+  },
+  {
+    "path": "/Game/Frostrail/Data/Items/Resources/Materials/ISCH_AdvancedComponent.ISCH_AdvancedComponent",
+    "category": "Resources"
+  },
+  {
+    "path": "/Game/Frostrail/Data/Items/Resources/Materials/ISCH_Component.ISCH_Component",
+    "category": "Resources"
+  },
+  {
+    "path": "/Game/Frostrail/Data/Items/Resources/Materials/ISCH_CopperPipe.ISCH_CopperPipe",
+    "category": "Resources"
+  },
+  {
+    "path": "/Game/Frostrail/Data/Items/Resources/Materials/ISCH_CopperPlate.ISCH_CopperPlate",
+    "category": "Resources"
+  },
+  {
+    "path": "/Game/Frostrail/Data/Items/Resources/Materials/ISCH_CopperWire.ISCH_CopperWire",
+    "category": "Resources"
+  },
+  {
+    "path": "/Game/Frostrail/Data/Items/Resources/Materials/ISCH_MetalDebris.ISCH_MetalDebris",
+    "category": "Resources"
+  },
+  {
+    "path": "/Game/Frostrail/Data/Items/Resources/Materials/ISCH_MetalPipe.ISCH_MetalPipe",
+    "category": "Resources"
+  },
+  {
+    "path": "/Game/Frostrail/Data/Items/Resources/Materials/ISCH_MetalPlate.ISCH_MetalPlate",
+    "category": "Resources"
+  },
+  {
+    "path": "/Game/Frostrail/Data/Items/Resources/Materials/ISCH_Nitrate.ISCH_Nitrate",
+    "category": "Resources"
+  },
+  {
+    "path": "/Game/Frostrail/Data/Items/Resources/Materials/ISCH_Oil.ISCH_Oil",
+    "category": "Resources"
+  },
+  {
+    "path": "/Game/Frostrail/Data/Items/Resources/Nature/ISCH_BlueBerries.ISCH_BlueBerries",
+    "category": "Resources"
+  },
+  {
+    "path": "/Game/Frostrail/Data/Items/Resources/Nature/ISCH_BoarMeat.ISCH_BoarMeat",
+    "category": "Resources"
+  },
+  {
+    "path": "/Game/Frostrail/Data/Items/Resources/Nature/ISCH_Branch_01.ISCH_Branch_01",
+    "category": "Resources"
+  },
+  {
+    "path": "/Game/Frostrail/Data/Items/Resources/Nature/ISCH_Chimerelle.ISCH_Chimerelle",
+    "category": "Resources"
+  },
+  {
+    "path": "/Game/Frostrail/Data/Items/Resources/Nature/ISCH_DeerMeat.ISCH_DeerMeat",
+    "category": "Resources"
+  },
+  {
+    "path": "/Game/Frostrail/Data/Items/Resources/Nature/ISCH_Dewgranate.ISCH_Dewgranate",
+    "category": "Resources"
+  },
+  {
+    "path": "/Game/Frostrail/Data/Items/Resources/Nature/ISCH_Fireberries.ISCH_Fireberries",
+    "category": "Resources"
+  },
+  {
+    "path": "/Game/Frostrail/Data/Items/Resources/Nature/ISCH_Fur.ISCH_Fur",
+    "category": "Resources"
+  },
+  {
+    "path": "/Game/Frostrail/Data/Items/Resources/Nature/ISCH_GreenBerries.ISCH_GreenBerries",
+    "category": "Resources"
+  },
+  {
+    "path": "/Game/Frostrail/Data/Items/Resources/Nature/ISCH_Hemp.ISCH_Hemp",
+    "category": "Resources"
+  },
+  {
+    "path": "/Game/Frostrail/Data/Items/Resources/Nature/ISCH_Leather.ISCH_Leather",
+    "category": "Resources"
+  },
+  {
+    "path": "/Game/Frostrail/Data/Items/Resources/Nature/ISCH_Log_01.ISCH_Log_01",
+    "category": "Resources"
+  },
+  {
+    "path": "/Game/Frostrail/Data/Items/Resources/Nature/ISCH_Mushroom.ISCH_Mushroom",
+    "category": "Resources"
+  },
+  {
+    "path": "/Game/Frostrail/Data/Items/Resources/Nature/ISCH_RawMeat_Deer.ISCH_RawMeat_Deer",
+    "category": "Resources"
+  },
+  {
+    "path": "/Game/Frostrail/Data/Items/Resources/Nature/ISCH_RedBerries.ISCH_RedBerries",
+    "category": "Resources"
+  },
+  {
+    "path": "/Game/Frostrail/Data/Items/Resources/Nature/ISCH_WolfMeat.ISCH_WolfMeat",
+    "category": "Resources"
+  },
+  {
+    "path": "/Game/Frostrail/Data/Items/Resources/Refined/ISCH_Cloth.ISCH_Cloth",
+    "category": "Resources"
+  },
+  {
+    "path": "/Game/Frostrail/Data/Items/Resources/Refined/ISCH_CopperIngot.ISCH_CopperIngot",
+    "category": "Resources"
+  },
+  {
+    "path": "/Game/Frostrail/Data/Items/Resources/Refined/ISCH_Felt.ISCH_Felt",
+    "category": "Resources"
+  },
+  {
+    "path": "/Game/Frostrail/Data/Items/Resources/Refined/ISCH_HardenedMetal.ISCH_HardenedMetal",
+    "category": "Resources"
+  },
+  {
+    "path": "/Game/Frostrail/Data/Items/Resources/Refined/ISCH_MetalIngot.ISCH_MetalIngot",
+    "category": "Resources"
+  },
+  {
+    "path": "/Game/Frostrail/Data/Items/Resources/Refined/ISCH_Oilcloth.ISCH_Oilcloth",
+    "category": "Resources"
+  },
+  {
+    "path": "/Game/Frostrail/Data/Items/Resources/Refined/ISCH_PlasticSheet.ISCH_PlasticSheet",
+    "category": "Resources"
+  },
+  {
+    "path": "/Game/Frostrail/Data/Items/Resources/Refined/ISCH_RefinedMetal.ISCH_RefinedMetal",
+    "category": "Resources"
+  },
+  {
+    "path": "/Game/Frostrail/Data/Items/Resources/Refined/ISCH_SlagMetal.ISCH_SlagMetal",
+    "category": "Resources"
+  },
+  {
+    "path": "/Game/Frostrail/Data/Items/Resources/Refined/ISCH_String.ISCH_String",
+    "category": "Resources"
+  },
+  {
+    "path": "/Game/Frostrail/Data/Items/Resources/Refined/ISCH_Timber.ISCH_Timber",
+    "category": "Resources"
+  },
+  {
+    "path": "/Game/Frostrail/Data/Items/Resources/Refined/ISCH_Wood.ISCH_Wood",
+    "category": "Resources"
+  },
+  {
+    "path": "/Game/Frostrail/Data/Items/Resources/Research/ISCH_Schematic.ISCH_Schematic",
+    "category": "Resources"
+  },
+  {
+    "path": "/Game/Frostrail/Data/Items/Resources/Scrap/ISCH_CopperScrap.ISCH_CopperScrap",
+    "category": "Resources"
+  },
+  {
+    "path": "/Game/Frostrail/Data/Items/Resources/Scrap/ISCH_MetalScrap.ISCH_MetalScrap",
+    "category": "Resources"
+  },
+  {
+    "path": "/Game/Frostrail/Data/Items/Resources/Scrap/ISCH_PlasticScrap.ISCH_PlasticScrap",
+    "category": "Resources"
+  },
+  {
+    "path": "/Game/Frostrail/Data/Items/Resources/Scrap/ISCH_TextileScrap.ISCH_TextileScrap",
+    "category": "Resources"
+  },
+  {
+    "path": "/Game/Frostrail/Data/Items/Resources/Scrap/ISCH_WoodScrap.ISCH_WoodScrap",
+    "category": "Resources"
+  },
+  {
+    "path": "/Game/Frostrail/Data/Items/Resources/Unused/ISCH_AdhesiveGlue.ISCH_AdhesiveGlue",
+    "category": "Resources"
+  },
+  {
+    "path": "/Game/Frostrail/Data/Items/Resources/Unused/ISCH_Bolt.ISCH_Bolt",
+    "category": "Resources"
+  },
+  {
+    "path": "/Game/Frostrail/Data/Items/Resources/Unused/ISCH_ChemicalScrap.ISCH_ChemicalScrap",
+    "category": "Resources"
+  },
+  {
+    "path": "/Game/Frostrail/Data/Items/Resources/Unused/ISCH_CopperCase.ISCH_CopperCase",
+    "category": "Resources"
+  },
+  {
+    "path": "/Game/Frostrail/Data/Items/Resources/Unused/ISCH_CopperSlug.ISCH_CopperSlug",
+    "category": "Resources"
+  },
+  {
+    "path": "/Game/Frostrail/Data/Items/Resources/Unused/ISCH_CraftingStationFrame.ISCH_CraftingStationFrame",
+    "category": "Resources"
+  },
+  {
+    "path": "/Game/Frostrail/Data/Items/Resources/Unused/ISCH_MetalGear.ISCH_MetalGear",
+    "category": "Resources"
+  },
+  {
+    "path": "/Game/Frostrail/Data/Items/Resources/Unused/ISCH_MetalRod.ISCH_MetalRod",
+    "category": "Resources"
+  },
+  {
+    "path": "/Game/Frostrail/Data/Items/Resources/Unused/ISCH_MetalSlug.ISCH_MetalSlug",
+    "category": "Resources"
+  },
+  {
+    "path": "/Game/Frostrail/Data/Items/Resources/Unused/ISCH_MetalWire.ISCH_MetalWire",
+    "category": "Resources"
+  },
+  {
+    "path": "/Game/Frostrail/Data/Items/Resources/Unused/ISCH_RefineryFrame.ISCH_RefineryFrame",
+    "category": "Resources"
+  },
+  {
+    "path": "/Game/Frostrail/Data/Items/Resources/Unused/ISCH_ScrapMetalAxeHead.ISCH_ScrapMetalAxeHead",
+    "category": "Resources"
+  },
+  {
+    "path": "/Game/Frostrail/Data/Items/Resources/Unused/ISCH_ScrapMetalBlade.ISCH_ScrapMetalBlade",
+    "category": "Resources"
+  },
+  {
+    "path": "/Game/Frostrail/Data/Items/Resources/Unused/ISCH_ScrapMetalScrewdriverTip.ISCH_ScrapMetalScrewdriverTip",
+    "category": "Resources"
+  },
+  {
+    "path": "/Game/Frostrail/Data/Items/Resources/Unused/ISCH_ScrapMetalWrenchJaw.ISCH_ScrapMetalWrenchJaw",
+    "category": "Resources"
+  },
+  {
+    "path": "/Game/Frostrail/Data/Items/Resources/Unused/ISCH_Screw.ISCH_Screw",
+    "category": "Resources"
+  },
+  {
+    "path": "/Game/Frostrail/Data/Items/Resources/Unused/ISCH_Spring.ISCH_Spring",
+    "category": "Resources"
+  },
+  {
+    "path": "/Game/Frostrail/Data/Items/Resources/Unused/ISCH_ToolHandle_Simple.ISCH_ToolHandle_Simple",
+    "category": "Resources"
+  },
+  {
+    "path": "/Game/Frostrail/Data/Items/Tools/BuildingRepairing/ISCH_Hammer_Metal.ISCH_Hammer_Metal",
+    "category": "Tools"
+  },
+  {
+    "path": "/Game/Frostrail/Data/Items/Tools/BuildingRepairing/ISCH_Hammer_Primitive.ISCH_Hammer_Primitive",
+    "category": "Tools"
+  },
+  {
+    "path": "/Game/Frostrail/Data/Items/Tools/BuildingRepairing/ISCH_Hammer_Scrap.ISCH_Hammer_Scrap",
+    "category": "Tools"
+  },
+  {
+    "path": "/Game/Frostrail/Data/Items/Tools/BuildingRepairing/ISCH_Wrench_Metal.ISCH_Wrench_Metal",
+    "category": "Tools"
+  },
+  {
+    "path": "/Game/Frostrail/Data/Items/Tools/BuildingRepairing/ISCH_Wrench_Scrap.ISCH_Wrench_Scrap",
+    "category": "Tools"
+  },
+  {
+    "path": "/Game/Frostrail/Data/Items/Tools/ObjectScanner/ISCH_ObjectScanner_01.ISCH_ObjectScanner_01",
+    "category": "Tools"
+  },
+  {
+    "path": "/Game/Frostrail/Data/Items/Tools/SalvageDeconstruct/ISCH_Crowbar_Metal.ISCH_Crowbar_Metal",
+    "category": "Tools"
+  },
+  {
+    "path": "/Game/Frostrail/Data/Items/Tools/SalvageDeconstruct/ISCH_Crowbar_Scrap.ISCH_Crowbar_Scrap",
+    "category": "Tools"
+  },
+  {
+    "path": "/Game/Frostrail/Data/Items/Tools/Tinderbox/ISCH_Lighter.ISCH_Lighter",
+    "category": "Tools"
+  },
+  {
+    "path": "/Game/Frostrail/Data/Items/Tools/Torch/ISCH_Torch.ISCH_Torch",
+    "category": "Tools"
+  },
+  {
+    "path": "/Game/Frostrail/Data/Items/Weapons/Clubs/ISCH_Club_Primitive.ISCH_Club_Primitive",
+    "category": "Weapons"
+  },
+  {
+    "path": "/Game/Frostrail/Data/Items/Weapons/Clubs/ISCH_Club_Scrap.ISCH_Club_Scrap",
+    "category": "Weapons"
+  },
+  {
+    "path": "/Game/Frostrail/Data/Items/Weapons/HandGrenade/ISCH_HandGrenade.ISCH_HandGrenade",
+    "category": "Weapons"
+  }
+]

@@ -1,0 +1,42 @@
+# Local evidence, extracted resources, tools and deliverables
+/.local/
+/build/
+/dist/
+/tools/
+
+# Compiler and Python output
+**/bin/
+**/obj/
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+
+# User configuration and captured original values
+/mods/*/config.json
+/mods/*/original-recipes.json
+.env
+.env.*
+!.env.example
+
+# Binary game data, dumps, runtime logs and archives
+*.pak
+*.utoc
+*.ucas
+*.uasset
+*.uexp
+*.ubulk
+*.usmap
+*.jmap
+*.sav
+*.dmp
+*.exe
+*.dll
+*.pdb
+*.log
+*.zip
+*.7z
+*.rar
+
+# retoc may emit this working-directory cache
+/pakstore.json

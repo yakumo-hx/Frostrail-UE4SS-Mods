@@ -1,0 +1,22 @@
+[
+  {
+    "key": "input_slots",
+    "label": {
+      "zh": "输入格数",
+      "en": "Input slots"
+    },
+    "min": 1,
+    "max": 120,
+    "integer": true
+  },
+  {
+    "key": "output_slots",
+    "label": {
+      "zh": "输出格数",
+      "en": "Output slots"
+    },
+    "min": 1,
+    "max": 120,
+    "integer": true
+  }
+]
