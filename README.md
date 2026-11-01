@@ -6,7 +6,7 @@ Frostrail（Steam Demo）的 Mod 和 Mod 管理器。作者 Yuuka。
 
 - **Frostrail mod管理器**：Windows 上的单个 EXE。安装、启停、排序、设置、更新 Mod，查看和导出日志，也能在线更新自己。
 - **UE4SS-FrostrailCore**：前置。包含固定版 UE4SS、公共 Lua 支持库和游戏内 F8 设置窗口。
-- **功能 Mod**：辅助（穿墙高亮、头灯、一键拿取、基础负重）、快存与格子锁、分拣台扩容、种植、堆叠、房主菜单暂停。每个都是独立的包。
+- **功能 Mod**：辅助（穿墙高亮、头灯、一键拿取、基础负重）、快存与格子锁、分拣台扩容、种植、堆叠、房主菜单暂停、自动保存。每个都是独立的包。
 
 ## 玩家
 
@@ -42,12 +42,13 @@ python scripts/package.py --only FrostrailQuickstash
 
 - **Core**：固定 [UE4SS 3.0.1-1183-gcdbc0b66](https://github.com/UE4SS-RE/RE-UE4SS/tree/cdbc0b66)，将 `dwmapi.dll`、`ue4ss/UE4SS.dll`、`ue4ss/UE4SS-settings.ini`、`ue4ss/LICENSE` 按此目录结构放进 `tools/ue4ss-3.0.1-1183/`。
 - **辅助**：预先构建的 `build/FrostrailAssist_P.pak`、`.utoc`、`.ucas`。公开仓库不含资源重建工具；可从同版本的辅助 Release ZIP 取得这三份资源。
+- **自动保存**：先用 `python scripts/build_autosave.py` 构建 `build/FrostrailAutosave/autosave.dll`。固定工具版本、原生接口和构建步骤见 [DLL 说明](native/FrostrailAutosave/README.md)。
 
 其余功能包可直接从仓库打包。锁图标和管理器图标已有成品，日常构建无需重新生成；修改图标时使用对应的 Python 脚本，需要 Pillow。
 
 ## 许可
 
-自有源码使用 MIT 许可（[LICENSE](LICENSE)）。UE4SS 和 `mods/shared/Frostrail/json.lua` 保留各自的许可。辅助包里的高亮资源由游戏文件生成，不适用 MIT。
+自有源码使用 MIT 许可（[LICENSE](LICENSE)）。UE4SS、MinHook 和 `mods/shared/Frostrail/json.lua` 保留各自的许可。辅助包里的高亮资源由游戏文件生成，不适用 MIT。
 
 ## English
 

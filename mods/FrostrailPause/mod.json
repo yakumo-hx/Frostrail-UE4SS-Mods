@@ -1,7 +1,7 @@
 {
   "id": "FrostrailPause",
   "name": { "zh": "房主菜单暂停", "en": "Host menu pause" },
-  "version": "0.1.0",
+  "version": "0.1.1",
   "author": "Yuuka",
   "update": "https://github.com/yakumo-hx/Frostrail-UE4SS-Mods",
   "requires": ["FrostrailCore"],

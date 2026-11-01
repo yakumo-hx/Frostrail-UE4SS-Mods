@@ -31,6 +31,8 @@ def build(package_id, output_dir=None):
         for ext in ('pak', 'utoc', 'ucas'):
             source = ROOT / 'build' / ('FrostrailAssist_P.' + ext)
             add(source, Path(source.name))
+    if package_id == 'FrostrailAutosave':
+        add(ROOT / 'build/FrostrailAutosave/autosave.dll', destination / 'native/autosave.dll')
     output_dir = Path(output_dir).resolve() if output_dir else ROOT / 'dist' / manifest['version']
     output_dir.mkdir(parents=True, exist_ok=True)
     name = 'UE4SS-FrostrailCore' if package_id == 'FrostrailCore' else package_id
@@ -39,6 +41,8 @@ def build(package_id, output_dir=None):
         archive.write(source_root / 'mod.json', 'mod.json')
         archive.write(ROOT / 'LICENSE', 'LICENSE')
         archive.write(ROOT / 'docs/安装与配置.md', '安装与配置.md')
+        if package_id == 'FrostrailAutosave':
+            archive.write(ROOT / 'tools/minhook-1.3.4/LICENSE.txt', 'MinHook-LICENSE.txt')
         for relative, source in sorted(selected.items()):
             archive.write(source, relative)
     display = output.relative_to(ROOT) if output.is_relative_to(ROOT) else output
@@ -51,5 +55,5 @@ if __name__ == '__main__':
     parser.add_argument('--only', nargs='+', help='Build only the specified package IDs.')
     parser.add_argument('--output', type=Path, help='Place packages with different versions in one delivery directory.')
     args = parser.parse_args()
-    for package_id in args.only or ['FrostrailCore', 'FrostrailAssist', 'FrostrailQuickstash', 'FrostrailRecycler', 'FrostrailFarming', 'FrostrailStacks', 'FrostrailPause']:
+    for package_id in args.only or ['FrostrailCore', 'FrostrailAssist', 'FrostrailQuickstash', 'FrostrailRecycler', 'FrostrailFarming', 'FrostrailStacks', 'FrostrailPause', 'FrostrailAutosave']:
         build(package_id, args.output)

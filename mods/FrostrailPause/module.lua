@@ -70,6 +70,35 @@ function M:acquire(pc)
     C.log(self.id,"Esc opened; native pause="..tostring(paused).." owned="..tostring(entry.owned))
 end
 
+function M:prepare_dialog(dialog)
+    local C=self.core
+    if not self.pause or not self.pause.owned or not C.valid(dialog) then return end
+    local pc=dialog:GetOwningPlayer()
+    if not current(C,self.menu) or not C.same(pc,self.pause.controller.object) then return end
+    -- Native AddButton initializes its text with SetTimerForNextTick. Pausing
+    -- that callback leaves "Text Block" buttons and a dangling callback on exit.
+    -- Let one complete world tick run before reacquiring our menu pause.
+    local pending={menu=self.menu,controller=remember(pc),world=self.pause.world,
+        frame=self.system:GetFrameCount()}
+    self.settling=pending
+    self:release()
+    local function finish()
+        if self.settling~=pending then return end
+        if not current(C,pending.menu) or not current(C,pending.controller)
+            or not current(C,pending.world) or self.menu~=pending.menu then
+            self.settling=nil
+            return
+        end
+        if self.system:GetFrameCount()<pending.frame+2 then
+            ExecuteWithDelay(50,function() ExecuteInGameThread(finish) end)
+            return
+        end
+        self.settling=nil
+        self:acquire(pending.controller.object)
+    end
+    ExecuteWithDelay(50,function() ExecuteInGameThread(finish) end)
+end
+
 function M:stack_changed(hud)
     local C=self.core
     if not C.valid(hud) then return end
@@ -84,6 +113,7 @@ function M:stack_changed(hud)
         end
     end)
     if root and current(C,self.menu) and C.same(root,self.menu.object) then return end
+    self.settling=nil
     self:release()
     self.menu=root and remember(root) or nil
     if root then self:acquire(pc) end
@@ -92,9 +122,13 @@ end
 function M:init()
     local C=self.core
     self.gameplay=C.class("/Script/Engine.Default__GameplayStatics")
+    self.system=C.class("/Script/Engine.Default__KismetSystemLibrary")
     LoadAsset(hud_path)
     C.script_hook(hud_path..":OnWidgetStackChanged",function(ctx)
         C.run(self.id,function() self:stack_changed(ctx:get()) end)
+    end)
+    C.hook("/Script/Frostrail.FRDialogBoxWidget:AddButton",function(ctx)
+        C.run(self.id,function() self:prepare_dialog(ctx:get()) end)
     end)
     -- An external native resume ends our ownership even if Esc stays open.
     -- Native post-hooks pass (self, return_value, function arguments...).
@@ -108,7 +142,7 @@ function M:init()
         end)
     end)
     RegisterLoadMapPreHook(function()
-        C.run(self.id,function() self:release(); self.menu=nil; self.pause=nil end)
+        C.run(self.id,function() self.settling=nil; self:release(); self.menu=nil; self.pause=nil end)
     end)
 end
 

@@ -1,0 +1,12 @@
+{
+  "id": "FrostrailAutosave",
+  "name": {"zh":"自动保存","en":"Autosave"},
+  "version": "0.1.0",
+  "author": "Yuuka",
+  "requires": ["FrostrailCore"],
+  "update": "https://github.com/yakumo-hx/Frostrail-UE4SS-Mods",
+  "description": {
+    "zh": "默认每 10 分钟有效游玩时间保存，并在从 Esc 返回主菜单或退出游戏前保存。身上和箱子里的物品随原生战役保存；读档后按游戏规则出现在列车或起点。游戏或 UE4SS 更新后自动保存会停用，等待 Mod 更新。",
+    "en": "Saves every 10 minutes of active play by default, and before leaving through Esc. Uses native campaign saves for carried items and container contents; reloads spawn you on the train or at the starting point under the game's own rules. Autosave stops after a game or UE4SS update until the mod is updated."
+  }
+}

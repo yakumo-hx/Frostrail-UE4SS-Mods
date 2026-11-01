@@ -1,0 +1,5 @@
+[
+  {"key":"autosave","label":{"zh":"定时自动保存","en":"Timed autosave"},"live":true},
+  {"key":"interval_minutes","label":{"zh":"保存间隔（分钟）","en":"Save interval (minutes)"},"min":1,"integer":true,"live":true,"help":{"zh":"只累计有效游玩时间；修改后重新计时。","en":"Counts active game time; changing settings restarts the timer."}},
+  {"key":"save_on_exit","label":{"zh":"退出前保存","en":"Save before leaving"},"live":true,"help":{"zh":"从 Esc 菜单返回主菜单或退出游戏前保存。","en":"Saves before returning to the menu or quitting through Esc."}}
+]
