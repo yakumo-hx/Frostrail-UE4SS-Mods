@@ -10,6 +10,105 @@ namespace Frostrail.ModManager
 {
     internal sealed class ModDetails : UserControl
     {
+        sealed class CachedPage
+        {
+            public string Key;
+            public ModDetailsPage View;
+        }
+        readonly Dictionary<string, CachedPage> pages = new Dictionary<string, CachedPage>(StringComparer.OrdinalIgnoreCase);
+        ManagerService manager;
+        ModDetailsPage current;
+        bool canWrite, gameRunning;
+        public event Action<string> UninstallRequested, UpdateRequested, LogsRequested, Status;
+        public ModDetails() { Dock = DockStyle.Fill; BackColor = Theme.Back; }
+        public void BeginResize() => current?.BeginResize();
+        public void EndResize() => current?.EndResize();
+        public void ShowMod(ManagerService service, ModInfo mod, LaunchLog launch, UpdateInfo update,
+            List<ModInfo> installed = null) =>
+            Theme.Batch(this, () => SelectMod(service, mod, launch, update, installed));
+        void SelectMod(ManagerService service, ModInfo mod, LaunchLog launch, UpdateInfo update, List<ModInfo> installed)
+        {
+            EndResize();
+            current?.ValidateChildren();
+            current?.SaveScroll();
+            if (manager != service)
+            {
+                ClearPages();
+                manager = service;
+            }
+            if (installed != null)
+            {
+                var ids = new HashSet<string>(installed.Select(m => m.Id), StringComparer.OrdinalIgnoreCase) { "" };
+                foreach (var id in pages.Keys.Where(id => !ids.Contains(id)).ToArray())
+                {
+                    pages[id].View.Dispose();
+                    pages.Remove(id);
+                }
+            }
+            var all = (installed ?? service?.ListMods() ?? new List<ModInfo>())
+                .ToDictionary(m => m.Id, StringComparer.OrdinalIgnoreCase);
+            string idKey = mod?.Id ?? "";
+            string key = mod == null ? "empty" : JsonData.Serialize(new {
+                manifest = mod.Manifest.Data(), mod.Entries, mod.UpdateSource,
+                mod.Installed, mod.Changed, failure = launch.Failure(mod),
+                update = update?.Available == true ? update.Version : "",
+                requires = mod.Manifest.Requires.Select(id => ModDetailsPage.Requirement(id, all)).ToArray(),
+                files = FileStamp.Read(service.DetailFiles(mod))
+            });
+            pages.TryGetValue(idKey, out var cached);
+            if (cached == null || cached.Key != key)
+            {
+                var view = new ModDetailsPage { Visible = false };
+                view.UninstallRequested += id => UninstallRequested?.Invoke(id);
+                view.UpdateRequested += id => UpdateRequested?.Invoke(id);
+                view.LogsRequested += id => LogsRequested?.Invoke(id);
+                view.Status += message => Status?.Invoke(message);
+                try { view.LoadMod(service, mod, launch, update, all); }
+                catch { view.Dispose(); throw; }
+                if (cached != null)
+                {
+                    view.ScrollPosition = cached.View.ScrollPosition;
+                    cached.View.Dispose();
+                }
+                cached = new CachedPage { Key = key, View = view };
+                pages[idKey] = cached;
+                Controls.Add(view);
+            }
+            cached.View.SetAvailability(canWrite, gameRunning);
+            if (current == cached.View) return;
+            SuspendLayout();
+            try
+            {
+                if (current != null && !current.IsDisposed) current.SetShown(false);
+                current = cached.View;
+                current.SetShown(true);
+                current.BringToFront();
+            }
+            finally { ResumeLayout(true); }
+            current.RestoreScroll();
+        }
+        public void SetAvailability(bool writable, bool running)
+        {
+            canWrite = writable;
+            gameRunning = running;
+            current?.SetAvailability(writable, running);
+        }
+        void ClearPages()
+        {
+            foreach (var page in pages.Values) page.View.Dispose();
+            pages.Clear();
+            current = null;
+        }
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing) ClearPages();
+            base.Dispose(disposing);
+        }
+    }
+
+    // Retained pages stay parented so switching does not recreate their native child windows.
+    internal sealed class ModDetailsPage : UserControl
+    {
         // Fixed header: the title, one meta line and the action buttons never move with the content below.
         readonly Label title = new Label { Dock = DockStyle.Fill, AutoEllipsis = true, Font = Theme.Title,
             ForeColor = Theme.Text, TextAlign = ContentAlignment.MiddleLeft, Margin = Padding.Empty };
@@ -26,7 +125,27 @@ namespace Frostrail.ModManager
         readonly ToolTip tips = new ToolTip();
         bool resizing;
         public event Action<string> UninstallRequested, UpdateRequested, LogsRequested, Status;
-        public ModDetails()
+        public Point ScrollPosition { get; set; }
+        public void SaveScroll() => ScrollPosition = new Point(-body.AutoScrollPosition.X, -body.AutoScrollPosition.Y);
+        public void RestoreScroll() => body.AutoScrollPosition = ScrollPosition;
+        public void SetShown(bool visible)
+        {
+            // Visibility propagates to every child. Suspend their layouts too, not just the outer host.
+            var controls = Descendants(this).ToArray();
+            foreach (var control in controls) control.SuspendLayout();
+            try { Visible = visible; }
+            finally
+            {
+                foreach (var control in controls.Reverse()) control.ResumeLayout(false);
+            }
+        }
+        static IEnumerable<Control> Descendants(Control parent)
+        {
+            yield return parent;
+            foreach (Control child in parent.Controls)
+                foreach (var control in Descendants(child)) yield return control;
+        }
+        public ModDetailsPage()
         {
             Dock = DockStyle.Fill;
             BackColor = Theme.Back;
@@ -87,13 +206,8 @@ namespace Frostrail.ModManager
             actions.Controls.Add(button);
             if (writes) changes.Add(button);
         }
-        public void ShowMod(ManagerService service, ModInfo mod, LaunchLog launch, UpdateInfo update)
-        {
-            // A splitter drag released without moving leaves no SplitterMoved; never rebuild on a suspended body.
-            if (resizing) EndResize();
-            Theme.Batch(this, () => Rebuild(service, mod, launch, update));
-        }
-        void Rebuild(ManagerService service, ModInfo mod, LaunchLog launch, UpdateInfo update)
+        public void LoadMod(ManagerService service, ModInfo mod, LaunchLog launch, UpdateInfo update,
+            Dictionary<string, ModInfo> installed)
         {
             SuspendLayout();
             body.SuspendLayout();
@@ -101,18 +215,8 @@ namespace Frostrail.ModManager
             actions.SuspendLayout();
             try
             {
-                // readOnly is reused; take it out before disposing the old page.
-                content.Controls.Remove(readOnly);
-                foreach (Control old in content.Controls.Cast<Control>().ToArray()) old.Dispose();
-                foreach (Control old in actions.Controls.Cast<Control>().ToArray()) old.Dispose();
-                content.Controls.Clear();
-                content.RowStyles.Clear();
-                content.RowCount = 0;
-                editors.Clear();
-                changes.Clear();
-                body.AutoScrollPosition = Point.Empty;
                 if (mod == null) ShowEmpty();
-                else ShowPage(service, mod, launch, update);
+                else ShowPage(service, mod, launch, update, installed);
             }
             finally
             {
@@ -128,10 +232,10 @@ namespace Frostrail.ModManager
             meta.Text = "";
             Add(Line(UiText.T("在左侧选择一个 Mod。", "Select a mod on the left."), Theme.Muted));
         }
-        void ShowPage(ManagerService service, ModInfo mod, LaunchLog launch, UpdateInfo update)
+        void ShowPage(ManagerService service, ModInfo mod, LaunchLog launch, UpdateInfo update,
+            Dictionary<string, ModInfo> installed)
         {
             // Header: what the player needs to recognise the mod. IDs and entry folders go to the footer.
-            var installed = service.ListMods().ToDictionary(m => m.Id, StringComparer.OrdinalIgnoreCase);
             var parts = new List<string> { mod.Version.Length == 0 ? "—" : mod.Version };
             if (mod.Manifest.Author.Length > 0) parts.Add(mod.Manifest.Author);
             if (mod.Manifest.Requires.Count > 0)
@@ -192,7 +296,7 @@ namespace Frostrail.ModManager
             Add(Line(footer, Theme.Muted, Theme.Small), 0);
             FitText();
         }
-        static string Requirement(string id, Dictionary<string, ModInfo> installed)
+        internal static string Requirement(string id, Dictionary<string, ModInfo> installed)
         {
             if (!installed.TryGetValue(id, out var required)) return id + UiText.T("（未安装）", " (not installed)");
             return required.Name(Language) + (required.Enabled ? "" : UiText.T("（未启用）", " (disabled)"));
@@ -222,6 +326,11 @@ namespace Frostrail.ModManager
             foreach (var editor in editors) editor.SetReadOnly(!canWrite);
             readOnly.Text = gameRunning ? UiText.T("游戏运行中，设置暂时只读。", "Settings are read-only while the game runs.") : "";
             readOnly.Visible = gameRunning;
+        }
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing) { tips.Dispose(); readOnly.Dispose(); }
+            base.Dispose(disposing);
         }
     }
 }

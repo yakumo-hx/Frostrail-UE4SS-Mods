@@ -4,13 +4,13 @@
 
 Frostrail（Steam Demo）的 Mod 和 Mod 管理器。作者 Yuuka。
 
-- **Frostrail mod管理器**：Windows 上的单个 EXE。安装、启停、排序、设置、更新 Mod，查看和导出日志。
+- **Frostrail mod管理器**：Windows 上的单个 EXE。安装、启停、排序、设置、更新 Mod，查看和导出日志，也能在线更新自己。
 - **UE4SS-FrostrailCore**：前置。包含固定版 UE4SS、公共 Lua 支持库和游戏内 F8 设置窗口。
 - **功能 Mod**：辅助（穿墙高亮、头灯、一键拿取、基础负重）、快存与格子锁、分拣台扩容、种植、堆叠。每个都是独立的包。
 
 ## 玩家
 
-从 [Releases](https://github.com/yakumo-hx/Frostrail-UE4SS-Mods/releases/latest) 下载 `FrostrailModManager.exe`、Core 和想用的功能 Mod ZIP。管理器在 Windows 10 22H2 和 Windows 11 上双击就能用，不用另装东西。
+从 [Releases](https://github.com/yakumo-hx/Frostrail-UE4SS-Mods/releases/latest) 下载 `FrostrailModManager-<版本>.exe`、Core 和想用的功能 Mod ZIP。管理器在 Windows 10 22H2 和 Windows 11 上双击就能用，不用另装东西。
 
 退出游戏，把 ZIP 拖进管理器就装好了。也可以在管理器里点“安装 → GitHub 链接…”，粘贴本仓库地址，勾选要装的包。具体步骤见[安装与配置](docs/安装与配置.md)。
 

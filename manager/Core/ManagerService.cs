@@ -466,6 +466,13 @@ namespace Frostrail.ModManager
                 Log("uninstall", "info", id, "Removed package; preserved original and other packages' files.");
             }
         }
+        public IEnumerable<string> DetailFiles(ModInfo mod)
+        {
+            yield return Cache(mod.Id);
+            foreach (var entry in mod.Entries)
+                foreach (var name in new[] { "settings.json", "defaults.json", "config.json" })
+                    yield return Path.Combine(Target(NativeMods + entry), name);
+        }
         public List<SettingsPage> ReadSettings(ModInfo mod)
         {
             var pages = new List<SettingsPage>();

@@ -78,6 +78,7 @@ namespace Frostrail.ModManager
     public sealed partial class ManagerService
     {
         public string RuntimeLog => Path.Combine(ModsRoot, "..", "UE4SS.log");
+        public string GameManifest => Path.GetFullPath(Path.Combine(GameRoot, "../../appmanifest_5090080.acf"));
         void Log(string action, string level, string mod, string message)
         {
             Directory.CreateDirectory(DataRoot);
@@ -105,9 +106,8 @@ namespace Frostrail.ModManager
         {
             var launch = LaunchLog.Parse(Tail(RuntimeLog), mods,
                 File.Exists(RuntimeLog) ? File.GetLastWriteTimeUtc(RuntimeLog) : DateTime.MinValue);
-            var manifest = Path.GetFullPath(Path.Combine(GameRoot, "../../appmanifest_5090080.acf"));
-            if (File.Exists(manifest))
-                launch.GameVersion = Regex.Match(File.ReadAllText(manifest), "\"buildid\"\\s+\"([^\"]+)\"").Groups[1].Value;
+            if (File.Exists(GameManifest))
+                launch.GameVersion = Regex.Match(File.ReadAllText(GameManifest), "\"buildid\"\\s+\"([^\"]+)\"").Groups[1].Value;
             return launch;
         }
         public List<LogEntry> ReadManagerLog()

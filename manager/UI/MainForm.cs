@@ -19,14 +19,18 @@ namespace Frostrail.ModManager
         HeaderTabs pages;
         Label status;
         readonly Timer timer = new Timer { Interval = 2000 };
+        readonly HashSet<Control> dropTargets = new HashSet<Control>();
         readonly string preferences;
         readonly bool isolated;
         string currentGame, selectedId;
-        bool busy, syncing, checking;
+        bool busy, syncing, checking, switchingPage;
         DateTime lastCheck;
         List<ModInfo> mods = new List<ModInfo>();
         LaunchLog launch = new LaunchLog();
         Dictionary<string, UpdateInfo> updates = new Dictionary<string, UpdateInfo>();
+        UpdateInfo managerUpdate;
+        // Set after the EXE was replaced; Program starts the new copy once this window has closed.
+        public bool RestartRequested { get; private set; }
         public MainForm(string initialGame, string uiDirectory = null)
         {
             isolated = uiDirectory != null;
@@ -102,7 +106,9 @@ namespace Frostrail.ModManager
             Controls.Add(gameBar);
             Controls.Add(Theme.Rule(DockStyle.Bottom));
             Controls.Add(status);
-            pages.Changed += index => tabs.SelectedIndex = index;
+            pages.Changed += index => SelectPage(index);
+            gameBar.ShowSelfUpdate(managerUpdate?.Available == true ? managerUpdate.Version : null);
+            gameBar.SelfUpdateRequested += async () => await UpdateManager();
             split.SplitterMoving += (s, e) => details.BeginResize();
             split.SplitterMoved += (s, e) => details.EndResize();
             split.MouseUp += (s, e) => details.EndResize();
@@ -110,7 +116,7 @@ namespace Frostrail.ModManager
             gameBar.LanguageSelected += () => {
                 SavePreferences();
                 Build();
-                RefreshData(true);
+                RefreshData();
             };
             list.Selected += id => {
                 if (syncing || selectedId == id) return;
@@ -128,22 +134,36 @@ namespace Frostrail.ModManager
                 else await CheckUpdates();
             };
             list.MoveRequested += async (id, offset) => {
-                if (id != null) await Run(() => Task.Run(() => service.Move(id, offset)), false);
+                if (id != null) await Run(() => Task.Run(() => service.Move(id, offset)));
             };
             details.UninstallRequested += Uninstall;
             details.UpdateRequested += async id => await UpdateOne(id);
-            details.LogsRequested += id => {
-                if (tabs.SelectedIndex != 1) tabs.SelectedIndex = 1;
-                else logs.LoadLogs(service, mods);
-                logs.SelectMod(id);
-            };
+            details.LogsRequested += id => SelectPage(1, id);
             details.Status += SetStatus;
             logs.Status += SetStatus;
             tabs.SelectedIndexChanged += (s, e) => {
                 pages.Selected = tabs.SelectedIndex;
-                if (tabs.SelectedIndex == 1 && service != null) logs.LoadLogs(service, mods);
+                if (switchingPage || service == null) return;
+                if (tabs.SelectedIndex == 1) logs.LoadLogs(service, mods);
+                else ShowDetails();
             };
             ResumeLayout();
+        }
+        void SelectPage(int index, string modId = null)
+        {
+            try
+            {
+                // Prepare the target while it is hidden; the details shortcut selects its source before rendering.
+                if (service != null)
+                {
+                    if (index == 1) logs.LoadLogs(service, mods, selectedMod: modId);
+                    else ShowDetails();
+                }
+                switchingPage = true;
+                Theme.Batch(tabs, () => tabs.SelectedIndex = index);
+            }
+            catch (Exception ex) { SetStatus(ex.Message); pages.Selected = tabs.SelectedIndex; }
+            finally { switchingPage = false; }
         }
         // Dragging the window edge would otherwise reflow the whole details page on every mouse move.
         protected override void OnResizeBegin(EventArgs e)
@@ -158,6 +178,9 @@ namespace Frostrail.ModManager
         }
         void HookDrop(Control control)
         {
+            // Register drag handlers once per control, including retained detail pages.
+            if (!dropTargets.Add(control)) return;
+            control.Disposed += (s, e) => dropTargets.Remove(control);
             control.AllowDrop = true;
             control.DragEnter += (s, e) => e.Effect = service != null && !busy && !service.GameRunning
                 && e.Data.GetDataPresent(DataFormats.FileDrop) ? DragDropEffects.Copy : DragDropEffects.None;
@@ -179,7 +202,7 @@ namespace Frostrail.ModManager
                 updates.Clear();
                 selectedId = null;
                 SavePreferences();
-                RefreshData(true);
+                RefreshData();
                 SetStatus(UiText.T("已读取 ", "Loaded ") + mods.Count + " Mod");
             }
             catch (Exception e)
@@ -194,7 +217,7 @@ namespace Frostrail.ModManager
                 SetStatus(e.Message);
             }
         }
-        void RefreshData(bool detailChanged)
+        void RefreshData()
         {
             if (service == null) return;
             mods = service.ListMods();
@@ -205,17 +228,17 @@ namespace Frostrail.ModManager
             list.Sync(mods, launch, updates);
             if (selectedId != null) list.SelectId(selectedId);
             var next = list.SelectedId;
-            bool changed = next != selectedId;
             selectedId = next;
             syncing = false;
-            if (changed || detailChanged) ShowDetails();
+            ShowDetails();
+            if (tabs.SelectedIndex == 1) logs.LoadLogs(service, mods);
             Availability();
         }
         void ShowDetails()
         {
             var mod = mods.FirstOrDefault(m => m.Id == selectedId);
             updates.TryGetValue(selectedId ?? "", out var update);
-            details.ShowMod(service, mod, launch, update);
+            details.ShowMod(service, mod, launch, update, mods);
             Availability();
         }
         void Availability()
@@ -230,7 +253,7 @@ namespace Frostrail.ModManager
             UseWaitCursor = busy;
         }
         void SetStatus(string message) { status.Text = message; }
-        async Task<bool> Run(Func<Task> action, bool detailChanged = true, bool writes = true)
+        async Task<bool> Run(Func<Task> action, bool writes = true)
         {
             if (service == null || busy) return false;
             if (writes && service.GameRunning) { SetStatus(UiText.T("请先退出游戏。", "Close the game first.")); return false; }
@@ -239,7 +262,7 @@ namespace Frostrail.ModManager
             try
             {
                 await action();
-                RefreshData(detailChanged);
+                RefreshData();
                 SetStatus(UiText.T("操作完成。", "Operation completed."));
                 return true;
             }
@@ -274,7 +297,7 @@ namespace Frostrail.ModManager
                     .Where(t => t.Length > 0).ToList();
                 if (group.Count > 1) notices.Insert(0, UiText.T("一起更改：", "Change together: ") + string.Join(", ", group.Select(m => m.Name(UiText.Chinese ? "zh" : "en"))));
                 if (notices.Count > 0 && !Confirm(string.Join("\n\n", notices))) return;
-                await Run(() => Task.Run(() => service.SetEnabled(id, enabled)), group.Any(m => m.Id == selectedId));
+                await Run(() => Task.Run(() => service.SetEnabled(id, enabled)));
             }
             catch (Exception e) { SetStatus(e.Message); }
         }
@@ -331,20 +354,38 @@ namespace Frostrail.ModManager
             try
             {
                 var result = await target.CheckUpdatesAsync();
+                UpdateInfo manager = null;
+                string managerError = null;
+                try { manager = await target.CheckManagerAsync(); }
+                catch (Exception e) { managerError = e.Message; }
                 if (IsDisposed || target != service) return;
                 updates = result.ToDictionary(u => u.Id);
+                managerUpdate = manager;
+                gameBar.ShowSelfUpdate(manager?.Available == true ? manager.Version : null);
                 lastCheck = DateTime.UtcNow;
                 SavePreferences();
-                RefreshData(selectedId != null && updates.ContainsKey(selectedId));
-                var errors = updates.Values.Where(u => u.Error.Length > 0).Select(u => u.Id + ": " + u.Error).ToArray();
+                RefreshData();
+                var errors = updates.Values.Where(u => u.Error.Length > 0).Select(u => u.Id + ": " + u.Error).ToList();
+                if (managerError != null) errors.Add(UiText.T("管理器：", "Manager: ") + managerError);
                 int count = updates.Values.Count(u => u.Available);
-                SetStatus(errors.Length > 0 ? string.Join("; ", errors)
-                    : count > 0 ? UiText.T("有 " + count + " 个更新。", count + " update(s) available.")
+                var managerNote = manager?.Available == true ? UiText.T("管理器有新版本 " + manager.Version + "，可在右上角更新。",
+                    "Manager " + manager.Version + " is available (top right). ") : "";
+                SetStatus(errors.Count > 0 ? string.Join("; ", errors)
+                    : managerNote + (count > 0 ? UiText.T("有 " + count + " 个 Mod 更新。", count + " mod update(s) available.")
                     : result.Count == 0 ? UiText.T("已装的 Mod 都没有更新来源。", "No installed mod has an update source.")
-                    : UiText.T("都是最新版本。", "Everything is up to date."));
+                    : UiText.T("Mod 都是最新版本。", "All mods are up to date.")));
             }
             catch (Exception e) { SetStatus(e.Message); }
             finally { checking = false; Availability(); }
+        }
+        // Downloads the new EXE over the running one, then closes; Program starts the new copy.
+        async Task UpdateManager()
+        {
+            var info = managerUpdate;
+            if (info?.Available != true) return;
+            if (!await Run(() => service.ReplaceManagerAsync(info, Application.ExecutablePath), writes: false)) return;
+            RestartRequested = true;
+            Close();
         }
         async Task UpdateOne(string id)
         {

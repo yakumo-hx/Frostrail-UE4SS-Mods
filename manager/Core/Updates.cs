@@ -5,6 +5,7 @@ using System.IO.Compression;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
+using System.Reflection;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading;
@@ -52,8 +53,7 @@ namespace Frostrail.ModManager
         async Task<HttpResponseMessage> Request(string url, CancellationToken token = default(CancellationToken))
         {
             var request = new HttpRequestMessage(HttpMethod.Get, url);
-            request.Headers.TryAddWithoutValidation("User-Agent",
-                "Frostrail-Mod-Manager/" + typeof(ManagerService).Assembly.GetName().Version.ToString(3));
+            request.Headers.TryAddWithoutValidation("User-Agent", "Frostrail-Mod-Manager/" + ManagerVersion);
             HttpResponseMessage response;
             try { response = await Network.SendAsync(request, token).ConfigureAwait(false); }
             catch (TaskCanceledException)
@@ -93,6 +93,69 @@ namespace Frostrail.ModManager
                 Id = id, Version = manifest.Version, Source = source.Url, Directory = source.Directory,
                 Commit = sha, DownloadUrl = source.Api + "/zipball/" + Uri.EscapeDataString(sha), Name = source.Directory
             };
+        }
+        // The manager updates itself from the repository that publishes the first-party packages.
+        // Its Release asset is named FrostrailModManager-<version>.exe, like the <id>-<version>.zip packages.
+        public const string ManagerRepository = "https://github.com/yakumo-hx/Frostrail-UE4SS-Mods";
+        public static string ManagerVersion => typeof(ManagerService).Assembly.GetName().Version.ToString(3);
+        public async Task<UpdateInfo> CheckManagerAsync(string repository = ManagerRepository)
+        {
+            var source = GitHubSource.Parse(repository);
+            var info = new UpdateInfo { Id = "FrostrailModManager", Source = repository };
+            foreach (var release in Releases(await GetJson(source.Api + "/releases").ConfigureAwait(false)))
+                foreach (var asset in JsonData.List(JsonData.Get(release, "assets")))
+                {
+                    var name = JsonData.Text(JsonData.Get(asset, "name"));
+                    var match = Regex.Match(name, @"^FrostrailModManager-(.+)\.exe$", RegexOptions.IgnoreCase);
+                    if (!match.Success) continue;
+                    info.Name = name;
+                    info.Version = match.Groups[1].Value;
+                    info.DownloadUrl = JsonData.Text(JsonData.Get(asset, "browser_download_url"));
+                    // Only newer: a developer build ahead of the last Release should not offer a step back.
+                    bool numeric = System.Version.TryParse(info.Version, out var offered)
+                        & System.Version.TryParse(ManagerVersion, out var running);
+                    info.Available = numeric ? offered > running : info.Version != ManagerVersion;
+                    return info;
+                }
+            return info;
+        }
+        // Windows lets a running EXE be renamed but not overwritten: download beside it, move the running
+        // file to .old, move the new one in. The .old copy is deleted on the next start.
+        public async Task ReplaceManagerAsync(UpdateInfo info, string exe)
+        {
+            var fresh = exe + ".new";
+            var old = exe + ".old";
+            try
+            {
+                using (var response = await Request(info.DownloadUrl).ConfigureAwait(false))
+                using (var stream = File.Create(fresh)) await response.Content.CopyToAsync(stream).ConfigureAwait(false);
+                // A cut-off download would leave the player without a working manager; a complete EXE has metadata.
+                try { AssemblyName.GetAssemblyName(fresh); }
+                catch (BadImageFormatException)
+                {
+                    throw new InvalidDataException(UiText.T("下载的管理器不完整，没有替换。请稍后再试。",
+                        "The downloaded manager is incomplete; nothing was replaced. Try again later."));
+                }
+                if (File.Exists(old)) File.Delete(old);
+                File.Move(exe, old);
+                try { File.Move(fresh, exe); }
+                catch { File.Move(old, exe); throw; }
+            }
+            catch (UnauthorizedAccessException)
+            {
+                throw new IOException(UiText.T("管理器所在的文件夹不能写入。请到 Releases 下载新版 EXE 手动替换。",
+                    "The manager's folder is not writable. Download the new EXE from Releases and replace it by hand."));
+            }
+            finally
+            {
+                if (File.Exists(fresh)) File.Delete(fresh);
+            }
+        }
+        public static void RemoveOldManager(string exe)
+        {
+            try { File.Delete(exe + ".old"); }
+            catch (IOException) { }
+            catch (UnauthorizedAccessException) { }
         }
         static List<object> Releases(object value) => JsonData.List(value)
             .Where(r => !JsonData.Bool(JsonData.Get(r, "draft"))).ToList();
