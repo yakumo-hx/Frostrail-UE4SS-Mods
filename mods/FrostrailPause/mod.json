@@ -1,0 +1,12 @@
+{
+  "id": "FrostrailPause",
+  "name": { "zh": "房主菜单暂停", "en": "Host menu pause" },
+  "version": "0.1.0",
+  "author": "Yuuka",
+  "update": "https://github.com/yakumo-hx/Frostrail-UE4SS-Mods",
+  "requires": ["FrostrailCore"],
+  "description": {
+    "zh": "按 Esc 打开菜单时游戏暂停，进到设置等页面也保持暂停；点继续或关掉菜单就恢复。一个人玩同样生效。多人游戏时只有房主的菜单会暂停，所有人一起停住。",
+    "en": "Pauses the game while the Esc menu is open, including its settings pages, and resumes when you continue or close it. Works when playing alone. In multiplayer only the host's menu pauses, and everyone stops together."
+  }
+}
