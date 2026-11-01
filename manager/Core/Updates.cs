@@ -37,6 +37,9 @@ namespace Frostrail.ModManager
     {
         public string Id = "", Version = "", DownloadUrl = "", Source = "", Directory = "", Commit = "", Name = "", Error = "";
         public bool Available;
+        // installed is the version on disk now, or null when the mod is gone.
+        public void Compare(string installed) =>
+            Available = Error.Length == 0 && installed != null && Version != installed;
     }
     public sealed partial class ManagerService
     {
@@ -136,7 +139,7 @@ namespace Frostrail.ModManager
                         if (!repos.TryGetValue(source.Api, out var task)) repos[source.Api] = task = GetJson(source.Api + "/releases");
                         info = ReleaseUpdate(await task.ConfigureAwait(false), source, mod.Id);
                     }
-                    info.Available = info.Error.Length == 0 && info.Version != mod.Version;
+                    info.Compare(mod.Version);
                     result.Add(info);
                 }
                 catch (Exception e)
@@ -155,48 +158,71 @@ namespace Frostrail.ModManager
             return releases.Count == 0 ? new List<UpdateInfo>()
                 : Assets(releases[0]).Select(a => Asset(a, releases[0], source, "")).ToList();
         }
-        public async Task<ModInfo> InstallRemoteAsync(UpdateInfo info, Func<Manifest, bool> enable = null)
+        public async Task<ModInfo> InstallRemoteAsync(UpdateInfo info, Func<Manifest, bool> enable = null) =>
+            (await InstallRemoteManyAsync(new[] { info }, enable).ConfigureAwait(false)).Single();
+        // Downloads everything first, then installs prerequisites before the mods that need them,
+        // so picking Assist above Core in one go still leaves both enabled.
+        public async Task<List<ModInfo>> InstallRemoteManyAsync(IList<UpdateInfo> infos, Func<Manifest, bool> enable = null)
         {
             RequireStopped();
             var directory = Path.Combine(WorkRoot, Guid.NewGuid().ToString("N"));
-            Directory.CreateDirectory(directory);
-            var zip = Path.Combine(directory, info.Name.EndsWith(".zip", StringComparison.OrdinalIgnoreCase)
-                ? Path.GetFileName(info.Name) : "download.zip");
+            var packages = new List<Package>();
+            var sources = new Dictionary<Package, string>();
             try
             {
-                using (var response = await Request(info.DownloadUrl).ConfigureAwait(false))
-                using (var stream = File.Create(zip)) await response.Content.CopyToAsync(stream).ConfigureAwait(false);
-                if (info.Commit.Length > 0)
+                for (int i = 0; i < infos.Count; i++)
                 {
-                    var extracted = Path.Combine(directory, "snapshot");
-                    FileOps.Extract(zip, extracted);
-                    var snapshot = Directory.GetDirectories(extracted).Single();
-                    var folder = info.Directory.Length == 0 ? snapshot : FileOps.Under(snapshot, info.Directory);
-                    using (var package = InspectPackage(folder))
-                        return Install(package, enable == null || enable(package.Manifest), info.Source);
+                    var folder = Path.Combine(directory, i.ToString());
+                    var package = await DownloadAsync(infos[i], folder).ConfigureAwait(false);
+                    packages.Add(package);
+                    sources[package] = infos[i].Source;
                 }
-                using (var package = InspectPackage(zip))
-                {
-                    // A Release's filename/tag is the published version, including packages without mod.json.
-                    var assetVersion = Regex.Match(info.Name, "(?:^|-)" + Regex.Escape(package.Manifest.Id) + @"-(.+)\.zip$",
-                        RegexOptions.IgnoreCase);
-                    package.Manifest.Version = assetVersion.Success ? assetVersion.Groups[1].Value : info.Version;
-                    // The single-ZIP fallback can pick another mod's asset in a multi-mod repository.
-                    if (info.Id.Length > 0 && package.DeclaredId
-                        && !package.Manifest.Id.Equals(info.Id, StringComparison.OrdinalIgnoreCase))
-                    {
-                        var found = package.Manifest.Id;
-                        throw new InvalidDataException(info.Name + UiText.T(
-                            " 里是 " + found + "，不是 " + info.Id + "，没有安装。",
-                            " contains " + found + ", not " + info.Id + "; nothing was installed."));
-                    }
-                    if (info.Id.Length > 0) package.Manifest.Id = info.Id;
-                    return Install(package, enable == null || enable(package.Manifest), info.Source);
-                }
+                return DependencyOrder(packages)
+                    .Select(p => Install(p, enable == null || enable(p.Manifest), sources[p])).ToList();
             }
             finally
             {
+                foreach (var package in packages) package.Dispose();
                 if (Directory.Exists(directory)) Directory.Delete(directory, true);
+            }
+        }
+        async Task<Package> DownloadAsync(UpdateInfo info, string directory)
+        {
+            Directory.CreateDirectory(directory);
+            var zip = Path.Combine(directory, info.Name.EndsWith(".zip", StringComparison.OrdinalIgnoreCase)
+                ? Path.GetFileName(info.Name) : "download.zip");
+            using (var response = await Request(info.DownloadUrl).ConfigureAwait(false))
+            using (var stream = File.Create(zip)) await response.Content.CopyToAsync(stream).ConfigureAwait(false);
+            if (info.Commit.Length > 0)
+            {
+                var extracted = Path.Combine(directory, "snapshot");
+                FileOps.Extract(zip, extracted);
+                var snapshot = Directory.GetDirectories(extracted).Single();
+                return InspectPackage(info.Directory.Length == 0 ? snapshot : FileOps.Under(snapshot, info.Directory));
+            }
+            var package = InspectPackage(zip);
+            try
+            {
+                // A Release's filename/tag is the published version, including packages without mod.json.
+                var assetVersion = Regex.Match(info.Name, "(?:^|-)" + Regex.Escape(package.Manifest.Id) + @"-(.+)\.zip$",
+                    RegexOptions.IgnoreCase);
+                package.Manifest.Version = assetVersion.Success ? assetVersion.Groups[1].Value : info.Version;
+                // The single-ZIP fallback can pick another mod's asset in a multi-mod repository.
+                if (info.Id.Length > 0 && package.DeclaredId
+                    && !package.Manifest.Id.Equals(info.Id, StringComparison.OrdinalIgnoreCase))
+                {
+                    var found = package.Manifest.Id;
+                    throw new InvalidDataException(info.Name + UiText.T(
+                        " 里是 " + found + "，不是 " + info.Id + "，没有安装。",
+                        " contains " + found + ", not " + info.Id + "; nothing was installed."));
+                }
+                if (info.Id.Length > 0) package.Manifest.Id = info.Id;
+                return package;
+            }
+            catch
+            {
+                package.Dispose();
+                throw;
             }
         }
     }

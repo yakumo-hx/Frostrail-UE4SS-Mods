@@ -2,12 +2,19 @@ local here=debug.getinfo(1,"S").source:sub(2):gsub("\\","/"):match("^(.*)/module
 local logic=dofile(here.."/logic.lua")
 local M={title="快存与格子锁",pending={}}
 function M:setup()
-    self.core.action("Quickstash","附近箱子快存",nil,function() self:stash() end)
-    self.core.action("ToggleSlotLock","切换悬停格子锁",nil,function() self:toggle_hovered() end)
+    self.core.action("Quickstash",{zh="附近箱子快存",en="Quick stash to nearby containers"},nil,function() self:stash() end)
+    self.core.action("ToggleSlotLock",{zh="切换悬停格子锁",en="Toggle hovered slot lock"},nil,function() self:toggle_hovered() end)
 end
 function M:changed()
     self.locks=logic.locked(self.cfg.locked_slots)
     for _,w in ipairs(FindAllOf("WBP_Element_ItemSlot_C") or {}) do self:decorate(w) end
+end
+function M:language_changed()
+    self:changed()
+    for id,entry in pairs(self.grids or {}) do
+        if self.core.ui.owned(self.core,entry,entry.owner) then self:stash_label(entry)
+        else self.grids[id]=nil end
+    end
 end
 function M:init()
     local C=self.core
@@ -101,7 +108,9 @@ function M:merge_stacks(inv)
 end
 function M:stash()
     local C=self.core
-    if not C.pawn_valid() or not C.pawn:HasAuthority() then C.message("快存首版仅支持单人主机"); return end
+    if not C.pawn_valid() or not C.pawn:HasAuthority() then
+        C.message(C.text("快存首版仅支持单人主机","Quick stash currently supports single-player hosts only")); return
+    end
     local source=C.pawn.ItemSystemComponent:GetInventory()
     local boxes={}
     for _,container in ipairs(FindAllOf("ContainerComponent") or {}) do
@@ -134,7 +143,8 @@ function M:stash()
             end
         end
     end
-    C.message("快存完成："..moved.." 个物品，附近 "..#boxes.." 个玩家储物箱")
+    C.message(string.format(C.text("快存完成：%d 个物品，附近 %d 个玩家储物箱",
+        "Quick stash complete: %d items; %d nearby player containers"),moved,#boxes))
     C.log(self.id,"Quickstash moved="..moved.." containers="..#boxes)
 end
 function M:toggle_hovered()
@@ -168,15 +178,20 @@ function M:decorate_grid(grid)
     self.grids=self.grids or {}
     local id=grid:GetAddress()
     local entry=self.grids[id]
-    if C.ui.owned(C,entry,grid) then return end
+    if C.ui.owned(C,entry,grid) then self:stash_label(entry); return end
     for key,value in pairs(self.grids) do if not C.ui.owned(C,value,value.owner) then self.grids[key]=nil end end
-    entry=C.ui.button(C,grid,"快存",function() self:stash() end,12)
+    entry=C.ui.button(C,grid,C.text("快存","Quick stash"),function() self:stash() end,12)
     entry.owner=grid
-    entry.button:SetToolTipText(FText("将未锁定物品存入附近玩家储物箱"))
+    self:stash_label(entry)
     local slot=grid.SortingControlsHolder:AddChildToHorizontalBox(entry.widget)
     slot:SetPadding({Left=6,Top=0,Right=0,Bottom=0}); slot:SetVerticalAlignment(2)
     self.grids[id]=entry
     C.log(self.id,"Quickstash button attached at the right of native inventory sorting controls")
+end
+function M:stash_label(entry)
+    entry.text:SetText(FText(self.core.text("快存","Quick stash")))
+    entry.button:SetToolTipText(FText(self.core.text("将未锁定物品存入附近玩家储物箱",
+        "Stash unlocked items into nearby player containers")))
 end
 function M:decorate(w)
     local C=self.core
@@ -200,6 +215,8 @@ function M:decorate(w)
     local locked=self.locks[w.SlotId.ID]
     entry.image:SetBrushFromTexture(locked and self.icons.locked or self.icons.unlocked,false)
     entry.image:SetColorAndOpacity(locked and {R=1,G=0.8,B=0.2,A=1} or {R=0.7,G=0.75,B=0.8,A=0.65})
-    entry.button:SetToolTipText(FText(locked and "点击解锁：允许向外快存和整理" or "点击锁定：保留整理位置，禁止向外快存"))
+    entry.button:SetToolTipText(FText(locked
+        and C.text("点击解锁：允许向外快存和整理","Click to unlock: allow quick stash and sorting")
+        or C.text("点击锁定：保留整理位置，禁止向外快存","Click to lock: keep this position when sorting; skip quick stash")))
 end
 return M

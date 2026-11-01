@@ -198,6 +198,8 @@ namespace Frostrail.ModManager
         {
             if (service == null) return;
             mods = service.ListMods();
+            // A local install or uninstall after a check changes what is installed; re-judge the old results.
+            foreach (var info in updates.Values) info.Compare(mods.FirstOrDefault(m => m.Id == info.Id)?.Version);
             launch = service.ReadLaunch(mods);
             syncing = true;
             list.Sync(mods, launch, updates);
@@ -352,11 +354,10 @@ namespace Frostrail.ModManager
         async Task UpdateAll()
         {
             await Run(async () => {
-                foreach (var info in updates.Values.Where(u => u.Available).ToArray())
-                {
-                    await service.InstallRemoteAsync(info);
-                    updates.Remove(info.Id);
-                }
+                // One batch, so a prerequisite updates before the mods that need it.
+                var ready = updates.Values.Where(u => u.Available).ToList();
+                await service.InstallRemoteManyAsync(ready);
+                foreach (var info in ready) updates.Remove(info.Id);
             });
         }
         async void RemoteInstall()
@@ -376,19 +377,22 @@ namespace Frostrail.ModManager
                 await Run(async () => {
                     var choices = await service.GetInstallChoicesAsync(url.Text);
                     if (choices.Count == 0) throw new IOException(UiText.T("没有找到 ZIP 附件。", "No ZIP assets found."));
-                    var choice = choices[0];
-                    if (choices.Count > 1) using (var picker = new Form {
-                        Text = UiText.T("选择包", "Choose package"), Size = new Size(560, 400), Icon = Icon })
+                    var picked = choices.ToList();
+                    if (choices.Count > 1) using (var picker = Dialog(UiText.T("选择要安装的包", "Choose packages"), 520, 360))
                     {
-                        var box = new ListBox { Dock = DockStyle.Fill };
-                        foreach (var item in choices) box.Items.Add(item.Name);
-                        box.SelectedIndex = 0;
-                        picker.Controls.Add(box);
-                        picker.Controls.Add(new Button { Text = UiText.T("安装", "Install"), Dock = DockStyle.Bottom, DialogResult = DialogResult.OK });
+                        // All ticked by default: a repository link usually means "give me this set".
+                        var list = new CheckedListBox { Dock = DockStyle.Fill, CheckOnClick = true, BorderStyle = BorderStyle.None,
+                            IntegralHeight = false };
+                        foreach (var item in choices) list.Items.Add(item.Name, true);
+                        var frame = new Panel { Dock = DockStyle.Fill, Padding = Theme.P(20, 16, 20, 8) };
+                        frame.Controls.Add(list);
+                        picker.Controls.Add(frame);
+                        picker.Controls.Add(Buttons(picker, UiText.T("安装", "Install"), Look.Primary));
                         if (picker.ShowDialog(this) != DialogResult.OK) return;
-                        choice = choices[box.SelectedIndex];
+                        picked = list.CheckedIndices.Cast<int>().Select(i => choices[i]).ToList();
+                        if (picked.Count == 0) return;
                     }
-                    await service.InstallRemoteAsync(choice, manifest => {
+                    await service.InstallRemoteManyAsync(picked, manifest => {
                         var notice = JsonData.Local(JsonData.Get(manifest.Notices, "enable"), UiText.Chinese ? "zh" : "en");
                         return notice.Length == 0 || (bool)Invoke(new Func<bool>(() => Confirm(notice)));
                     });

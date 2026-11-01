@@ -4,8 +4,8 @@ local function color(hex)
     return {R=tonumber(hex:sub(1,2),16)/255,G=tonumber(hex:sub(3,4),16)/255,B=tonumber(hex:sub(5,6),16)/255,A=1}
 end
 function M:setup()
-    self.core.action("TakeAll","打开容器：全部拿取","R",function() self:take_all() end)
-    self.core.action("Headlamp","免费头灯","F",function()
+    self.core.action("TakeAll",{zh="打开容器：全部拿取",en="Open container: take all"},"R",function() self:take_all() end)
+    self.core.action("Headlamp",{zh="免费头灯",en="Free headlamp"},"F",function()
         local C=self.core
         if C.pawn_valid() and C.instance(self.lamp,self.lamp_name) and not C.player.bShowMouseCursor then
             self.lamp_on=not self.lamp_on; self.lamp:SetVisibility(self.lamp_on,false)
@@ -44,6 +44,9 @@ function M:init()
     C.log(self.id,"Native carry base initializer="..self.cfg.base_carry_weight.."; other GAS modifiers retained")
     C.script_hook("/Script/Frostrail.BaseCharacter:OnBecomeDead",function() self:scan() end)
     C.hook("/Script/Frostrail.GatherableActor:TryGather",nil,function() self:scan() end)
+    for _,event in ipairs({"RequestSalvage","MC_RequestSalvage","OnRep_CurrentDurability"}) do
+        C.hook("/Script/Frostrail.RepairComponent:"..event,nil,function() self:scan() end)
+    end
     LoopAsync(math.max(500,self.cfg.refresh_ms),function()
         ExecuteInGameThread(function() if not self.failed then C.run(self.id,function() self:scan() end) end end)
         return self.failed==true
@@ -193,6 +196,30 @@ function M:take_all()
     end
     self:scan()
 end
+function M:has_salvage(repair)
+    local C=self.core
+    if not C.valid(repair) or repair.bDisableFeature or repair.bIsSalvagingBlocked then return false end
+    local durability=repair:GetCurrentDurability()
+    if durability<=0 then return false end
+    local remaining=false
+    repair.PartInstances:ForEach(function(_,p)
+        local part=p:get()
+        -- Native RequestSalvage rewards a part when durability drops BELOW its
+        -- threshold (or reaches zero). At the threshold its reward is still due.
+        if part.DurabilityThreshold<=durability then
+            local resources=part.SalvageReward.Resources
+            if part.bUseRepairCostForSalvage and resources:GetArrayNum()==0 then
+                resources=part.RepairCost.Resources
+            end
+            resources:ForEach(function(_,r)
+                local reward=r:get()
+                if reward.Quantity>0 and C.valid(reward.Item) then remaining=true; return true end
+            end)
+        end
+        if remaining then return true end
+    end)
+    return remaining
+end
 function M:scan()
     local C=self.core
     if not C.pawn_valid() then
@@ -214,6 +241,13 @@ function M:scan()
             for _,a in ipairs(FindAllOf("ItemPickable") or {}) do mark(a,"items") end
             for _,a in ipairs(FindAllOf("GatherableActor") or {}) do
                 if not a.bHasGathered and a:CanGather() then mark(a,"items") end
+            end
+            for _,repair in ipairs(FindAllOf("RepairComponent") or {}) do
+                local owner=repair:GetOwner()
+                if C.valid(owner)
+                    and owner:IsA("/Game/Frostrail/Blueprints/Interactables/Salvageables/BP_Salvageable_Base.BP_Salvageable_Base_C")
+                    and owner:GetDistanceTo(C.pawn)<=self.cfg.range_m*100
+                    and self:has_salvage(repair) then mark(owner,"items") end
             end
         end
         if self.cfg.containers then

@@ -9,7 +9,7 @@ BASE = Path('Frostrail/Binaries/Win64')
 RUNTIME = ROOT / 'tools/ue4ss-3.0.1-1183'
 
 
-def build(package_id):
+def build(package_id, output_dir=None):
     source_root = ROOT / 'mods' / package_id
     manifest = json.loads((source_root / 'mod.json').read_text(encoding='utf-8-sig'))
     selected = {}
@@ -31,7 +31,7 @@ def build(package_id):
         for ext in ('pak', 'utoc', 'ucas'):
             source = ROOT / 'build' / ('FrostrailAssist_P.' + ext)
             add(source, Path(source.name))
-    output_dir = ROOT / 'dist' / manifest['version']
+    output_dir = Path(output_dir).resolve() if output_dir else ROOT / 'dist' / manifest['version']
     output_dir.mkdir(parents=True, exist_ok=True)
     name = 'UE4SS-FrostrailCore' if package_id == 'FrostrailCore' else package_id
     output = output_dir / (name + '-' + manifest['version'] + '.zip')
@@ -41,13 +41,15 @@ def build(package_id):
         archive.write(ROOT / 'docs/安装与配置.md', '安装与配置.md')
         for relative, source in sorted(selected.items()):
             archive.write(source, relative)
-    print(f'{output.relative_to(ROOT)}: {len(selected)} deployment files; {output.stat().st_size} bytes')
+    display = output.relative_to(ROOT) if output.is_relative_to(ROOT) else output
+    print(f'{display}: {len(selected)} deployment files; {output.stat().st_size} bytes')
     return output
 
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument('--only', nargs='+', help='Build only the specified package IDs.')
+    parser.add_argument('--output', type=Path, help='Place packages with different versions in one delivery directory.')
     args = parser.parse_args()
     for package_id in args.only or ['FrostrailCore', 'FrostrailAssist', 'FrostrailQuickstash', 'FrostrailRecycler', 'FrostrailFarming', 'FrostrailStacks']:
-        build(package_id)
+        build(package_id, args.output)

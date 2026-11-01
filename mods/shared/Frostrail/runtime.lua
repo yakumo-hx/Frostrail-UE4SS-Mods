@@ -2,8 +2,9 @@
 local config=require("Frostrail.config")
 local input=require("Frostrail.input")
 local settings=require("Frostrail.settings")
-local M={version="0.3.0"}
+local M={version="0.3.1"}
 local menu_path="/Game/Frostrail/UI/Widgets/Menus/MainMenu/WBP_Menu_Main.WBP_Menu_Main_C"
+local language_menu="/Game/Frostrail/UI/Widgets/Menus/SettingsMenu/WBP_Element_Settings_General.WBP_Element_Settings_General_C"
 local function native_name(id)
     return (id:gsub(".",function(c) return string.format("%02X",c:byte()) end))
 end
@@ -23,6 +24,7 @@ function M.create(options)
         game_root=options.game_root or game_root(root),
         actions={},config=config,settings=settings,options=options,native_id=native_name(context_id)}
     C.ui=require("Frostrail.ui")
+    C.text=require("Frostrail.locale").text
     function C.log(id,message) print("["..id.."] "..message.."\n") end
     function C.valid(o) return o~=nil and o:IsValid() end
     function C.same(a,b) return C.valid(a) and C.valid(b) and a:GetAddress()==b:GetAddress() end
@@ -140,6 +142,17 @@ function M.create(options)
             end)
         end
         ExecuteWithDelay(2000,function() ExecuteInGameThread(function()
+            if #C.actions>0 or module.language_changed then
+                LoadAsset(language_menu)
+                -- The menu's native SetGameLanguage call bypasses RegisterHook
+                -- in the pinned build. Its Blueprint selection event does not.
+                C.script_hook(language_menu..":BndEvt__WBP_Element_Settings_General_WBP_Common_Dropdown_Language_K2Node_ComponentBoundEvent_0_OnSelectionChanged__DelegateSignature",function()
+                    C.run(C.id,function()
+                        if #C.actions>0 then input.refresh_labels(C) end
+                        if C.initialized then C.call("language_changed") end
+                    end)
+                end)
+            end
             C.initialize()
             if #C.actions>0 then
                 local function attach_menu(menu)

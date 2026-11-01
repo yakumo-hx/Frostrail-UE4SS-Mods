@@ -4,7 +4,7 @@
     "zh": "快存与格子锁",
     "en": "Quick stash and slot locks"
   },
-  "version": "0.3.0",
+  "version": "0.3.1",
   "author": "Yuuka",
   "update": "https://github.com/yakumo-hx/Frostrail-UE4SS-Mods",
   "requires": [

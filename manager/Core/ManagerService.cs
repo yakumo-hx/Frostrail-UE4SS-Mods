@@ -132,22 +132,27 @@ namespace Frostrail.ModManager
             try
             {
                 foreach (var path in sources) packages.Add(InspectPackage(path));
-                var sorted = new List<Package>();
-                var seen = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
-                Action<Package> visit = null;
-                visit = p => {
-                    if (!seen.Add(p.Manifest.Id)) return;
-                    foreach (var dependency in p.Manifest.Requires)
-                    {
-                        var found = packages.FirstOrDefault(x => x.Manifest.Id.Equals(dependency, StringComparison.OrdinalIgnoreCase));
-                        if (found != null) visit(found);
-                    }
-                    sorted.Add(p);
-                };
-                foreach (var package in packages) visit(package);
-                return sorted.Select(p => Install(p, enable == null || enable(p.Manifest), "")).ToList();
+                return DependencyOrder(packages).Select(p => Install(p, enable == null || enable(p.Manifest), "")).ToList();
             }
             finally { foreach (var package in packages) package.Dispose(); }
+        }
+        // Prerequisites in the same batch come before the packages that require them.
+        static List<Package> DependencyOrder(List<Package> packages)
+        {
+            var sorted = new List<Package>();
+            var seen = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+            Action<Package> visit = null;
+            visit = p => {
+                if (!seen.Add(p.Manifest.Id)) return;
+                foreach (var dependency in p.Manifest.Requires)
+                {
+                    var found = packages.FirstOrDefault(x => x.Manifest.Id.Equals(dependency, StringComparison.OrdinalIgnoreCase));
+                    if (found != null) visit(found);
+                }
+                sorted.Add(p);
+            };
+            foreach (var package in packages) visit(package);
+            return sorted;
         }
         public ModInfo InstallPackage(string source, bool enable = true, string origin = "")
         {

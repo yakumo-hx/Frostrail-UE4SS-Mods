@@ -28,7 +28,7 @@ Frostrail（Steam Demo）的 Mod 和 Mod 管理器。作者 Yuuka。
 powershell -File scripts/Build-Manager.ps1
 ```
 
-输出为 `build/v0.3.0/manager/FrostrailModManager.exe`。构建好的 EXE 不需要 SDK。
+输出为 `build/v<版本>/manager/FrostrailModManager.exe`。构建好的 EXE 不需要 SDK。
 
 Mod 打包需要 Python：
 

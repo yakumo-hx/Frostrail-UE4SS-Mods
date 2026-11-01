@@ -1,11 +1,7 @@
 local M={}
 local settings=require("Frostrail.settings")
 local editors=require("Frostrail.editors")
-local function language()
-    local value=StaticFindObject("/Script/Engine.Default__KismetInternationalizationLibrary"):GetCurrentLanguage()
-    local tag=type(value)=="string" and value or value:ToString()
-    return tag:lower():sub(1,2)=="zh" and "zh" or "en"
-end
+local language=require("Frostrail.locale").language
 local function tr(C,zh,en) return C.panel_state and C.panel_state.language=="en" and en or zh end
 local function state(C)
     C.panel_state=C.panel_state or {menus={}}

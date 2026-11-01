@@ -10,7 +10,7 @@
     <Prefer32Bit>false</Prefer32Bit>
     <ApplicationManifest>app.manifest</ApplicationManifest>
     <ApplicationIcon>Assets/Manager.ico</ApplicationIcon>
-    <Version>0.3.0</Version>
+    <Version>0.3.1</Version>
     <AssemblyTitle>Frostrail mod manager</AssemblyTitle>
     <Description>Portable Frostrail mod manager</Description>
     <Company>Yuuka</Company>

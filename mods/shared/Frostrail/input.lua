@@ -1,5 +1,6 @@
 local M={}
 local settings=require("Frostrail.settings")
+local locale=require("Frostrail.locale")
 local function state(C)
     C.input_state=C.input_state or {registered={},dispatch={},held={}}
     return C.input_state
@@ -81,6 +82,51 @@ function M.sync(C,applying)
         end
     end
 end
+function M.refresh_labels(C)
+    local S=state(C)
+    local native_settings=FindFirstOf("FREnhancedInputUserSettings")
+    if not C.instance(native_settings,S.settings_name) or not C.instance(S.context,S.context_name) then return end
+    local labels={}
+    for _,a in ipairs(C.actions) do labels[a.name]=settings.label(a.label,locale.language()) end
+    local category=locale.text("Frostrail 模组","Frostrail mods")
+    S.context.Mappings:ForEach(function(_,p)
+        local action=p:get().Action
+        if C.valid(action) then
+            local keysettings=action.PlayerMappableKeySettings
+            if C.valid(keysettings) then
+                local label=labels[keysettings.Name:ToString()]
+                if label then keysettings.DisplayName=FText(label); keysettings.DisplayCategory=FText(category) end
+            end
+        end
+    end)
+    local profile=native_settings:GetActiveKeyProfile()
+    if not C.valid(profile) then return end
+    for name,label in pairs(labels) do
+        if profile.PlayerMappedKeys:Contains(FName(name)) then
+            profile.PlayerMappedKeys:Find(FName(name)):get().Mappings:ForEach(function(p)
+                -- Only presentation changes. MappingName, CurrentKey and DefaultKey stay intact.
+                local mapping=p:get()
+                mapping.DisplayName=FText(label)
+                mapping.DisplayCategory=FText(category)
+            end)
+        end
+    end
+    -- The controls page keeps copies of profile rows while switching settings tabs.
+    for _,data in ipairs(FindAllOf("Data_KeybindingListEntry_C") or {}) do
+        local mapping=data.PlayerKeyMapping
+        local label=labels[mapping.MappingName:ToString()]
+        if label then mapping.DisplayName=FText(label); mapping.DisplayCategory=FText(category) end
+    end
+    for _,entry in ipairs(FindAllOf("WBP_Element_Settings_Controls_KeybindingListEntry_C") or {}) do
+        if C.valid(entry.KeybindingData) then
+            local label=labels[entry.KeybindingData.PlayerKeyMapping.MappingName:ToString()]
+            if label then
+                entry.KeybindingText:SetText(FText(label))
+                entry.KeybindingCategoryText:SetText(FText(category))
+            end
+        end
+    end
+end
 function M.attach(C,pc)
     local S=state(C)
     local native_settings=FindFirstOf("FREnhancedInputUserSettings")
@@ -92,8 +138,8 @@ function M.attach(C,pc)
             local action=C.new("/Script/EnhancedInput.InputAction",ctx,a.name:gsub("%.","_"))
             local keysettings=C.new("/Script/EnhancedInput.PlayerMappableKeySettings",action)
             keysettings.Name=FName(a.name)
-            keysettings.DisplayName=FText(a.label)
-            keysettings.DisplayCategory=FText("Frostrail 模组")
+            keysettings.DisplayName=FText(settings.label(a.label,locale.language()))
+            keysettings.DisplayCategory=FText(locale.text("Frostrail 模组","Frostrail mods"))
             action.PlayerMappableKeySettings=keysettings
             action.bConsumeInput=false
             ctx:MapKey(action,{KeyName=FName(a.key or "None")})
@@ -111,6 +157,7 @@ function M.attach(C,pc)
     if pc:IsA("/Script/Frostrail.FrostrailPlayerControllerBase") then
         pc:AddInputMapping(S.context,100,{bIgnoreAllPressedKeysUntilRelease=true,bForceImmediately=true,bNotifyUserSettings=true})
     end
+    M.refresh_labels(C)
     M.sync(C)
 end
 return M
