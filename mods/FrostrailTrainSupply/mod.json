@@ -1,0 +1,12 @@
+{
+  "id": "FrostrailTrainSupply",
+  "name": {"zh": "同列车供料", "en": "Train supply"},
+  "version": "0.1.0",
+  "author": "Yuuka",
+  "requires": ["FrostrailCore"],
+  "update": "https://github.com/yakumo-hx/Frostrail-UE4SS-Mods",
+  "description": {
+    "zh": "背包和工作台制作可使用同列车玩家储物箱的材料。开始制作时补齐背包缺料，关闭制作界面时退回未用完的搬入材料。仅单人或房主生效。",
+    "en": "Craft with materials from player storage on the same train. Missing materials move into your backpack when crafting starts; unused borrowed materials return when you close crafting. Single player or host only."
+  }
+}
