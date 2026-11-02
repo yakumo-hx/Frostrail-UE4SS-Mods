@@ -21,14 +21,14 @@ function M:bind(refinery)
         end
     end
     refinery.MaxParallelRefineProcesses=1
-    C.log(self.id,"Bound "..refinery:GetFullName().." input="..input.ContainerInventorySize.." output="..output.ContainerInventorySize.." parallel=1")
+    C.log(C.id,"Bound "..refinery:GetFullName().." input="..input.ContainerInventorySize.." output="..output.ContainerInventorySize.." parallel=1")
 end
 function M:init()
     assert(self.cfg.input_slots>=1 and self.cfg.input_slots%1==0 and self.cfg.output_slots>=1 and self.cfg.output_slots%1==0,"Invalid inventory capacity")
     self.input_slots,self.output_slots=self.cfg.input_slots,self.cfg.output_slots
     for _,ref in ipairs(FindAllOf("RefineryComponent") or {}) do self:bind(ref) end
     self.core.hook("/Script/Frostrail.RefineryComponent:OnInputInventoryChanged",function(ctx) self:bind(ctx:get()) end)
-    self.core.log(self.id,"Native sequential processor hooks registered; awaiting recycler instance")
+    self.core.log(self.core.id,"Native sequential processor hooks registered; awaiting recycler instance")
 end
 function M:actor_ready(actor)
     if actor:GetClass():GetFName():ToString():find("Recycler") then

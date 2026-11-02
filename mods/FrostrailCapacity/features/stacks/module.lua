@@ -21,6 +21,6 @@ function M:init()
         end
     end
     C.retain(self.id,keep)
-    C.log(self.id,"Bound "..count.." stackable schematics; multiplier="..self.cfg.multiplier.."; weight fields unchanged")
+    C.log(C.id,"Bound "..count.." stackable schematics; multiplier="..self.cfg.multiplier.."; weight fields unchanged")
 end
 return M

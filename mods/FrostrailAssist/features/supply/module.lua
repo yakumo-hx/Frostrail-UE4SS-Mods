@@ -26,6 +26,7 @@ end
 
 function M:ordinary(component)
     local C,s=self.core,self.session
+    if self.cfg and self.cfg.enabled==false then return nil end
     if not self:owned(s) or not C.same(component,s.component.object) then return nil end
     -- The native component also uses ModifyItemInstance for a NEW staged item.
     -- NonModular is the discriminator; a non-null staged item does not mean editing.
@@ -55,6 +56,7 @@ end
 
 function M:adopt(ui)
     local C=self.core
+    if self.cfg and self.cfg.enabled==false then return end
     if not C.valid(ui) or not self:host(ui:GetOwningPlayer()) then return end
     if self.session and current(C,self.session.ui) and C.same(self.session.ui.object,ui)
         and self:owned(self.session) then return self.session end
@@ -129,7 +131,7 @@ function M:close(ui)
             s.component.object:RequestCancelCraftingInProgress()
         end
         local returned,left=S.refund(C,s.inventory.object,S.boxes(C,s.pc.object,s.inventory.object,true),s.ledger)
-        C.log(self.id,"Crafting closed; returned="..returned.." remaining in backpack="..left)
+        C.log(C.id,"Crafting closed; returned="..returned.." remaining in backpack="..left)
         if left>0 then C.message(C.text("列车箱子放不下，未退回的材料仍在背包里。",
             "Train storage cannot accept all leftovers; the remaining materials stay in your backpack.")) end
     end,debug.traceback)
@@ -146,13 +148,13 @@ function M:init()
     local info_class=LoadAsset(info_path)
     C.retain(self.id.."_classes",{composite_class,info_class})
     C.script_hook(composite..":InitializeCraftingUI",function(ctx)
-        C.run(self.id,function() local ui=ctx:get(); self:adopt(ui); self:refresh(ui.WBP_Sub_CraftingInfo) end)
+        C.run(C.id,function() local ui=ctx:get(); self:adopt(ui); self:refresh(ui.WBP_Sub_CraftingInfo) end)
     end)
     for _,event in ipairs({"SetResources","OnCraftingAmountChanged","OnCraftingIterationCompleted","StateChanged"}) do
-        C.script_hook(info_path..":"..event,function(ctx) C.run(self.id,function() self:refresh(ctx:get()) end) end)
+        C.script_hook(info_path..":"..event,function(ctx) C.run(C.id,function() self:refresh(ctx:get()) end) end)
     end
     C.hook("/Script/Frostrail.CraftingComponent:HasResourcesToCraft",nil,function(ctx)
-        return C.run(self.id,function()
+        return C.run(C.id,function()
             if self.busy then return end
             local component=ctx:get()
             local costs=self:ordinary(component)
@@ -163,19 +165,19 @@ function M:init()
         end)
     end)
     C.hook("/Script/Frostrail.CraftingViewModel:RequestCraft",function(ctx,pc)
-        C.run(self.id,function()
+        C.run(C.id,function()
             local s=self.session
             if s and self:owned(s) and C.same(pc:get(),s.pc.object)
                 and C.same(ctx:get(),s.component.object:GetViewModel()) then self:request(s.component.object) end
         end)
     end)
     C.hook("/Script/Frostrail.CraftingViewModel:RequestExitCrafting",nil,function(_,pc)
-        C.run(self.id,function()
+        C.run(C.id,function()
             if self.session and C.same(pc:get(),self.session.pc.object) then self:close() end
         end)
     end)
     for _,event in ipairs({"ExternallyToggledOff","OnRemovedFromStack"}) do
-        C.script_hook(composite..":"..event,function(ctx) C.run(self.id,function() self:close(ctx:get()) end) end)
+        C.script_hook(composite..":"..event,function(ctx) C.run(C.id,function() self:close(ctx:get()) end) end)
     end
     -- A half-second refresh exists only while crafting is open. It catches native
     -- inventory mutations/attachments that bypass UFunction hooks, without Tick hooks.
@@ -184,7 +186,7 @@ function M:init()
         if queued or not self.session then return end
         queued=true
         ExecuteInGameThread(function()
-            C.run(self.id,function()
+            C.run(C.id,function()
                 local s=self.session
                 if not s then return end
                 if not self:owned(s) or not self:present(s) or s.component.object:GetCraftingSessionState()==0 then self:close(); return end
@@ -193,8 +195,30 @@ function M:init()
             queued=false
         end)
     end)
-    RegisterLoadMapPreHook(function() C.run(self.id,function() self:close() end) end)
+    RegisterLoadMapPreHook(function() C.run(C.id,function() self:close() end) end)
 end
 
 function M:player_left() self:close() end
+function M:changed()
+    -- Closing still uses the old ledger when new borrowing is switched off.
+    local s=self.session
+    if self.cfg.enabled==false then
+        self:close()
+    elseif not s then
+        for _,ui in ipairs(FindAllOf("WBP_Composite_Crafting_C") or {}) do
+            s=self:adopt(ui)
+            if s then break end
+        end
+    end
+    if self:owned(s) and current(self.core,s.info) then
+        -- Rebuild native backpack counts/labels; our hook adds train totals
+        -- again only while the feature is enabled.
+        local costs={}
+        s.info.object.ResourceCostElements:ForEach(function(_,ref)
+            local row=ref:get()
+            if self.core.valid(row) then costs[#costs+1]={Item=row.Resource,Quantity=row.Quantity} end
+        end)
+        s.info.object:SetResources(costs)
+    end
+end
 return M

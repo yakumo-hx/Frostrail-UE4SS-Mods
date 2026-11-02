@@ -6,8 +6,12 @@ function M:setup()
     self.core.action("ToggleSlotLock",{zh="切换悬停格子锁",en="Toggle hovered slot lock"},nil,function() self:toggle_hovered() end)
 end
 function M:changed()
-    self.locks=logic.locked(self.cfg.locked_slots)
+    self.locks=logic.locked(self.cfg.enabled==false and {} or self.cfg.locked_slots)
     for _,w in ipairs(FindAllOf("WBP_Element_ItemSlot_C") or {}) do self:decorate(w) end
+    for _,grid in ipairs(FindAllOf("WBP_Sub_InventorySlots_C") or {}) do self:decorate_grid(grid) end
+    for _,entry in pairs(self.grids or {}) do
+        if self.core.ui.owned(self.core,entry,entry.owner) then self:stash_label(entry) end
+    end
 end
 function M:language_changed()
     self:changed()
@@ -35,6 +39,7 @@ function M:init()
         end)
     end
     C.hook("/Script/Frostrail.ReplicationRequestComponent:RequestInventorySorting",function(ctx,kind,descending,target)
+        if self.cfg.enabled==false then return end
         local inv=target:get()
         if not C.pawn_valid() or not C.pawn:HasAuthority() or not C.same(inv,C.pawn.ItemSystemComponent:GetInventory()) or kind:get()==0 then return end
         self:merge_stacks(inv)
@@ -78,9 +83,9 @@ function M:init()
             vm.ActiveSortingType=transaction.kind
             vm:K2_BroadcastFieldValueChanged({FieldName=FName("ActiveSortingType")})
         end
-        C.log(self.id,"Native sorting completed with occupied locked slots preserved")
+        C.log(C.id,"Native sorting completed with occupied locked slots preserved")
     end)
-    C.log(self.id,"Sorting collection/writeback hook registered; locks="..table.concat(self.cfg.locked_slots,","))
+    C.log(C.id,"Sorting collection/writeback hook registered; locks="..table.concat(self.cfg.locked_slots,","))
 end
 function M:merge_stacks(inv)
     local C=self.core
@@ -108,6 +113,7 @@ function M:merge_stacks(inv)
 end
 function M:stash()
     local C=self.core
+    if self.cfg.enabled==false then return end
     if not C.pawn_valid() or not C.pawn:HasAuthority() then
         C.message(C.text("快存首版仅支持单人主机","Quick stash currently supports single-player hosts only")); return
     end
@@ -145,10 +151,11 @@ function M:stash()
     end
     C.message(string.format(C.text("快存完成：%d 个物品，附近 %d 个玩家储物箱",
         "Quick stash complete: %d items; %d nearby player containers"),moved,#boxes))
-    C.log(self.id,"Quickstash moved="..moved.." containers="..#boxes)
+    C.log(C.id,"Quickstash moved="..moved.." containers="..#boxes)
 end
 function M:toggle_hovered()
     local C=self.core
+    if self.cfg.enabled==false then return end
     for _,w in ipairs(FindAllOf("WBP_Element_ItemSlot_C") or {}) do
         if w:IsHovered() and w.bIsPlayerInventory then
             self:toggle_slot(w.SlotId.ID)
@@ -157,13 +164,14 @@ function M:toggle_hovered()
     end
 end
 function M:toggle_slot(slot)
+    if self.cfg.enabled==false then return end
     self.locks[slot]=not self.locks[slot] or nil
     self.cfg.locked_slots={}
     for id in pairs(self.locks) do self.cfg.locked_slots[#self.cfg.locked_slots+1]=id+1 end
     table.sort(self.cfg.locked_slots)
-    self.core.config.save(self.dir.."/config.json",self.cfg)
+    self.core.config.save(self.dir.."/config.json",self.config or self.cfg)
     self:changed()
-    self.core.log(self.id,"Inventory slot "..(slot+1)..(self.locks[slot] and " locked" or " unlocked"))
+    self.core.log(self.core.id,"Inventory slot "..(slot+1)..(self.locks[slot] and " locked" or " unlocked"))
 end
 function M:decorate_grid(grid)
     local C=self.core
@@ -179,6 +187,7 @@ function M:decorate_grid(grid)
     local id=grid:GetAddress()
     local entry=self.grids[id]
     if C.ui.owned(C,entry,grid) then self:stash_label(entry); return end
+    if self.cfg.enabled==false then return end
     for key,value in pairs(self.grids) do if not C.ui.owned(C,value,value.owner) then self.grids[key]=nil end end
     entry=C.ui.button(C,grid,C.text("快存","Quick stash"),function() self:stash() end,12)
     entry.owner=grid
@@ -186,9 +195,10 @@ function M:decorate_grid(grid)
     local slot=grid.SortingControlsHolder:AddChildToHorizontalBox(entry.widget)
     slot:SetPadding({Left=6,Top=0,Right=0,Bottom=0}); slot:SetVerticalAlignment(2)
     self.grids[id]=entry
-    C.log(self.id,"Quickstash button attached at the right of native inventory sorting controls")
+    C.log(C.id,"Quickstash button attached at the right of native inventory sorting controls")
 end
 function M:stash_label(entry)
+    entry.widget:SetVisibility(self.cfg.enabled==false and 1 or 0)
     entry.text:SetText(FText(self.core.text("快存","Quick stash")))
     entry.button:SetToolTipText(FText(self.core.text("将未锁定物品存入附近玩家储物箱",
         "Stash unlocked items into nearby player containers")))
@@ -201,6 +211,10 @@ function M:decorate(w)
     self.labels=self.labels or {}
     local id=w:GetAddress()
     local entry=self.labels[id]
+    if self.cfg.enabled==false then
+        if C.ui.owned(C,entry,w) then entry.widget:SetVisibility(1) end
+        return
+    end
     if not C.ui.owned(C,entry,w) then
         entry=C.ui.icon_button(C,w,function()
             if C.valid(w) then self:toggle_slot(w.SlotId.ID) end
@@ -212,6 +226,7 @@ function M:decorate(w)
         slot:SetPadding({Left=2,Top=0,Right=0,Bottom=2})
         self.labels[id]=entry
     end
+    entry.widget:SetVisibility(0)
     local locked=self.locks[w.SlotId.ID]
     entry.image:SetBrushFromTexture(locked and self.icons.locked or self.icons.unlocked,false)
     entry.image:SetColorAndOpacity(locked and {R=1,G=0.8,B=0.2,A=1} or {R=0.7,G=0.75,B=0.8,A=0.65})

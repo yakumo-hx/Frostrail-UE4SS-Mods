@@ -6,7 +6,9 @@ Frostrail（Steam Demo）的 Mod 和 Mod 管理器。作者 Yuuka。
 
 - **Frostrail mod管理器**：Windows 上的单个 EXE。安装、启停、排序、设置、更新 Mod，查看和导出日志，也能在线更新自己。
 - **UE4SS-FrostrailCore**：前置。包含固定版 UE4SS、公共 Lua 支持库和游戏内 F8 设置窗口。
-- **功能 Mod**：辅助（穿墙高亮、头灯、一键拿取、基础负重）、快存与格子锁、分拣台扩容、种植、堆叠、房主菜单暂停、自动保存、同列车供料。每个都是独立的包。
+- **辅助**：高亮、R 拿取、头灯、基础负重、快存与格子锁、菜单暂停、同列车供料；各功能可单独开关，种植默认关闭。另有物品生成的数量和机会倍率，默认均为 1。
+- **容量**：堆叠上限和分拣台格数。
+- **自动保存**：定时保存和退出前保存。
 
 ## 玩家
 
@@ -14,7 +16,9 @@ Frostrail（Steam Demo）的 Mod 和 Mod 管理器。作者 Yuuka。
 
 退出游戏，把 ZIP 拖进管理器就装好了。也可以在管理器里点“安装 → GitHub 链接…”，粘贴本仓库地址，勾选要装的包。具体步骤见[安装与配置](docs/安装与配置.md)。
 
-多人游戏和存档兼容还没有完整测过，建议先备份存档。用堆叠 Mod 的话，关闭、卸载或调低倍率之前，先在 Mod 还开着的时候把超过原版上限的堆拆开并存档，否则多出来的数量会丢。
+从旧版换过来，先在管理器里卸载快存与格子锁、房主菜单暂停、同列车供料、种植、堆叠、分拣台这六个旧包，再装新的辅助和容量。旧包设置、锁格位置不转入新包；需要的改键请在游戏里重新设置。
+
+多人游戏和存档兼容还没有完整测过，建议先备份存档。容量包关闭、卸载或调低设置前，先拆开超量堆叠、清空分拣台额外格子，再保存，否则可能丢东西。
 
 ## Mod 作者
 
@@ -35,7 +39,7 @@ Mod 打包需要 Python：
 ```powershell
 python scripts/package.py
 # 也可只打一个包：
-python scripts/package.py --only FrostrailQuickstash
+python scripts/package.py --only FrostrailCapacity
 ```
 
 包输出到 `dist/<包版本>/`。以下二进制不在源码仓库中，打包对应的包时需要自行准备：
@@ -54,4 +58,6 @@ python scripts/package.py --only FrostrailQuickstash
 
 Unofficial Frostrail Steam Demo mods and a portable Windows mod manager, not affiliated with the game developer. Download the manager EXE and the Core / feature ZIPs from [Releases](https://github.com/yakumo-hx/Frostrail-UE4SS-Mods/releases/latest). Close the game, then drag the ZIPs into the manager. See the [installation guide](docs/安装与配置.md) and [package specification](docs/包规范-v2.md) (Chinese).
 
-Building the manager requires Windows, a .NET SDK and the .NET Framework 4.8 Developer Pack; run `scripts/Build-Manager.ps1`. Mod packaging uses `python scripts/package.py`. Core requires the pinned UE4SS binaries; Assist requires prebuilt game assets, neither included in this repository. Original code is MIT-licensed; third-party code and game-derived assets retain their own terms. Multiplayer and full save compatibility are unverified. Split oversized stacks before disabling, uninstalling or reducing the Stacks multiplier.
+Building the manager requires Windows, a .NET SDK and the .NET Framework 4.8 Developer Pack; run `scripts/Build-Manager.ps1`. Mod packaging uses `python scripts/package.py`. Core requires the pinned UE4SS binaries; Assist requires prebuilt game assets, neither included in this repository. Original code is MIT-licensed; third-party code and game-derived assets retain their own terms. Multiplayer and full save compatibility are unverified. Split oversized stacks before disabling, uninstalling or reducing Capacity settings; empty added recycler slots and save first.
+
+For the merged packages, uninstall the six old Quickstash, Pause, Train Supply, Farming, Stacks and Recycler packages before installing Assist and Capacity. Reconfigure settings, slot locks and keys as needed.

@@ -1,0 +1,55 @@
+[
+  {
+    "key": "stacks.multiplier",
+    "label": {
+      "zh": "默认堆叠倍率",
+      "en": "Default stack multiplier"
+    },
+    "min": 1,
+    "max": 1000,
+    "group": {
+      "zh": "堆叠",
+      "en": "Stacks"
+    }
+  },
+  {
+    "key": "stacks.categories",
+    "label": {
+      "zh": "按物品类别覆盖倍率",
+      "en": "Multipliers by item category"
+    },
+    "value_type": "number",
+    "group": {
+      "zh": "堆叠",
+      "en": "Stacks"
+    }
+  },
+  {
+    "key": "recycler.input_slots",
+    "label": {
+      "zh": "输入格数",
+      "en": "Input slots"
+    },
+    "min": 1,
+    "max": 120,
+    "integer": true,
+    "group": {
+      "zh": "分拣台",
+      "en": "Recycler"
+    }
+  },
+  {
+    "key": "recycler.output_slots",
+    "label": {
+      "zh": "输出格数",
+      "en": "Output slots"
+    },
+    "min": 1,
+    "max": 120,
+    "integer": true,
+    "group": {
+      "zh": "分拣台",
+      "en": "Recycler"
+    }
+  }
+]

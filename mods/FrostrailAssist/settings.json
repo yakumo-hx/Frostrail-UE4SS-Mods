@@ -139,6 +139,30 @@
     }
   },
   {
+    "key": "take_all",
+    "label": {
+      "zh": "启用 R 拿取",
+      "en": "Enable R take all"
+    },
+    "group": {
+      "zh": "R 拿取",
+      "en": "R take all"
+    },
+    "live": true
+  },
+  {
+    "key": "headlamp",
+    "label": {
+      "zh": "启用头灯",
+      "en": "Enable headlamp"
+    },
+    "group": {
+      "zh": "头灯",
+      "en": "Headlamp"
+    },
+    "live": true
+  },
+  {
     "key": "lamp_intensity",
     "label": {
       "zh": "头灯亮度",
@@ -181,6 +205,17 @@
     }
   },
   {
+    "key": "carry",
+    "label": {
+      "zh": "修改基础负重",
+      "en": "Change base carry weight"
+    },
+    "group": {
+      "zh": "负重",
+      "en": "Carry weight"
+    }
+  },
+  {
     "key": "base_carry_weight",
     "label": {
       "zh": "基础负重",
@@ -191,6 +226,142 @@
     "group": {
       "zh": "负重",
       "en": "Carry weight"
+    }
+  },
+  {
+    "key": "quickstash.enabled",
+    "label": {
+      "zh": "启用快存与格子锁",
+      "en": "Enable quick stash and slot locks"
+    },
+    "group": {
+      "zh": "快存与格子锁",
+      "en": "Quick stash and slot locks"
+    },
+    "live": true
+  },
+  {
+    "key": "quickstash.range_m",
+    "label": {
+      "zh": "快存距离（米）",
+      "en": "Quick stash range (m)"
+    },
+    "min": 1,
+    "max": 100,
+    "live": true,
+    "group": {
+      "zh": "快存与格子锁",
+      "en": "Quick stash and slot locks"
+    }
+  },
+  {
+    "key": "quickstash.existing_items_only",
+    "label": {
+      "zh": "只放入已有同类物品的箱子",
+      "en": "Only containers already holding the item"
+    },
+    "live": true,
+    "group": {
+      "zh": "快存与格子锁",
+      "en": "Quick stash and slot locks"
+    }
+  },
+  {
+    "key": "pause.enabled",
+    "label": {
+      "zh": "启用菜单暂停",
+      "en": "Enable menu pause"
+    },
+    "group": {
+      "zh": "菜单暂停",
+      "en": "Menu pause"
+    },
+    "live": true
+  },
+  {
+    "key": "supply.enabled",
+    "label": {
+      "zh": "启用同列车供料",
+      "en": "Enable train supply"
+    },
+    "group": {
+      "zh": "同列车供料",
+      "en": "Train supply"
+    },
+    "live": true
+  },
+  {
+    "key": "loot.quantity_multiplier",
+    "label": {"zh": "数量倍率", "en": "Quantity multiplier"},
+    "group": {"zh": "物品生成", "en": "Loot generation"},
+    "min": 1,
+    "max": 10,
+    "integer": true,
+    "help": {"zh": "可堆叠战利品的数量；下次启动游戏生效。", "en": "Stackable loot quantities; restart the game to apply."}
+  },
+  {
+    "key": "loot.chance_multiplier",
+    "label": {"zh": "刷出机会倍率", "en": "Spawn chance multiplier"},
+    "group": {"zh": "物品生成", "en": "Loot generation"},
+    "min": 1,
+    "max": 4,
+    "help": {"zh": "每次刷出物品的机会；可填小数，下次启动游戏生效。", "en": "Chance of loot spawning; accepts decimals. Restart the game to apply."}
+  },
+  {
+    "key": "farming.enabled",
+    "label": {
+      "zh": "启用种植",
+      "en": "Enable farming"
+    },
+    "group": {
+      "zh": "种植",
+      "en": "Farming"
+    }
+  },
+  {
+    "key": "farming.recipes",
+    "label": {
+      "zh": "种植配方",
+      "en": "Farming recipes"
+    },
+    "columns": [
+      {
+        "key": "item",
+        "label": {
+          "zh": "物品",
+          "en": "Item"
+        }
+      },
+      {
+        "key": "input",
+        "label": {
+          "zh": "投入数量",
+          "en": "Input"
+        },
+        "min": 1,
+        "integer": true
+      },
+      {
+        "key": "seconds",
+        "label": {
+          "zh": "基础秒数",
+          "en": "Base seconds"
+        },
+        "min": 0.1
+      },
+      {
+        "key": "output",
+        "label": {
+          "zh": "产出数量",
+          "en": "Output"
+        },
+        "min": 1,
+        "integer": true
+      }
+    ],
+    "group": {
+      "zh": "种植",
+      "en": "Farming"
     }
   }
 ]

@@ -2,7 +2,7 @@
 from pathlib import Path
 from PIL import Image, ImageDraw
 
-out=Path(__file__).resolve().parents[1]/'mods/FrostrailQuickstash/icons'
+out=Path(__file__).resolve().parents[1]/'mods/FrostrailAssist/icons'
 out.mkdir(parents=True,exist_ok=True)
 scale=4
 for state in ('locked','unlocked'):

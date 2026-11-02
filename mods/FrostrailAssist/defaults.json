@@ -15,5 +15,71 @@
   "lamp_intensity": 2000,
   "lamp_radius_m": 30,
   "lamp_angle": 65,
-  "base_carry_weight": 100
+  "base_carry_weight": 100,
+  "take_all": true,
+  "headlamp": true,
+  "carry": true,
+  "quickstash": {
+    "enabled": true,
+    "range_m": 20,
+    "locked_slots": [],
+    "existing_items_only": true
+  },
+  "pause": {
+    "enabled": true
+  },
+  "supply": {
+    "enabled": true
+  },
+  "loot": {
+    "quantity_multiplier": 1,
+    "chance_multiplier": 1
+  },
+  "farming": {
+    "enabled": false,
+    "recipes": [
+      {
+        "item": "BlueBerries",
+        "input": 1,
+        "seconds": 600,
+        "output": 5
+      },
+      {
+        "item": "RedBerries",
+        "input": 1,
+        "seconds": 600,
+        "output": 5
+      },
+      {
+        "item": "GreenBerries",
+        "input": 1,
+        "seconds": 600,
+        "output": 5
+      },
+      {
+        "item": "Fireberries",
+        "input": 1,
+        "seconds": 600,
+        "output": 5
+      },
+      {
+        "item": "Dewgranate",
+        "input": 1,
+        "seconds": 600,
+        "output": 5
+      },
+      {
+        "item": "Chimerelle",
+        "input": 1,
+        "seconds": 600,
+        "output": 5
+      },
+      {
+        "item": "Mushroom",
+        "input": 1,
+        "seconds": 600,
+        "output": 5
+      }
+    ]
+  }
 }

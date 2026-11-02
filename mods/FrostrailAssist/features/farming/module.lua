@@ -6,7 +6,7 @@ function M:init()
     for row,r in ipairs(self.cfg.recipes) do
         assert(allowed[r.item],"Unsupported crop: "..tostring(r.item))
         if seen[r.item] then
-            C.log(self.id,"WARNING duplicate crop "..r.item.." at row "..row.." ignored; using first recipe")
+            C.log(C.id,"WARNING duplicate crop "..r.item.." at row "..row.." ignored; using first recipe")
         else
             seen[r.item]=true
             assert(type(r.input)=="number" and r.input>=1 and r.input%1==0
@@ -45,7 +45,7 @@ function M:init()
         -- Tier-0 sorting-table insertion and its green inventory hint require
         -- this flag before considering the item's native refinement recipes.
         item.bIsRefineable=true
-        C.log(self.id,"Sorting-table recipe "..r.item.."="..rule.ConsumedPerProcess.."/"..rule.Duration.."/"..rule.RefinementResults[1].Quantity.." refineable=true original_recipes="..#originals[r.item].recipes)
+        C.log(C.id,"Sorting-table recipe "..r.item.."="..rule.ConsumedPerProcess.."/"..rule.Duration.."/"..rule.RefinementResults[1].Quantity.." refineable=true original_recipes="..#originals[r.item].recipes)
     end
     C.config.save(self.dir.."/original-recipes.json",self.originals)
 end

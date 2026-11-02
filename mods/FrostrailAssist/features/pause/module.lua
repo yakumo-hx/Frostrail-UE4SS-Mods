@@ -43,7 +43,7 @@ function M:release()
         -- Drop ownership before the native call, including its post-hook.
         entry.owned=false
         local resumed=self.gameplay:SetGamePaused(entry.controller.object,false)
-        C.log(self.id,"Esc closed; native resume="..tostring(resumed))
+        C.log(C.id,"Esc closed; native resume="..tostring(resumed))
     end
     entry.owned=false
     -- ClearPause needs bPauseable to remain true until its delegate list clears.
@@ -53,6 +53,7 @@ end
 
 function M:acquire(pc)
     local C=self.core
+    if self.cfg and self.cfg.enabled==false then return end
     local world=pc:GetWorld()
     if not C.valid(world) or self.gameplay:IsGamePaused(pc) then return end
     self:restore_permission()
@@ -67,7 +68,7 @@ function M:acquire(pc)
     self.pause=entry
     entry.owned=paused and C.same(settings.PauserPlayerState,pc.PlayerState)
     if not entry.owned then self:restore_permission() end
-    C.log(self.id,"Esc opened; native pause="..tostring(paused).." owned="..tostring(entry.owned))
+    C.log(C.id,"Esc opened; native pause="..tostring(paused).." owned="..tostring(entry.owned))
 end
 
 function M:prepare_dialog(dialog)
@@ -101,6 +102,7 @@ end
 
 function M:stack_changed(hud)
     local C=self.core
+    if self.cfg and self.cfg.enabled==false then return end
     if not C.valid(hud) then return end
     local pc=hud:GetOwningPlayerController()
     if not host(C,pc) then return end
@@ -125,15 +127,15 @@ function M:init()
     self.system=C.class("/Script/Engine.Default__KismetSystemLibrary")
     LoadAsset(hud_path)
     C.script_hook(hud_path..":OnWidgetStackChanged",function(ctx)
-        C.run(self.id,function() self:stack_changed(ctx:get()) end)
+        C.run(C.id,function() self:stack_changed(ctx:get()) end)
     end)
     C.hook("/Script/Frostrail.FRDialogBoxWidget:AddButton",function(ctx)
-        C.run(self.id,function() self:prepare_dialog(ctx:get()) end)
+        C.run(C.id,function() self:prepare_dialog(ctx:get()) end)
     end)
     -- An external native resume ends our ownership even if Esc stays open.
     -- Native post-hooks pass (self, return_value, function arguments...).
     C.hook("/Script/Engine.GameplayStatics:SetGamePaused",nil,function(_,result,context)
-        C.run(self.id,function()
+        C.run(C.id,function()
             local entry=self.pause
             local object=context:get()
             if not entry or not current(C,entry.world) or not C.valid(object)
@@ -142,12 +144,19 @@ function M:init()
         end)
     end)
     RegisterLoadMapPreHook(function()
-        C.run(self.id,function() self.settling=nil; self:release(); self.menu=nil; self.pause=nil end)
+        C.run(C.id,function() self.settling=nil; self:release(); self.menu=nil; self.pause=nil end)
     end)
 end
 
 function M:player_ready(pc)
     if host(self.core,pc) then self:stack_changed(pc:GetHUD()) end
+end
+
+function M:changed()
+    self.settling=nil
+    self:release()
+    self.menu=nil
+    if self.core.player_valid() then self:player_ready(self.core.player) end
 end
 
 return M

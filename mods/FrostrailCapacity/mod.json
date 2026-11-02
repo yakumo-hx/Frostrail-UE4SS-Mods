@@ -1,0 +1,31 @@
+{
+  "id": "FrostrailCapacity",
+  "name": {
+    "zh": "容量",
+    "en": "Capacity"
+  },
+  "version": "0.4.0",
+  "author": "Yuuka",
+  "update": "https://github.com/yakumo-hx/Frostrail-UE4SS-Mods",
+  "requires": [
+    "FrostrailCore"
+  ],
+  "notices": {
+    "enable": {
+      "zh": "降低容量、关闭或卸载前，先在本包启用时拆开超量堆叠，清空分拣台额外格子里的物品，再保存。否则可能丢东西。",
+      "en": "Before reducing capacity, disabling or uninstalling, split oversized stacks, empty added recycler slots and save while this package is enabled, or items may be lost."
+    },
+    "disable": {
+      "zh": "降低容量、关闭或卸载前，先在本包启用时拆开超量堆叠，清空分拣台额外格子里的物品，再保存。否则可能丢东西。",
+      "en": "Before reducing capacity, disabling or uninstalling, split oversized stacks, empty added recycler slots and save while this package is enabled, or items may be lost."
+    },
+    "uninstall": {
+      "zh": "降低容量、关闭或卸载前，先在本包启用时拆开超量堆叠，清空分拣台额外格子里的物品，再保存。否则可能丢东西。",
+      "en": "Before reducing capacity, disabling or uninstalling, split oversized stacks, empty added recycler slots and save while this package is enabled, or items may be lost."
+    }
+  },
+  "description": {
+    "zh": "堆叠上限默认 ×10，分拣台输入 15 格、输出 10 格，均可调整；不改物品重量和原版加工流程。",
+    "en": "Stack limits x10 and recycler capacity of 15 input / 10 output slots, adjustable; item weight and native processing are unchanged."
+  }
+}

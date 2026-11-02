@@ -4,14 +4,14 @@
     "zh": "辅助",
     "en": "Assist"
   },
-  "version": "0.3.2",
+  "version": "0.4.0",
   "author": "Yuuka",
   "update": "https://github.com/yakumo-hx/Frostrail-UE4SS-Mods",
   "requires": [
     "FrostrailCore"
   ],
   "description": {
-    "zh": "穿墙高亮掉落物与可采集物、非空战利品容器、地窖入口和活体敌人；R 拿取当前容器全部物品，拿空后关闭容器和背包；F 开关个人头灯；可调整基础负重。",
-    "en": "Highlights items, non-empty loot containers, cellar entrances and living enemies through walls; R takes everything from the open container and closes it and the backpack when empty; F toggles a personal headlamp; adjustable base carry weight."
+    "zh": "高亮、R 拿取、头灯、基础负重、快存与格子锁、菜单暂停和同列车供料，均可单独开关；另有种植配方和物品生成的数量、机会倍率，默认不改变生成。",
+    "en": "Highlights, R take all, headlamp, carry weight, quick stash and slot locks, menu pause and train supply with individual switches; optional farming and loot quantity/chance multipliers. Loot is unchanged by default."
   }
 }
