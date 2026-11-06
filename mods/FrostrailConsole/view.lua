@@ -29,12 +29,16 @@ function V.open(M)
     local pc,pawn=M:host()
     local lib=C.class("/Script/UMG.Default__WidgetBlueprintLibrary")
     local width,height=2*PAD+TABS+10+COLUMNS*TILE,CHROME+MAX_ROWS*TILE
-    local w=lib:Create(pc,C.class("/Script/UMG.UserWidget"),pc)
+    local w=lib:Create(pc,C.class("/Script/Frostrail.FRCompositeWidgetBase"),pc)
+    local hud=pc:GetHUD()
     local S={widget=w,name=w:GetFullName(),controller_name=pc:GetFullName(),pawn_name=pawn:GetFullName(),building=true,
-        cursor=pc.bShowMouseCursor,category="all",query="",page=1,cells={},categories={}}
+        hud=hud,hud_name=hud:GetFullName(),category="all",query="",page=1,cells={},categories={}}
     M.panel=S
     -- Asset loads may collect the unfinished widget tree before it is attached.
     C.retain("console_panel",{w})
+    w.RequiredInputState=2 -- UIOnly, applied by the native HUD stack.
+    w.bHideHud=false;w.bHideCrosshair=true;w.bHideCursor=false
+    w.bIsClosableByUserInput=true;w.bIsFocusable=true
     local tree=w.WidgetTree
     local function new(name) return C.new("/Script/UMG."..name,tree) end
     local function sized(widget,x,y)
@@ -50,7 +54,7 @@ function V.open(M)
         local e=C.ui.button(C,w,label,callback,12)
         skin.button(e,kind or "base");return e
     end
-    local root=new("Overlay");tree.RootWidget=root;skin.frame(root)
+    local root=new("Overlay");tree.RootWidget=sized(root,width,height);skin.frame(root)
     local inset=new("Border");inset:SetBrushColor({R=0,G=0,B=0,A=0});inset:SetPadding(padding(PAD))
     local inset_slot=root:AddChildToOverlay(inset);inset_slot:SetHorizontalAlignment(0);inset_slot:SetVerticalAlignment(0)
     local column=new("VerticalBox");inset:SetContent(column)
@@ -135,10 +139,11 @@ function V.open(M)
     S.hover:AddChildToHorizontalBox(S.hover_name)
     S.hover:AddChildToHorizontalBox(S.hover_category):SetPadding({Left=8,Top=0,Right=0,Bottom=0})
     S.status=text("");local os=output:AddChildToOverlay(S.status);os:SetHorizontalAlignment(0);os:SetVerticalAlignment(2);S.status:SetVisibility(1)
-    w:SetDesiredSizeInViewport({X=width,Y=height});w:SetPositionInViewport({X=MARGIN,Y=MARGIN},false)
-    w:SetRenderTransformPivot({X=0,Y=0});w:SetRenderScale({X=PANEL_SCALE,Y=PANEL_SCALE});w:AddToViewport(110)
+    w:SetRenderTransformPivot({X=0,Y=0});w:SetRenderScale({X=PANEL_SCALE,Y=PANEL_SCALE})
+    assert(hud:AddWidgetToStack(w,{X=MARGIN,Y=MARGIN})>=0,"Console could not join the HUD stack")
+    w.Slot:SetHorizontalAlignment(1);w.Slot:SetVerticalAlignment(1)
     S.building=false
-    C.settings.set_busy(true);pc.bShowMouseCursor=true;lib:SetInputMode_UIOnlyEx(pc,w,0,true)
+    C.settings.set_busy(true)
     M.icons.prepare(M)
     V.render(M);C.log(C.id,"Opened "..COLUMNS.."x"..MAX_ROWS.." item grid")
 end

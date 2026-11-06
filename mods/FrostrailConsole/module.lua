@@ -1,5 +1,4 @@
 local M={title="控制台"}
-local function widget_library() return StaticFindObject("/Script/UMG.Default__WidgetBlueprintLibrary") end
 function M:player()
     local C=self.core
     if not C.player_valid() then return end
@@ -19,12 +18,31 @@ end
 function M:live()
     local C,S=self.core,self.panel
     local pc,pawn=self:player()
-    return S and not S.building and pc and C.instance(S.widget,S.name) and S.widget:IsInViewport()
+    return S and not S.building and pc and C.instance(S.widget,S.name) and C.instance(S.hud,S.hud_name)
+        and S.hud:IsWidgetInStack(S.widget) and C.valid(S.widget:GetParent())
         and C.instance(pc,S.controller_name) and C.instance(pawn,S.pawn_name)
 end
-function M:close(restore)
+function M:stack_index(S)
+    local C=self.core
+    if not C.instance(S.hud,S.hud_name) or not C.instance(S.widget,S.name) then return end
+    local index
+    S.hud.WidgetStack:ForEach(function(i,ref)
+        if C.same(ref:get(),S.widget) then index=i-1 end
+    end)
+    return index
+end
+function M:stack_input(hud)
     local C,S=self.core,self.panel
-    if not S then return end
+    -- The native fold keeps the first mode 2 or 3 it sees. A lower inventory's
+    -- mode 3 otherwise defeats this page's UIOnly request. Change only the
+    -- result for our topmost instance; the HUD still applies/restores input.
+    -- This also runs during AddWidgetToStack, while the panel is building.
+    if S and C.instance(S.hud,S.hud_name) and C.instance(hud,S.hud_name)
+        and C.instance(S.widget,S.name) and C.same(hud:GetTopmostWidgetFromStack(),S.widget) then return 2 end
+end
+function M:cleanup(S)
+    local C=self.core
+    if self.panel~=S then return end
     self.panel=nil
     -- WidgetTree owns the controls and their materials. Drop dispatch entries
     -- before removing it; a delayed callback may only touch its own panel.
@@ -37,14 +55,24 @@ function M:close(restore)
     C.retain("console_skin",{})
     C.retain("console_panel",{})
     C.settings.set_busy(false)
-    -- A respawn can retire the pawn while its local controller still owns our
-    -- UI-only input mode. Restore that controller even when the pawn is gone.
-    local pc=C.player_valid() and C.player
-    if restore~=false and pc and C.instance(pc,S.controller_name) then
-        pc.bShowMouseCursor=S.cursor
-        if S.cursor then widget_library():SetInputMode_GameAndUIEx(pc,nil,0,false,true)
-        else widget_library():SetInputMode_GameOnly(pc,true) end
+end
+function M:close()
+    local S=self.panel
+    if not S then return end
+    local index=self:stack_index(S)
+    if index~=nil then
+        -- The HUD owns removal, focus and input restoration, including any
+        -- inventory or crafting session underneath this particular instance.
+        S.hud:RemoveWidgetFromStackByIndex(index)
+        if self:stack_index(S)~=nil then return end
     end
+    if self.panel==S then self:cleanup(S) end
+end
+function M:stack_changed(hud)
+    local C,S=self.core,self.panel
+    if not S or S.building or not C.instance(hud,S.hud_name) then return end
+    if not C.instance(S.widget,S.name) or not hud:IsWidgetInStack(S.widget)
+        or not C.valid(S.widget:GetParent()) then self:close() end
 end
 function M:toggle()
     local C=self.core
@@ -54,7 +82,7 @@ function M:toggle()
     local pc=self:player()
     if not pc then return end
     if not self:host() then C.message(C.text("只有单人游戏或房主能用","Only available in single player or to the host")); return end
-    if C.settings.busy() or pc.bShowMouseCursor then return end
+    if C.settings.busy() then return end
     if not self.rows then self.rows,self.excluded=self.catalog.build(C) end
     self.catalog.names(C,self.rows)
     local ok,err=xpcall(function() self.view.open(self) end,debug.traceback)
@@ -100,13 +128,9 @@ function M:click(row)
 end
 function M:escape()
     local C,S=self.core,self.panel
-    if not self:live() or S.closing then return end
-    S.closing=true
-    -- Keep UI-only input through the physical press so the same Esc
-    -- cannot reach the game's menu action or Assist's menu pause.
-    ExecuteInGameThreadWithDelay(120,function()
-        if self.panel==S then C.run(C.id,function() self:close() end) end
-    end)
+    -- EditableTextBox consumes Esc before the composite page can handle it.
+    -- All other focus goes through the native Input_CloseUI route.
+    if self:live() and C.valid(S.search) and S.search:HasKeyboardFocus() then self:close() end
 end
 function M:give(row,quantity)
     local C=self.core
@@ -139,8 +163,8 @@ function M:give(row,quantity)
     self.last_give={path=row.path,requested=quantity,created=generated,gained=gained,stacks=#items,unplaced=unplaced}
     self:message(text)
 end
-function M:reset(restore)
-    self:close(restore)
+function M:reset()
+    self:close()
     self.icons.clear(self)
     self.rows,self.excluded=nil,nil
     self.core.retain("console_catalog",{})
@@ -161,7 +185,15 @@ function M:setup()
 end
 function M:init()
     local C=self.core
-    RegisterLoadMapPreHook(function() C.run(C.id,function() self:reset(false) end) end)
+    local hud_path="/Game/Frostrail/UI/BP_FrostrailHUD.BP_FrostrailHUD_C"
+    LoadAsset(hud_path)
+    C.script_hook(hud_path..":OnWidgetStackChanged",function(ctx)
+        C.run(C.id,function() self:stack_changed(ctx:get()) end)
+    end)
+    C.hook("/Script/Frostrail.FrostrailHUDBase:GetCurrentInputState",nil,function(ctx)
+        return C.run(C.id,function() return self:stack_input(ctx:get()) end)
+    end)
+    RegisterLoadMapPreHook(function() C.run(C.id,function() self:reset() end) end)
     -- Runs on the game thread. A LoopAsync body ran Lua on another thread of
     -- this VM and lost a queued callback (`Ref was not function`).
     LoopInGameThreadWithDelay(100,function()

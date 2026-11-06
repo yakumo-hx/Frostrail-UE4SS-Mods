@@ -85,8 +85,8 @@ local function listen(C,S,code)
         if not held[code] then presses[code]=presses[code]+1 end
     end)
 end
--- A fixed key outside the native controls page; internal for now (only
--- Console's Esc), may change or go. Runs on the game thread without action checks.
+-- A fixed key outside the native controls page; internal (Console's search-box
+-- Esc). Runs on the game thread without action checks.
 function M.key(C,code,callback)
     local S=state(C)
     S.keys[code]=S.keys[code] or {}
