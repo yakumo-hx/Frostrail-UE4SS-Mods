@@ -9,6 +9,8 @@ Frostrail（Steam Demo）的 Mod 和 Mod 管理器。作者 Yuuka。
 - **辅助**：高亮、R 拿取、头灯、基础负重、快存与格子锁、菜单暂停、同列车供料；各功能可单独开关，种植默认关闭。另有物品生成的数量和机会倍率，默认均为 1。
 - **容量**：堆叠上限和分拣台格数。
 - **自动保存**：定时保存和退出前保存。
+- **控制台**：房主按 Y 打开分类、搜索和翻页物品面板，左键给 1 个、Shift+左键给多个（默认 10，可改）；可一次性恢复体温、血量。
+- **新物品**：芝士汉堡、薯条、甜甜圈，以及可回收的微波炉、显示器、收音机、键盘，使用独立的 Kenney 模型和图标。
 
 ## 玩家
 
@@ -47,17 +49,18 @@ python scripts/package.py --only FrostrailCapacity
 - **Core**：固定 [UE4SS 3.0.1-1183-gcdbc0b66](https://github.com/UE4SS-RE/RE-UE4SS/tree/cdbc0b66)，将 `dwmapi.dll`、`ue4ss/UE4SS.dll`、`ue4ss/UE4SS-settings.ini`、`ue4ss/LICENSE` 按此目录结构放进 `tools/ue4ss-3.0.1-1183/`。
 - **辅助**：预先构建的 `build/FrostrailAssist_P.pak`、`.utoc`、`.ucas`。公开仓库不含资源重建工具；可从同版本的辅助 Release ZIP 取得这三份资源。
 - **自动保存**：先用 `python scripts/build_autosave.py` 构建 `build/FrostrailAutosave/autosave.dll`。固定工具版本、原生接口和构建步骤见 [DLL 说明](native/FrostrailAutosave/README.md)。
+- **新物品**：`build/FrostrailItems_P.pak`、`.utoc`、`.ucas`。公开仓库不含资源重建工具，发布后可从对应的新物品 Release ZIP 取得。
 
 其余功能包可直接从仓库打包。锁图标和管理器图标已有成品，日常构建无需重新生成；修改图标时使用对应的 Python 脚本，需要 Pillow。
 
 ## 许可
 
-自有源码使用 MIT 许可（[LICENSE](LICENSE)）。UE4SS、MinHook 和 `mods/shared/Frostrail/json.lua` 保留各自的许可。辅助包里的高亮资源由游戏文件生成，不适用 MIT。
+自有源码使用 MIT 许可（[LICENSE](LICENSE)）。UE4SS、MinHook 和 `mods/shared/Frostrail/json.lua` 保留各自的许可。辅助和新物品包里的游戏派生资源不适用 MIT。
 
 ## English
 
 Unofficial Frostrail Steam Demo mods and a portable Windows mod manager, not affiliated with the game developer. Download the manager EXE and the Core / feature ZIPs from [Releases](https://github.com/yakumo-hx/Frostrail-UE4SS-Mods/releases/latest). Close the game, then drag the ZIPs into the manager. See the [installation guide](docs/安装与配置.md) and [package specification](docs/包规范-v2.md) (Chinese).
 
-Building the manager requires Windows, a .NET SDK and the .NET Framework 4.8 Developer Pack; run `scripts/Build-Manager.ps1`. Mod packaging uses `python scripts/package.py`. Core requires the pinned UE4SS binaries; Assist requires prebuilt game assets, neither included in this repository. Original code is MIT-licensed; third-party code and game-derived assets retain their own terms. Multiplayer and full save compatibility are unverified. Split oversized stacks before disabling, uninstalling or reducing Capacity settings; empty added recycler slots and save first.
+Building the manager requires Windows, a .NET SDK and the .NET Framework 4.8 Developer Pack; run `scripts/Build-Manager.ps1`. Mod packaging uses `python scripts/package.py`. Core requires the pinned UE4SS binaries; Assist and Items require prebuilt game assets, neither included in this repository. Original code is MIT-licensed; third-party code and game-derived assets retain their own terms. Multiplayer and full save compatibility are unverified. Split oversized stacks before disabling, uninstalling or reducing Capacity settings; empty added recycler slots and save first.
 
 For the merged packages, uninstall the six old Quickstash, Pause, Train Supply, Farming, Stacks and Recycler packages before installing Assist and Capacity. Reconfigure settings, slot locks and keys as needed.

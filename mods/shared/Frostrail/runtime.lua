@@ -2,7 +2,7 @@
 local config=require("Frostrail.config")
 local input=require("Frostrail.input")
 local settings=require("Frostrail.settings")
-local M={version="0.3.1"}
+local M={version="0.3.2"}
 local menu_path="/Game/Frostrail/UI/Widgets/Menus/MainMenu/WBP_Menu_Main.WBP_Menu_Main_C"
 local language_menu="/Game/Frostrail/UI/Widgets/Menus/SettingsMenu/WBP_Element_Settings_General.WBP_Element_Settings_General_C"
 local function native_name(id)
@@ -63,6 +63,10 @@ function M.create(options)
         C.actions[#C.actions+1]={name=a.id or (options.action_prefix or C.context_id).."."..name,
             label=label,key=key,callback=callback,allow_ui=a.allow_ui==true,requires_pawn=a.requires_pawn~=false}
     end
+    -- Internal for now: only Console's Esc uses it, and it may change or go
+    -- once Console joins the native HUD widget stack. Not in the package spec.
+    -- A fixed (not rebindable) key whose callback runs on the game thread.
+    function C.key(code,callback) input.key(C,code,callback) end
     function C.message(message)
         C.log(C.id,message)
         if C.panel_open then require("Frostrail.panel").message(C,message) end
@@ -141,7 +145,7 @@ function M.create(options)
                 if C.initialized and C.valid(actor) then C.call("actor_ready",actor) end
             end)
         end
-        ExecuteWithDelay(2000,function() ExecuteInGameThread(function()
+        ExecuteInGameThreadWithDelay(2000,function()
             if #C.actions>0 or module.language_changed then
                 LoadAsset(language_menu)
                 -- The menu's native SetGameLanguage call bypasses RegisterHook
@@ -168,7 +172,7 @@ function M.create(options)
             end
             local pc=FindFirstOf("BP_FrostrailPlayerController_C")
             if C.valid(pc) then C.run(C.id,C.player_ready,pc,pc:GetBoundCharacterPawn()) end
-        end) end)
+        end)
         C.log(C.id,"Independent entry registered")
         return C
     end

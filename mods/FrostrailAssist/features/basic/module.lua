@@ -50,9 +50,8 @@ function M:init()
     for _,event in ipairs({"RequestSalvage","MC_RequestSalvage","OnRep_CurrentDurability"}) do
         C.hook("/Script/Frostrail.RepairComponent:"..event,nil,function() self:scan() end)
     end
-    LoopAsync(math.max(500,self.cfg.refresh_ms),function()
-        ExecuteInGameThread(function() if not self.failed then C.run(C.id,function() self:scan() end) end end)
-        return self.failed==true
+    LoopInGameThreadWithDelay(math.max(500,self.cfg.refresh_ms),function()
+        if not self.failed then C.run(C.id,function() self:scan() end) end
     end)
 end
 function M:restore_mark(entry)

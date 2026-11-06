@@ -91,13 +91,13 @@ function M:prepare_dialog(dialog)
             return
         end
         if self.system:GetFrameCount()<pending.frame+2 then
-            ExecuteWithDelay(50,function() ExecuteInGameThread(finish) end)
+            ExecuteInGameThreadWithDelay(50,finish)
             return
         end
         self.settling=nil
         self:acquire(pending.controller.object)
     end
-    ExecuteWithDelay(50,function() ExecuteInGameThread(finish) end)
+    ExecuteInGameThreadWithDelay(50,finish)
 end
 
 function M:stack_changed(hud)

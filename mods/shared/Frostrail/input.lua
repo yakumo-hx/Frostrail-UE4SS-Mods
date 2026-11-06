@@ -2,8 +2,19 @@ local M={}
 local settings=require("Frostrail.settings")
 local locale=require("Frostrail.locale")
 local function state(C)
-    C.input_state=C.input_state or {registered={},dispatch={},held={}}
-    return C.input_state
+    local S=C.input_state or {registered={},dispatch={}}
+    C.input_state=S
+    if not S.presses then
+        -- UE4SS calls key callbacks on its input thread while game-thread Lua
+        -- may run in this VM. They only read held[code] and bump presses[code];
+        -- every virtual-key slot exists up front, so neither table grows later.
+        S.held,S.presses,S.seen,S.remapped,S.keys=S.held or {},{},{},{},{}
+        for code=1,255 do
+            if S.held[code]==nil then S.held[code]=false end
+            S.presses[code],S.seen[code],S.remapped[code]=0,0,0
+        end
+    end
+    return S
 end
 local function editing_text()
     for _,w in ipairs(FindAllOf("EditableTextBox") or {}) do if w:HasKeyboardFocus() then return true end end
@@ -23,14 +34,14 @@ local function wait_for_release(C,S,code,key)
     local held={player_name=C.player_name}
     S.held[code]=held
     local function check(delay)
-        ExecuteWithDelay(delay,function() ExecuteInGameThread(function()
+        ExecuteInGameThreadWithDelay(delay,function()
             if S.held[code]~=held then return end
             local down=C.run(C.id,function()
                 return C.player_valid() and C.player_name==held.player_name
                     and S.dispatch[code]~=nil and C.player:IsInputKeyDown(key)
             end)
-            if down then check(16) else S.held[code]=nil end
-        end) end)
+            if down then check(16) else S.held[code]=false end
+        end)
     end
     -- Pinned UE4SS polls GetAsyncKeyState's low bit too: a released capture can
     -- arrive after ApplySettings, while paused UI reports IsInputKeyDown=false.
@@ -38,10 +49,55 @@ local function wait_for_release(C,S,code,key)
     -- This expires without an event; never consume the next press to unlock it.
     check(50)
 end
+local none={}
+local function run_actions(C,S,code)
+    local actions=S.dispatch[code]
+    if not actions or not C.player_valid() or editing_text() then return end
+    for _,a in ipairs(actions) do
+        if (a.requires_pawn==false or C.pawn_valid()) and (a.allow_ui or not settings.busy()) then C.run(C.id,a.callback) end
+    end
+end
+-- Game thread: handle every press counted since the last pump, in order.
+function M.pump(C)
+    local S=state(C)
+    for code in pairs(S.registered) do
+        local count,seen=S.presses[code],S.seen[code]
+        if count~=seen then
+            S.seen[code]=count
+            for press=seen+1,count do
+                for _,callback in ipairs(S.keys[code] or none) do C.run(C.id,callback) end
+                -- A press counted before the mapping changed never uses the new one.
+                if press>S.remapped[code] then run_actions(C,S,code) end
+            end
+        end
+    end
+end
+-- The only RegisterKeyBind: the callback runs on UE4SS's input thread and
+-- must not allocate, call UE4SS or touch UObjects. One pump per VM reads it.
+local function listen(C,S,code)
+    if S.registered[code] then return end
+    S.registered[code]=true
+    if not S.pump then
+        S.pump=LoopInGameThreadWithDelay(16,function() C.run(C.id,M.pump,C) end)
+    end
+    local held,presses=S.held,S.presses
+    RegisterKeyBind(code,function()
+        if not held[code] then presses[code]=presses[code]+1 end
+    end)
+end
+-- A fixed key outside the native controls page; internal for now (only
+-- Console's Esc), may change or go. Runs on the game thread without action checks.
+function M.key(C,code,callback)
+    local S=state(C)
+    S.keys[code]=S.keys[code] or {}
+    table.insert(S.keys[code],callback)
+    listen(C,S,code)
+end
 function M.sync(C,applying)
     local S=state(C)
     local previous=S.dispatch
     S.dispatch={}
+    for code in pairs(S.registered) do S.remapped[code]=S.presses[code] end
     -- Resolve the current settings afresh; ApplySettings may arrive after travel.
     local native_settings=FindFirstOf("FREnhancedInputUserSettings")
     if not C.instance(native_settings,S.settings_name) then return end
@@ -62,21 +118,7 @@ function M.sync(C,applying)
                 end
                 S.dispatch[code]=S.dispatch[code] or {}
                 table.insert(S.dispatch[code],action)
-                if not S.registered[code] then
-                    S.registered[code]=true
-                    RegisterKeyBind(code,function()
-                        if S.held[code] then return end
-                        -- Do not route an already queued press through a newer mapping.
-                        local actions=S.dispatch[code]
-                        if not actions then return end
-                        ExecuteInGameThread(function()
-                            if S.dispatch[code]~=actions or not C.player_valid() or editing_text() then return end
-                            for _,a in ipairs(actions) do
-                                if (a.requires_pawn==false or C.pawn_valid()) and (a.allow_ui or not settings.busy()) then C.run(C.id,a.callback) end
-                            end
-                        end)
-                    end)
-                end
+                listen(C,S,code)
                 C.log(C.id,action.name.."="..name.." (native profile)")
             end
         end

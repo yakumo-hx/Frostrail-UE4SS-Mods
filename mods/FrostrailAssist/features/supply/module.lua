@@ -181,18 +181,13 @@ function M:init()
     end
     -- A half-second refresh exists only while crafting is open. It catches native
     -- inventory mutations/attachments that bypass UFunction hooks, without Tick hooks.
-    local queued=false
-    LoopAsync(500,function()
-        if queued or not self.session then return end
-        queued=true
-        ExecuteInGameThread(function()
-            C.run(C.id,function()
-                local s=self.session
-                if not s then return end
-                if not self:owned(s) or not self:present(s) or s.component.object:GetCraftingSessionState()==0 then self:close(); return end
-                if current(C,s.info) then self:refresh(s.info.object) end
-            end)
-            queued=false
+    LoopInGameThreadWithDelay(500,function()
+        if self.failed or not self.session then return end
+        C.run(C.id,function()
+            local s=self.session
+            if not s then return end
+            if not self:owned(s) or not self:present(s) or s.component.object:GetCraftingSessionState()==0 then self:close(); return end
+            if current(C,s.info) then self:refresh(s.info.object) end
         end)
     end)
     RegisterLoadMapPreHook(function() C.run(C.id,function() self:close() end) end)

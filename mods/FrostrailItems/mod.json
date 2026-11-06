@@ -1,0 +1,22 @@
+{
+  "id": "FrostrailItems",
+  "name": {"zh": "新物品", "en": "Items"},
+  "version": "0.1.0",
+  "author": "Yuuka",
+  "description": {
+    "zh": "三种食物和四种可在分拣台回收的杂物，使用独立的 Kenney 模型和图标，出现在厨房和杂物掉落中。",
+    "en": "Three foods and four recyclable junk items with their own Kenney models and icons, found in kitchen and junk loot."
+  },
+  "requires": ["FrostrailCore"],
+  "update": "https://github.com/yakumo-hx/Frostrail-UE4SS-Mods",
+  "notices": {
+    "disable": {
+      "zh": "关闭后再读档，本包物品会消失，食物效果会失效。原来的食物记录可能还会占一个食物槽，到时间后消失。",
+      "en": "Loading a save with this package disabled removes its items and food bonuses. An old food record may still occupy a food slot until its timer expires."
+    },
+    "uninstall": {
+      "zh": "卸载后再读档，本包物品会消失，食物效果会失效。原来的食物记录可能还会占一个食物槽，到时间后消失。",
+      "en": "Loading a save after uninstalling this package removes its items and food bonuses. An old food record may still occupy a food slot until its timer expires."
+    }
+  }
+}

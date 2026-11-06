@@ -1,7 +1,7 @@
 {
   "id": "FrostrailAutosave",
   "name": {"zh":"自动保存","en":"Autosave"},
-  "version": "0.1.0",
+  "version": "0.1.1",
   "author": "Yuuka",
   "requires": ["FrostrailCore"],
   "update": "https://github.com/yakumo-hx/Frostrail-UE4SS-Mods",

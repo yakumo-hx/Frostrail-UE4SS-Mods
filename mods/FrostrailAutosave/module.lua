@@ -115,15 +115,8 @@ function M:init()
         self:reset()
         self.leaving=false
     end)
-    local queued=false
-    LoopAsync(1000,function()
-        if queued then return end
-        queued=true
-        ExecuteInGameThread(function()
-            C.run(self.id,function() self:tick() end)
-            queued=false
-        end)
-    end)
+    -- Game-thread loop: no pending timer callback can outlive leave().
+    LoopInGameThreadWithDelay(1000,function() C.run(self.id,function() self:tick() end) end)
 end
 
 function M:changed()

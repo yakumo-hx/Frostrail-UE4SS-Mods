@@ -73,6 +73,9 @@ local function live_fields(description)
 end
 function M.toggle(C,controller)
     if live(C) then M.close(C); return end
+    -- Another independent mod may own an input-only panel (e.g. Console).
+    -- Do not capture its cursor state and later restore that as gameplay input.
+    if settings.busy() and not state(C).widget then return end
     M.close(C,false)
     local pc=controller or C.player
     if not C.player_valid() or not C.same(pc,C.player) then return end

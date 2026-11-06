@@ -1,0 +1,198 @@
+{
+  "source": {
+    "zh": "来自 Mod：新物品",
+    "en": "From mod: Items"
+  },
+  "templates": {
+    "food": "/Game/Frostrail/Data/Items/Food/ISCH_CanOfBeans",
+    "junk": "/Game/Frostrail/Data/Items/Resources/Junk/ISCH_AlarmClock"
+  },
+  "resources": {
+    "MetalScrap": "/Game/Frostrail/Data/Items/Resources/Scrap/ISCH_MetalScrap",
+    "Component": "/Game/Frostrail/Data/Items/Resources/Materials/ISCH_Component",
+    "CopperScrap": "/Game/Frostrail/Data/Items/Resources/Scrap/ISCH_CopperScrap",
+    "PlasticScrap": "/Game/Frostrail/Data/Items/Resources/Scrap/ISCH_PlasticScrap"
+  },
+  "loot_tables": [
+    "LT_Tier_1",
+    "LT_Tier_2",
+    "LT_Tier_3",
+    "LT_Tier_4",
+    "LT_Tier_5",
+    "LT_Tutorial"
+  ],
+  "fallback_junk_table": "LT_Tier_2",
+  "items": [
+    {
+      "id": "CheeseBurger",
+      "kind": "food",
+      "icon": "/Game/FrostrailMods/FrostrailItems/Icons/T_FRI_CheeseBurger",
+      "name": {
+        "zh": "芝士汉堡",
+        "en": "Cheeseburger"
+      },
+      "description": {
+        "zh": "芝士汉堡，可以直接食用。",
+        "en": "Cheeseburger. Ready to eat."
+      },
+      "food": {
+        "Duration": 600,
+        "MaxHealthBonus": 50,
+        "MaxStaminaBonus": 30,
+        "Healing": 1.5
+      },
+      "loot_contexts": [
+        "Loot.Context.Junk.Kitchen"
+      ],
+      "weight": 0.6,
+      "max_stack_size": 10
+    },
+    {
+      "id": "Fries",
+      "kind": "food",
+      "name": {
+        "zh": "薯条",
+        "en": "Fries"
+      },
+      "description": {
+        "zh": "薯条，可以直接食用。",
+        "en": "Fries. Ready to eat."
+      },
+      "food": {
+        "Duration": 300,
+        "MaxHealthBonus": 0,
+        "MaxStaminaBonus": 35,
+        "Healing": 0.3
+      },
+      "loot_contexts": [
+        "Loot.Context.Junk.Kitchen"
+      ],
+      "weight": 0.4,
+      "max_stack_size": 10,
+      "icon": "/Game/FrostrailMods/FrostrailItems/Icons/T_FRI_Fries"
+    },
+    {
+      "id": "Donut",
+      "kind": "food",
+      "name": {
+        "zh": "甜甜圈",
+        "en": "Donut"
+      },
+      "description": {
+        "zh": "甜甜圈，可以直接食用。",
+        "en": "Donut. Ready to eat."
+      },
+      "food": {
+        "Duration": 150,
+        "MaxHealthBonus": 10,
+        "MaxStaminaBonus": 15,
+        "Healing": 0.3
+      },
+      "loot_contexts": [
+        "Loot.Context.Junk.Kitchen"
+      ],
+      "weight": 0.2,
+      "max_stack_size": 10,
+      "icon": "/Game/FrostrailMods/FrostrailItems/Icons/T_FRI_Donut"
+    },
+    {
+      "id": "Microwave",
+      "kind": "junk",
+      "category": "Item.Category.Junk",
+      "name": {
+        "zh": "微波炉",
+        "en": "Microwave"
+      },
+      "description": {
+        "zh": "损坏的微波炉，可放进分拣台回收材料。",
+        "en": "A broken microwave. Recycle it for materials."
+      },
+      "recycle_seconds": 20,
+      "outputs": {
+        "MetalScrap": 8,
+        "Component": 2,
+        "CopperScrap": 2
+      },
+      "loot_contexts": [
+        "Loot.Context.Junk.Kitchen"
+      ],
+      "weight": 3,
+      "max_stack_size": 3,
+      "icon": "/Game/FrostrailMods/FrostrailItems/Icons/T_FRI_Microwave"
+    },
+    {
+      "id": "Monitor",
+      "kind": "junk",
+      "category": "Item.Category.Junk",
+      "name": {
+        "zh": "显示器",
+        "en": "Monitor"
+      },
+      "description": {
+        "zh": "损坏的显示器，可放进分拣台回收材料。",
+        "en": "A broken monitor. Recycle it for materials."
+      },
+      "recycle_seconds": 15,
+      "outputs": {
+        "PlasticScrap": 6,
+        "Component": 2,
+        "CopperScrap": 2
+      },
+      "loot_contexts": [
+        "Loot.Context.Junk"
+      ],
+      "weight": 2,
+      "max_stack_size": 3,
+      "icon": "/Game/FrostrailMods/FrostrailItems/Icons/T_FRI_Monitor"
+    },
+    {
+      "id": "Radio",
+      "kind": "junk",
+      "category": "Item.Category.Junk",
+      "name": {
+        "zh": "收音机",
+        "en": "Radio"
+      },
+      "description": {
+        "zh": "损坏的收音机，可放进分拣台回收材料。",
+        "en": "A broken radio. Recycle it for materials."
+      },
+      "recycle_seconds": 10,
+      "outputs": {
+        "MetalScrap": 2,
+        "Component": 2,
+        "CopperScrap": 2
+      },
+      "loot_contexts": [
+        "Loot.Context.Junk"
+      ],
+      "weight": 0.8,
+      "max_stack_size": 10,
+      "icon": "/Game/FrostrailMods/FrostrailItems/Icons/T_FRI_Radio"
+    },
+    {
+      "id": "Keyboard",
+      "kind": "junk",
+      "category": "Item.Category.Junk",
+      "name": {
+        "zh": "键盘",
+        "en": "Keyboard"
+      },
+      "description": {
+        "zh": "损坏的键盘，可放进分拣台回收材料。",
+        "en": "A broken keyboard. Recycle it for materials."
+      },
+      "recycle_seconds": 10,
+      "outputs": {
+        "PlasticScrap": 4,
+        "CopperScrap": 2
+      },
+      "loot_contexts": [
+        "Loot.Context.Junk"
+      ],
+      "weight": 0.5,
+      "max_stack_size": 10,
+      "icon": "/Game/FrostrailMods/FrostrailItems/Icons/T_FRI_Keyboard"
+    }
+  ]
+}
