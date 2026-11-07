@@ -2,7 +2,9 @@
 local config=require("Frostrail.config")
 local input=require("Frostrail.input")
 local settings=require("Frostrail.settings")
-local M={version="0.3.2"}
+local find=require("Frostrail.find")
+local M={version="0.3.3"}
+local validity_system,native_valid
 local menu_path="/Game/Frostrail/UI/Widgets/Menus/MainMenu/WBP_Menu_Main.WBP_Menu_Main_C"
 local language_menu="/Game/Frostrail/UI/Widgets/Menus/SettingsMenu/WBP_Element_Settings_General.WBP_Element_Settings_General_C"
 local function native_name(id)
@@ -26,7 +28,15 @@ function M.create(options)
     C.ui=require("Frostrail.ui")
     C.text=require("Frostrail.locale").text
     function C.log(id,message) print("["..id.."] "..message.."\n") end
-    function C.valid(o) return o~=nil and o:IsValid() end
+    function C.valid(o)
+        if o==nil or not o:IsValid() then return false end
+        if not native_valid then
+            validity_system=StaticFindObject("/Script/Engine.Default__KismetSystemLibrary")
+            native_valid=StaticFindObject("/Script/Engine.KismetSystemLibrary:IsValid")
+        end
+        -- system:IsValid(o) resolves to UE4SS's same-named Lua method.
+        return native_valid(validity_system,o)
+    end
     function C.same(a,b) return C.valid(a) and C.valid(b) and a:GetAddress()==b:GetAddress() end
     function C.instance(o,name) return name~=nil and C.valid(o) and o:GetFullName()==name end
     function C.player_valid() return C.instance(C.player,C.player_name) end
@@ -161,7 +171,7 @@ function M.create(options)
             if #C.actions>0 then
                 local function attach_menu(menu)
                     if not C.valid(menu) then return end
-                    local pc=menu:GetOwningPlayer()
+                    local pc=find.controller(C,menu)
                     if C.valid(pc) then C.set_player(pc,nil); input.attach(C,pc) end
                 end
                 LoadAsset(menu_path)
@@ -170,7 +180,7 @@ function M.create(options)
                     if menu:IsInViewport() then C.run(C.id,attach_menu,menu) end
                 end
             end
-            local pc=FindFirstOf("BP_FrostrailPlayerController_C")
+            local pc=find.controller(C,nil,"BP_FrostrailPlayerController_C")
             if C.valid(pc) then C.run(C.id,C.player_ready,pc,pc:GetBoundCharacterPawn()) end
         end)
         C.log(C.id,"Independent entry registered")

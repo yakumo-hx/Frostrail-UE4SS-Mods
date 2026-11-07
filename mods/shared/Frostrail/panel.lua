@@ -1,6 +1,7 @@
 local M={}
 local settings=require("Frostrail.settings")
 local editors=require("Frostrail.editors")
+local find=require("Frostrail.find")
 local language=require("Frostrail.locale").language
 local function tr(C,zh,en) return C.panel_state and C.panel_state.language=="en" and en or zh end
 local function state(C)
@@ -153,8 +154,7 @@ function M.toggle(C,controller)
 end
 function M.bind_menu(C,menu)
     if not C.valid(menu) or not C.valid(menu.Settings) then return end
-    local pc=menu:GetOwningPlayer()
-    if not C.valid(pc) then pc=FindFirstOf("PlayerController") end
+    local pc=find.controller(C,menu)
     if not C.valid(pc) then return end
     C.set_player(pc,nil)
     local S=state(C)
@@ -163,8 +163,8 @@ function M.bind_menu(C,menu)
     if C.ui.owned(C,entry,menu) then return end
     for key,value in pairs(S.menus) do if not C.ui.owned(C,value,value.owner) then S.menus[key]=nil end end
     entry=C.ui.button(C,menu,language()=="en" and "Mod settings" or "模组设置",function()
-        local owner=menu:GetOwningPlayer()
-        if not C.valid(owner) then owner=FindFirstOf("PlayerController") end
+        local owner=find.controller(C,menu)
+        if not owner then return end
         C.set_player(owner,nil)
         M.toggle(C,owner)
     end,18)

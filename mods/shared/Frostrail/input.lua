@@ -1,6 +1,7 @@
 local M={}
 local settings=require("Frostrail.settings")
 local locale=require("Frostrail.locale")
+local find=require("Frostrail.find")
 local function state(C)
     local S=C.input_state or {registered={},dispatch={}}
     C.input_state=S
@@ -99,7 +100,7 @@ function M.sync(C,applying)
     S.dispatch={}
     for code in pairs(S.registered) do S.remapped[code]=S.presses[code] end
     -- Resolve the current settings afresh; ApplySettings may arrive after travel.
-    local native_settings=FindFirstOf("FREnhancedInputUserSettings")
+    local native_settings=find.first(C,"FREnhancedInputUserSettings")
     if not C.instance(native_settings,S.settings_name) then return end
     local profile=native_settings:GetActiveKeyProfile()
     if not C.valid(profile) then return end
@@ -126,7 +127,7 @@ function M.sync(C,applying)
 end
 function M.refresh_labels(C)
     local S=state(C)
-    local native_settings=FindFirstOf("FREnhancedInputUserSettings")
+    local native_settings=find.first(C,"FREnhancedInputUserSettings")
     if not C.instance(native_settings,S.settings_name) or not C.instance(S.context,S.context_name) then return end
     local labels={}
     for _,a in ipairs(C.actions) do labels[a.name]=settings.label(a.label,locale.language()) end
@@ -171,7 +172,7 @@ function M.refresh_labels(C)
 end
 function M.attach(C,pc)
     local S=state(C)
-    local native_settings=FindFirstOf("FREnhancedInputUserSettings")
+    local native_settings=find.first(C,"FREnhancedInputUserSettings")
     assert(C.valid(native_settings),"Native input settings unavailable")
     if not C.instance(native_settings,S.settings_name) or not C.instance(S.context,S.context_name) then
         S.settings_name=native_settings:GetFullName()

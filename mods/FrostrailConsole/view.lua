@@ -8,7 +8,10 @@ local CHROME=2*PAD+40+36+26
 local function padding(n) return {Left=n,Top=n,Right=n,Bottom=n} end
 local function close_label(C)
     local names={}
-    local settings=FindFirstOf("FREnhancedInputUserSettings")
+    local settings
+    for _,candidate in ipairs(FindAllOf("FREnhancedInputUserSettings") or {}) do
+        if C.valid(candidate) then settings=candidate;break end
+    end
     if C.valid(settings) then
         local profile=settings:GetActiveKeyProfile()
         local id=FName("FrostrailMods.Console")
