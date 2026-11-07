@@ -109,6 +109,18 @@ function M:restore(attribute)
     local label=attribute=="warmth" and C.text("体温","Warmth") or C.text("血量","Health")
     self:message(label..string.format("  %.0f / %.0f",after,maximum))
 end
+function M:return_to_train()
+    if not self:live() then return end
+    local C=self.core
+    local pc=self:host()
+    if not pc then return end
+    if ModRef:GetSharedVariable("FrostrailAssist.return_to_train.enabled")~=true then
+        self:message(C.text("请安装辅助并开启回列车。","Install Assist and enable Return to train."));return
+    end
+    self:close()
+    if self:live() then return end
+    C.class("/Script/Engine.Default__KismetSystemLibrary"):ExecuteConsoleCommand(pc,"frostrail.assist.return_to_train",pc)
+end
 function M:message(value)
     if self:live() then self.view.message(self,value) end
     self.core.log(self.core.id,value)

@@ -4,14 +4,14 @@
     "zh": "辅助",
     "en": "Assist"
   },
-  "version": "0.4.1",
+  "version": "0.5.0",
   "author": "Yuuka",
   "update": "https://github.com/yakumo-hx/Frostrail-UE4SS-Mods",
   "requires": [
     "FrostrailCore"
   ],
   "description": {
-    "zh": "高亮、R 拿取、头灯、基础负重、快存与格子锁、菜单暂停和同列车供料，均可单独开关；另有种植配方和物品生成的数量、机会倍率，默认不改变生成。",
-    "en": "Highlights, R take all, headlamp, carry weight, quick stash and slot locks, menu pause and train supply with individual switches; optional farming and loot quantity/chance multipliers. Loot is unchanged by default."
+    "zh": "高亮、R 拿取、头灯、基础负重、快存与格子锁、菜单暂停、同列车供料和 O 回列车；可选设备防寒损、工具武器不磨损、种植及物品生成倍率。",
+    "en": "Highlights, take all, headlamp, carry weight, quick stash and slot locks, menu pause, train supply and O to return to the train; optional cold damage protection, no item wear, farming and loot multipliers."
   }
 }

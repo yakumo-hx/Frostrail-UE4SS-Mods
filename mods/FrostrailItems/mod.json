@@ -1,7 +1,7 @@
 {
   "id": "FrostrailItems",
   "name": {"zh": "新物品", "en": "Items"},
-  "version": "0.1.0",
+  "version": "0.1.1",
   "author": "Yuuka",
   "description": {
     "zh": "三种食物和四种可在分拣台回收的杂物，使用独立的 Kenney 模型和图标，出现在厨房和杂物掉落中。",

@@ -124,6 +124,9 @@ function V.open(M)
         e.label=C.text(action.zh,action.en);S.action_buttons[action.id]=e
     end
     nav:AddChildToHorizontalBox(new("Spacer")):SetSize({SizeRule=1,Value=1})
+    local return_train=button(C.text("回列车","Return to train"),function() M:return_to_train() end)
+    nav:AddChildToHorizontalBox(sized(return_train.widget,120,30)):SetPadding({Left=0,Top=3,Right=6,Bottom=3})
+    S.return_train=return_train
     local previous=button("‹",function() V.turn(M,-1) end)
     nav:AddChildToHorizontalBox(sized(previous.widget,30,26)):SetVerticalAlignment(2)
     S.page_label=text("")

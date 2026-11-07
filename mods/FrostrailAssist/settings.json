@@ -1,5 +1,25 @@
 [
   {
+    "key": "return_train.enabled",
+    "label": {"zh": "启用回列车", "en": "Enable return to train"},
+    "group": {"zh": "回列车", "en": "Return to train"},
+    "live": true,
+    "help": {"zh": "默认 O，可在原生控制设置中改键；目前仅房主可用。", "en": "Default O; rebind in the game's controls. Currently host-only."}
+  },
+  {
+    "key": "durability.devices",
+    "label": {"zh": "设备防寒损", "en": "Protect devices from cold damage"},
+    "group": {"zh": "耐久", "en": "Durability"},
+    "live": true,
+    "help": {"zh": "保护工作台、分拣台和加热器；攻击、拆解照常，已有损坏仍需维修。", "en": "Protects crafting stations, recyclers and heaters. Attacks and salvage still damage them; existing damage still needs repair."}
+  },
+  {
+    "key": "durability.items",
+    "label": {"zh": "工具和武器不磨损", "en": "No tool or weapon wear"},
+    "group": {"zh": "耐久", "en": "Durability"},
+    "help": {"zh": "下次启动生效，也影响衣物，不修复已有磨损。状态页上“防腐环境”等耐久规则仍显示原版说明（如损耗降低 20%），实际不磨损。", "en": "Restart to apply; also affects clothing and does not repair existing wear. The status page keeps the original text of durability rules such as 20% less wear; items do not wear at all."}
+  },
+  {
     "key": "highlight",
     "label": {
       "zh": "穿墙高亮",

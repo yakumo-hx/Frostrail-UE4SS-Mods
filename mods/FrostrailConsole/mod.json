@@ -1,12 +1,17 @@
 {
   "id": "FrostrailConsole",
-  "name": {"zh": "控制台", "en": "Console"},
-  "version": "0.2.0",
+  "name": {
+    "zh": "控制台",
+    "en": "Console"
+  },
+  "version": "0.2.1",
   "author": "Yuuka",
   "description": {
-    "zh": "房主按 Y 打开物品面板：分类、名称搜索、翻页，左键领取 1 个，按住 Shift 点击领取多个（默认 10，可在设置里改）；可一次性恢复体温和血量。可叠在背包或设备界面上，Esc 返回原页。按键可在游戏设置中修改。",
-    "en": "Press Y as host to browse, search and give items: click for 1, Shift-click for more (10 by default, adjustable in settings). Includes restore warmth and health actions. Opens over inventory or device pages; Esc returns to the previous page. Rebind in the game's controls settings."
+    "zh": "房主按 Y 打开物品面板：分类、名称搜索、翻页，左键领取 1 个，按住 Shift 点击领取多个（默认 10，可在设置里改）；可一次性恢复体温和血量，搭配辅助可回列车。可叠在背包或设备界面上，Esc 返回原页。按键可在游戏设置中修改。",
+    "en": "Press Y as host to browse, search and give items: click for 1, Shift-click for more (10 by default, adjustable in settings). Restore warmth or health, or return to the train with Assist installed. Opens over inventory or device pages; Esc returns to the previous page. Rebind in the game's controls settings."
   },
-  "requires": ["FrostrailCore"],
+  "requires": [
+    "FrostrailCore"
+  ],
   "update": "https://github.com/yakumo-hx/Frostrail-UE4SS-Mods"
 }

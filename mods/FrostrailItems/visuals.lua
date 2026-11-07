@@ -53,6 +53,7 @@ return function(C,dir,catalog)
             return previous
         end
         local class=C.class("/Script/ProceduralMeshComponent.ProceduralMeshComponent")
+        assert(C.valid(class),"Missing item ProceduralMeshComponent class")
         -- A player rebind clears Lua records, but an existing actor still owns
         -- its component. Find its tag before creating another visual.
         for _,ref in ipairs(actor:K2_GetComponentsByClass(class)) do
@@ -64,7 +65,15 @@ return function(C,dir,catalog)
         local assets=self:resources(pc)
         local component=actor:AddComponentByClass(class,false,
             {Rotation={X=0,Y=0,Z=0,W=1},Translation={X=0,Y=0,Z=0},Scale3D={X=1,Y=1,Z=1}},false)
-        assert(C.valid(component),"Cannot create item ProceduralMeshComponent")
+        -- A pickup can retire while resources load. Keep the scan and icons
+        -- alive if creation is declined; retry only while it remains in the
+        -- next native actor list.
+        if not C.valid(component) then
+            if not previous or not previous.pending then
+                C.log(C.id,"Deferred "..visual.id.." visual for "..actor_name..": AddComponentByClass returned no component")
+            end
+            return {actor=actor,pending=true}
+        end
         component.ComponentTags={visual.tag}
         for i,section in ipairs(visual.sections) do
             component:CreateMeshSection_LinearColor(i-1,section.vertices,section.triangles,section.normals,
@@ -98,8 +107,15 @@ return function(C,dir,catalog)
     function V:scan(pc)
         local world=pc:GetLevel().OwningWorld
         local current={}
-        for _,actor in ipairs(FindAllOf("ItemPickable") or {}) do
-            if C.valid(actor) and actor:IsA("/Script/Frostrail.StaticMeshItemPickable")
+        -- UE4SS FindAllOf/IsValid include garbage pickups awaiting GC. Their
+        -- actor UFunctions no longer execute, even IsActorBeingDestroyed.
+        -- Let the engine enumerate live actors in the current world instead.
+        local actors={}
+        C.class("/Script/Engine.Default__GameplayStatics"):GetAllActorsOfClass(pc,
+            C.class("/Script/Frostrail.StaticMeshItemPickable"),actors)
+        for _,ref in ipairs(actors) do
+            local actor=ref:get()
+            if C.valid(actor)
                 and C.same(actor:GetLevel().OwningWorld,world) and C.valid(actor.ItemInstance) then
                 local schematic=actor.ItemInstance:GetSchematic()
                 local visual=C.valid(schematic) and self.items[schematic:GetFullName()]

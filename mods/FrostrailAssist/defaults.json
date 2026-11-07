@@ -19,6 +19,13 @@
   "take_all": true,
   "headlamp": true,
   "carry": true,
+  "return_train": {
+    "enabled": true
+  },
+  "durability": {
+    "devices": false,
+    "items": false
+  },
   "quickstash": {
     "enabled": true,
     "range_m": 20,
