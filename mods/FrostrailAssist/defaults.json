@@ -1,5 +1,6 @@
 {
-  "highlight": true,
+  "highlight_outline": true,
+  "highlight_fill": false,
   "items": true,
   "containers": true,
   "cellars": true,

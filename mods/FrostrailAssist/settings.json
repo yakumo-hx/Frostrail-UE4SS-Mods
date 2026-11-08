@@ -20,11 +20,19 @@
     "help": {"zh": "下次启动生效，也影响衣物，不修复已有磨损。状态页上“防腐环境”等耐久规则仍显示原版说明（如损耗降低 20%），实际不磨损。", "en": "Restart to apply; also affects clothing and does not repair existing wear. The status page keeps the original text of durability rules such as 20% less wear; items do not wear at all."}
   },
   {
-    "key": "highlight",
+    "key": "highlight_outline",
     "label": {
-      "zh": "穿墙高亮",
-      "en": "Highlights"
+      "zh": "描边高亮",
+      "en": "Outline highlights"
     },
+    "help": {"zh": "物品青绿、容器黄、地窖和敌人红；使用游戏原样的描边粗细和穿墙效果。", "en": "Items are teal, containers yellow, cellars and enemies red. Uses the game's outline thickness and through-wall effect."},
+    "live": true,
+    "group": {"zh": "高亮", "en": "Highlights"}
+  },
+  {
+    "key": "highlight_fill",
+    "label": {"zh": "整块高亮", "en": "Filled highlights"},
+    "help": {"zh": "整个模型盖一层颜色，颜色用下面四项；可以和描边同时开。", "en": "Covers the whole model with the four colors below. Can be enabled together with outlines."},
     "live": true,
     "group": {
       "zh": "高亮",
@@ -109,8 +117,8 @@
   {
     "key": "colors.items",
     "label": {
-      "zh": "物品颜色",
-      "en": "Item color"
+      "zh": "物品颜色（整块）",
+      "en": "Item color (fill)"
     },
     "type": "color",
     "live": true,
@@ -122,8 +130,8 @@
   {
     "key": "colors.containers",
     "label": {
-      "zh": "容器颜色",
-      "en": "Container color"
+      "zh": "容器颜色（整块）",
+      "en": "Container color (fill)"
     },
     "type": "color",
     "live": true,
@@ -135,8 +143,8 @@
   {
     "key": "colors.cellars",
     "label": {
-      "zh": "地窖颜色",
-      "en": "Cellar color"
+      "zh": "地窖颜色（整块）",
+      "en": "Cellar color (fill)"
     },
     "type": "color",
     "live": true,
@@ -148,8 +156,8 @@
   {
     "key": "colors.enemies",
     "label": {
-      "zh": "敌人颜色",
-      "en": "Enemy color"
+      "zh": "敌人颜色（整块）",
+      "en": "Enemy color (fill)"
     },
     "type": "color",
     "live": true,

@@ -1,4 +1,8 @@
 local M={title="辅助",marked={},materials={}}
+local outline_bits={items=8,containers=16,cellars=32,enemies=32}
+local function stencil(mesh,bit,on)
+    StaticFindObject("/Script/Frostrail.Default__FXUtils"):SetMeshStencilBit(mesh,bit,on,true)
+end
 local identity={Rotation={X=0,Y=0,Z=0,W=1},Translation={X=0,Y=0,Z=0},Scale3D={X=1,Y=1,Z=1}}
 local function color(hex)
     return {R=tonumber(hex:sub(1,2),16)/255,G=tonumber(hex:sub(3,4),16)/255,B=tonumber(hex:sub(5,6),16)/255,A=1}
@@ -54,11 +58,20 @@ function M:init()
         if not self.failed then C.run(C.id,function() self:scan() end) end
     end)
 end
-function M:restore_mark(entry)
+function M:restore_fill(entry)
     local C=self.core
-    if C.instance(entry.mesh,entry.name) and C.same(entry.mesh.OverlayMaterial,self.materials[entry.category]) then
+    if entry.fill and C.instance(entry.mesh,entry.name) and C.same(entry.mesh.OverlayMaterial,self.materials[entry.category]) then
         entry.mesh:SetOverlayMaterial(C.instance(entry.original,entry.original_name) and entry.original or nil)
     end
+    entry.fill,entry.original,entry.original_name=nil,nil,nil
+end
+function M:restore_outline(entry)
+    if entry.own and self.core.instance(entry.mesh,entry.name) then stencil(entry.mesh,entry.bit,false) end
+    entry.bit,entry.own=nil,nil
+end
+function M:restore_mark(entry)
+    self:restore_fill(entry)
+    self:restore_outline(entry)
 end
 function M:retain_overlays()
     local keep={}
@@ -241,7 +254,7 @@ function M:scan()
             if C.valid(mesh) then desired[mesh:GetAddress()]={mesh=mesh,category=category} end
         end
     end
-    if self.cfg.highlight then
+    if self.cfg.highlight_outline or self.cfg.highlight_fill then
         if self.cfg.items then
             for _,a in ipairs(FindAllOf("ItemPickable") or {}) do mark(a,"items") end
             for _,a in ipairs(FindAllOf("GatherableActor") or {}) do
@@ -287,13 +300,35 @@ function M:scan()
     end
     for id,entry in pairs(desired) do
         if not self.marked[id] then
-            local original=entry.mesh.OverlayMaterial
-            self.marked[id]={mesh=entry.mesh,name=entry.mesh:GetFullName(),original=original,
-                original_name=C.valid(original) and original:GetFullName() or nil,category=entry.category}
+            self.marked[id]={mesh=entry.mesh,name=entry.mesh:GetFullName(),category=entry.category}
         end
-        self.marked[id].category=entry.category
-        if not C.same(entry.mesh.OverlayMaterial,self.materials[entry.category]) then
-            entry.mesh:SetOverlayMaterial(self.materials[entry.category])
+        local mark=self.marked[id]
+        if mark.category~=entry.category then
+            self:restore_mark(mark)
+            mark.category=entry.category
+        end
+        if self.cfg.highlight_fill then
+            if not mark.fill then
+                mark.original=entry.mesh.OverlayMaterial
+                mark.original_name=C.valid(mark.original) and mark.original:GetFullName() or nil
+                mark.fill=true
+            end
+            if not C.same(entry.mesh.OverlayMaterial,self.materials[entry.category]) then
+                entry.mesh:SetOverlayMaterial(self.materials[entry.category])
+            end
+        else
+            self:restore_fill(mark)
+        end
+        if self.cfg.highlight_outline then
+            mark.bit=outline_bits[entry.category]
+            if (entry.mesh.CustomDepthStencilValue & mark.bit)==0 then
+                stencil(entry.mesh,mark.bit,true)
+                mark.own=true
+            elseif mark.own==nil then
+                mark.own=false
+            end
+        else
+            self:restore_outline(mark)
         end
     end
     self:retain_overlays()
