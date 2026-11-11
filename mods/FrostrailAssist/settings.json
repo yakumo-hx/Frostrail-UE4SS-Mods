@@ -1,5 +1,12 @@
 [
   {
+    "key": "jump.enabled",
+    "label": {"zh": "启用二段跳", "en": "Enable double jump"},
+    "group": {"zh": "跳跃", "en": "Jumping"},
+    "live": true,
+    "help": {"zh": "空中松开再按跳跃键，可再跳一次；保持原版单次跳跃高度。", "en": "Release and press jump again in midair for a second jump; keeps the original single-jump height."}
+  },
+  {
     "key": "return_train.enabled",
     "label": {"zh": "启用回列车", "en": "Enable return to train"},
     "group": {"zh": "回列车", "en": "Return to train"},

@@ -23,10 +23,13 @@ def build(package_id, output_dir=None):
         for source in (ROOT / 'mods/shared/Frostrail').rglob('*.lua'):
             add(source, BASE / 'ue4ss/Mods/shared/Frostrail' / source.relative_to(ROOT / 'mods/shared/Frostrail'))
     destination = BASE / 'ue4ss/Mods' / package_id if package_id == 'FrostrailCore' else Path(package_id)
-    for source in source_root.rglob('*'):
-        if source.is_file() and (source.suffix in ('.lua', '.png') or source.name.endswith('.mesh.json') or source.name in
-                               ('mod.json', 'settings.json', 'defaults.json', 'items.json')):
-            add(source, destination / source.relative_to(source_root))
+    if package_id == 'FrostrailDemoContinue':
+        add(source_root / 'Scripts/main.lua', destination / 'Scripts/main.lua')
+    else:
+        for source in source_root.rglob('*'):
+            if source.is_file() and (source.suffix in ('.lua', '.png') or source.name.endswith('.mesh.json') or source.name in
+                                   ('mod.json', 'settings.json', 'defaults.json', 'items.json')):
+                add(source, destination / source.relative_to(source_root))
     if package_id in ('FrostrailAssist', 'FrostrailItems'):
         for ext in ('pak', 'utoc', 'ucas'):
             source = ROOT / 'build' / (package_id + '_P.' + ext)
@@ -40,7 +43,10 @@ def build(package_id, output_dir=None):
     with zipfile.ZipFile(output, 'w', zipfile.ZIP_DEFLATED) as archive:
         archive.write(source_root / 'mod.json', 'mod.json')
         archive.write(ROOT / 'LICENSE', 'LICENSE')
-        archive.write(ROOT / 'docs/安装与配置.md', '安装与配置.md')
+        if (source_root / 'README.md').is_file():
+            archive.write(source_root / 'README.md', 'README.md')
+        else:
+            archive.write(ROOT / 'docs/安装与配置.md', '安装与配置.md')
         if package_id == 'FrostrailAutosave':
             archive.write(ROOT / 'tools/minhook-1.3.4/LICENSE.txt', 'MinHook-LICENSE.txt')
         if package_id == 'FrostrailItems':

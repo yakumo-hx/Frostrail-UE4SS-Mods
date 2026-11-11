@@ -20,6 +20,9 @@
   "take_all": true,
   "headlamp": true,
   "carry": true,
+  "jump": {
+    "enabled": true
+  },
   "return_train": {
     "enabled": true
   },

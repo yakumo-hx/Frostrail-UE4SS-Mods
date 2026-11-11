@@ -1,0 +1,12 @@
+{
+  "id": "FrostrailDemoContinue",
+  "name": {"zh": "Demo 续玩", "en": "Demo Continue"},
+  "version": "0.1.0",
+  "author": "Yuuka",
+  "requires": ["FrostrailCore"],
+  "update": "https://github.com/yakumo-hx/Frostrail-UE4SS-Mods",
+  "description": {
+    "zh": "Demo 打到苔原终点后不结束：在终点选 CONTINUE IN THE TUNDRA BIOME，接着跑苔原关卡。启用或停用后重启游戏生效。",
+    "en": "Keep playing after the Demo's tundra ending: choose CONTINUE IN THE TUNDRA BIOME at the end and carry on through tundra levels. Restart the game after enabling or disabling."
+  }
+}

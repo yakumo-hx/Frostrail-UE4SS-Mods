@@ -1,6 +1,6 @@
 local here=debug.getinfo(1,"S").source:sub(2):gsub("\\","/"):match("^(.*)/module.lua$")
 local M={title="辅助",features={}}
-local order={"basic","quickstash","pause","supply","farming","loot","return_train","durability"}
+local order={"basic","quickstash","pause","supply","farming","loot","return_train","durability","jump"}
 for _,name in ipairs(order) do
     M.features[name]=dofile(here.."/features/"..name.."/module.lua")
 end

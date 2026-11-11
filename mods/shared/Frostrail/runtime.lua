@@ -3,7 +3,7 @@ local config=require("Frostrail.config")
 local input=require("Frostrail.input")
 local settings=require("Frostrail.settings")
 local find=require("Frostrail.find")
-local M={version="0.3.3"}
+local M={version="0.3.4"}
 local validity_system,native_valid
 local menu_path="/Game/Frostrail/UI/Widgets/Menus/MainMenu/WBP_Menu_Main.WBP_Menu_Main_C"
 local language_menu="/Game/Frostrail/UI/Widgets/Menus/SettingsMenu/WBP_Element_Settings_General.WBP_Element_Settings_General_C"
@@ -17,14 +17,13 @@ end
 function M.create(options)
     options=options or {}
     local caller=debug.getinfo(2,"S").source:sub(2):gsub("\\","/")
-    local dir=(options.dir or caller:match("^(.*)/Scripts/") or caller:match("^(.*)/[^/]+$"))
+    local dir=(caller:match("^(.*)/Scripts/") or caller:match("^(.*)/[^/]+$"))
         :gsub("\\","/"):gsub("/$","")
-    local id=options.id or dir:match("([^/]+)$")
-    local root=options.mods_root or dir:match("^(.*)/[^/]+$")
-    local context_id=options.context_id or id
-    local C={id=id,context_id=context_id,title=options.title or id,dir=dir,root=root,version=M.version,
-        game_root=options.game_root or game_root(root),
-        actions={},config=config,settings=settings,options=options,native_id=native_name(context_id)}
+    local id=dir:match("([^/]+)$")
+    local root=dir:match("^(.*)/[^/]+$")
+    local C={id=id,title=id,dir=dir,root=root,version=M.version,
+        game_root=game_root(root),
+        actions={},config=config,settings=settings,native_id=native_name(id)}
     C.ui=require("Frostrail.ui")
     C.text=require("Frostrail.locale").text
     function C.log(id,message) print("["..id.."] "..message.."\n") end
@@ -70,7 +69,7 @@ function M.create(options)
     end
     function C.action(name,label,key,callback,action_options)
         local a=action_options or {}
-        C.actions[#C.actions+1]={name=a.id or (options.action_prefix or C.context_id).."."..name,
+        C.actions[#C.actions+1]={name=(options.action_prefix or C.id).."."..name,
             label=label,key=key,callback=callback,allow_ui=a.allow_ui==true,requires_pawn=a.requires_pawn~=false}
     end
     -- Internal, not in the package spec: Console closes on Esc with it while
@@ -132,16 +131,15 @@ function M.create(options)
         local m=C.module
         m.cfg=config.load(C.dir)
         if not C.call("changed") then return false end
-        if options.on_settings_changed then options.on_settings_changed(C) end
         C.log(C.id,"Configuration reloaded; live settings applied")
     end
     function C.start(module)
         C.module=module
         module.id,module.dir,module.core=C.id,C.dir,C
-        C.title=options.title or module.title or C.id
+        C.title=module.title or C.id
         module.cfg=config.load(C.dir)
         C.call("setup")
-        RegisterConsoleCommandGlobalHandler(settings.command(C.context_id),function()
+        RegisterConsoleCommandGlobalHandler(settings.command(C.id),function()
             ExecuteInGameThread(function() C.run(C.id,C.reload) end)
             return true
         end)

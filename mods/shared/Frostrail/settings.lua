@@ -43,7 +43,7 @@ function M.register(C)
     local defaults=config.optional(C.dir.."/defaults.json") or {}
     for _,field in ipairs(fields) do field.type=M.kind(field,M.get(defaults,field.key)) end
     local manifest=config.optional(C.dir.."/mod.json") or {}
-    local id=C.context_id or C.id
+    local id=C.id
     local record={id=id,title=manifest.name or C.title or C.id,
         config={path=C.dir.."/config.json",defaults=defaults,fields=fields}}
     local raw=ModRef:GetSharedVariable(M.registry_key)
