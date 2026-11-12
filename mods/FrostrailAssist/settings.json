@@ -398,5 +398,23 @@
       "zh": "种植",
       "en": "Farming"
     }
+  },
+  {
+    "key": "relic.minutes",
+    "label": {
+      "zh": "圣物祝福时长（分钟）",
+      "en": "Relic blessing duration (minutes)"
+    },
+    "min": 1,
+    "integer": true,
+    "live": true,
+    "group": {
+      "zh": "圣物",
+      "en": "Relics"
+    },
+    "help": {
+      "zh": "从下次祈祷起生效；填 2 等于原版。祭坛受损仍会缩短时长。",
+      "en": "Applies from the next prayer; 2 restores vanilla duration. Shrine damage still reduces it."
+    }
   }
 ]

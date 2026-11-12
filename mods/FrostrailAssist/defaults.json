@@ -92,5 +92,8 @@
         "output": 5
       }
     ]
+  },
+  "relic": {
+    "minutes": 10
   }
 }
