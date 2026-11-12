@@ -1,0 +1,17 @@
+{
+  "id": "FrostrailWoodcutting",
+  "name": {
+    "zh": "伐木",
+    "en": "Woodcutting"
+  },
+  "version": "0.1.0",
+  "author": "Yuuka",
+  "description": {
+    "zh": "用近战武器砍伐站立的树，获得原木和树枝。",
+    "en": "Fell standing trees with melee hits to collect logs and branches."
+  },
+  "requires": [
+    "FrostrailCore"
+  ],
+  "update": "https://github.com/yakumo-hx/Frostrail-UE4SS-Mods"
+}

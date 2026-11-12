@@ -30,7 +30,7 @@ def build(package_id, output_dir=None):
             if source.is_file() and (source.suffix in ('.lua', '.png') or source.name.endswith('.mesh.json') or source.name in
                                    ('mod.json', 'settings.json', 'defaults.json', 'items.json')):
                 add(source, destination / source.relative_to(source_root))
-    if package_id in ('FrostrailAssist', 'FrostrailItems'):
+    if package_id in ('FrostrailAssist', 'FrostrailItems', 'FrostrailWoodcutting'):
         for ext in ('pak', 'utoc', 'ucas'):
             source = ROOT / 'build' / (package_id + '_P.' + ext)
             add(source, Path(source.name))
@@ -64,5 +64,5 @@ if __name__ == '__main__':
     parser.add_argument('--only', nargs='+', help='Build only the specified package IDs.')
     parser.add_argument('--output', type=Path, help='Place packages with different versions in one delivery directory.')
     args = parser.parse_args()
-    for package_id in args.only or ['FrostrailCore', 'FrostrailAssist', 'FrostrailCapacity', 'FrostrailAutosave', 'FrostrailItems', 'FrostrailConsole']:
+    for package_id in args.only or ['FrostrailCore', 'FrostrailAssist', 'FrostrailCapacity', 'FrostrailAutosave', 'FrostrailItems', 'FrostrailConsole', 'FrostrailWoodcutting']:
         build(package_id, args.output)

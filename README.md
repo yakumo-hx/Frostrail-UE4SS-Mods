@@ -12,6 +12,7 @@ Frostrail（Steam Demo）的 Mod 和 Mod 管理器。作者 Yuuka。
 - **控制台**：房主按 Y 打开分类、搜索和翻页物品面板，左键给 1 个、Shift+左键给多个（默认 10，可改）；可一次性恢复体温、血量，搭配辅助可回列车。背包、工作台、箱子开着时也能打开，Esc 回到原界面。
 - **Demo 续玩**：打到苔原终点后接着玩。独立的小包，不用可以不装。
 - **新物品**：芝士汉堡、薯条、甜甜圈，以及可回收的微波炉、显示器、收音机、键盘，使用独立的 Kenney 模型和图标。
+- **伐木**：用近战武器砍站立的树，留下树桩并获得原木、树枝。F8 可改每棵树的产量。
 
 ## 玩家
 
@@ -51,12 +52,13 @@ python scripts/package.py --only FrostrailCapacity
 - **辅助**：预先构建的 `build/FrostrailAssist_P.pak`、`.utoc`、`.ucas`。公开仓库不含资源重建工具；可从同版本的辅助 Release ZIP 取得这三份资源。
 - **自动保存**：先用 `python scripts/build_autosave.py` 构建 `build/FrostrailAutosave/autosave.dll`。固定工具版本、原生接口和构建步骤见 [DLL 说明](native/FrostrailAutosave/README.md)。
 - **新物品**：`build/FrostrailItems_P.pak`、`.utoc`、`.ucas`。公开仓库不含资源重建工具，发布后可从对应的新物品 Release ZIP 取得。
+- **伐木**：`build/FrostrailWoodcutting_P.pak`、`.utoc`、`.ucas`。公开仓库不含资源重建工具，可从对应的伐木 Release ZIP 取得。
 
 其余功能包可直接从仓库打包。锁图标和管理器图标已有成品，日常构建无需重新生成；修改图标时使用对应的 Python 脚本，需要 Pillow。
 
 ## 许可
 
-自有源码使用 MIT 许可（[LICENSE](LICENSE)）。UE4SS、MinHook 和 `mods/shared/Frostrail/json.lua` 保留各自的许可。辅助和新物品包里的游戏派生资源不适用 MIT。
+自有源码使用 MIT 许可（[LICENSE](LICENSE)）。UE4SS、MinHook 和 `mods/shared/Frostrail/json.lua` 保留各自的许可。辅助、新物品和伐木包里的游戏派生资源不适用 MIT。
 
 ## English
 

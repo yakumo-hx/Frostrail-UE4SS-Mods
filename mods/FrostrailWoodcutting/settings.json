@@ -1,0 +1,22 @@
+[
+  {
+    "key": "logs",
+    "label": {
+      "zh": "原木数量",
+      "en": "Logs"
+    },
+    "live": true,
+    "integer": true,
+    "min": 0
+  },
+  {
+    "key": "branches",
+    "label": {
+      "zh": "树枝数量",
+      "en": "Branches"
+    },
+    "live": true,
+    "integer": true,
+    "min": 0
+  }
+]
