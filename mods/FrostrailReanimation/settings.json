@@ -1,0 +1,8 @@
+[
+  {"key":"chance","label":{"zh":"尸变概率（%）","en":"Reanimation chance (%)"},"integer":true,"min":0,"max":100,"live":true},
+  {"key":"look","label":{"zh":"僵尸外观","en":"Zombie look"},"live":true,"options":[
+    {"value":"random","label":{"zh":"随机","en":"Random"}},
+    {"value":"revenant","label":{"zh":"原版 Revenant","en":"Revenant"}},
+    {"value":"self","label":{"zh":"自己的样子","en":"Yourself"}}
+  ]}
+]

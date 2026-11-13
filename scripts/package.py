@@ -64,5 +64,5 @@ if __name__ == '__main__':
     parser.add_argument('--only', nargs='+', help='Build only the specified package IDs.')
     parser.add_argument('--output', type=Path, help='Place packages with different versions in one delivery directory.')
     args = parser.parse_args()
-    for package_id in args.only or ['FrostrailCore', 'FrostrailAssist', 'FrostrailCapacity', 'FrostrailAutosave', 'FrostrailItems', 'FrostrailConsole', 'FrostrailWoodcutting']:
+    for package_id in args.only or ['FrostrailCore', 'FrostrailAssist', 'FrostrailCapacity', 'FrostrailAutosave', 'FrostrailItems', 'FrostrailConsole', 'FrostrailWoodcutting', 'FrostrailReanimation']:
         build(package_id, args.output)

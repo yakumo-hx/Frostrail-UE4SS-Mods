@@ -1,0 +1,13 @@
+{
+  "id": "FrostrailReanimation",
+  "name": {"zh":"尸变","en":"Reanimation"},
+  "version": "0.1.0",
+  "author": "Yuuka",
+  "description": {"zh":"靠近玩家遗体时，它可能起身成为携带剩余遗物的近战僵尸。","en":"Player corpses may rise as melee revenants carrying their remaining belongings."},
+  "requires": ["FrostrailCore"],
+  "update": "https://github.com/yakumo-hx/Frostrail-UE4SS-Mods",
+  "notices": {
+    "disable": {"zh":"停用前先捡走僵尸尸体上的东西，再保存。停用后读档，死僵尸的遗物需要重新启用本包才能搜取。","en":"Loot dead revenants and save before disabling. After loading without this mod, re-enable it to loot their bodies."},
+    "uninstall": {"zh":"卸载前先捡走僵尸尸体上的东西，再保存。卸载后读档，死僵尸的遗物需要重新安装本包才能搜取。","en":"Loot dead revenants and save before uninstalling. After loading without this mod, reinstall it to loot their bodies."}
+  }
+}
