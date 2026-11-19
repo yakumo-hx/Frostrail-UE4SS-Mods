@@ -1,0 +1,4 @@
+[
+  {"key":"unlock_stock_ammo","label":{"zh":"解锁步枪弹药和霰弹枪弹药配方","en":"Unlock rifle and shotgun ammunition recipes"},"live":true,
+   "help":{"zh":"原版要先给武器工作台装上“步枪钻孔工具”，Demo 里不一定拿得到。打开后，下次打开工作台时解锁；解锁记在存档里，再关掉不会收回。","en":"The game unlocks these with the Rifle Boring Tools augment, which the Demo may not offer. When on, they unlock the next time you open a workbench. The unlock is saved and turning this off does not undo it."}}
+]

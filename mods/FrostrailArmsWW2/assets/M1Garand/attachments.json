@@ -1,0 +1,18 @@
+{
+  "rig": "SK_Rifle_Pipe_Receiver",
+  "offset": [
+    24.6,
+    0,
+    3.8
+  ],
+  "sightHeight": 12.55,
+  "muzzle": [
+    72.1,
+    0,
+    9.92
+  ],
+  "bones": {
+    "Bolt": "bullet_slid",
+    "Trigger": "trigger"
+  }
+}

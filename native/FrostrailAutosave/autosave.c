@@ -5,6 +5,8 @@
 #include <windows.h>
 #include <stdint.h>
 #include <stdbool.h>
+#include <stdlib.h>
+#include <string.h>
 #include "MinHook.h"
 #include "ue4ss_lua_api.h"
 
@@ -30,6 +32,70 @@ static DWORD save_thread;
 static unsigned write_count;
 static bool write_success;
 static char written_slot[512];
+
+/* Fixed-build TMap storage. Only read occupied entries; native constructors,
+ * insertion and destruction retain ownership of strings and allocations. */
+typedef struct {
+    unsigned char *data;
+    int32_t count, capacity;
+    uint32_t inline_bits[4];
+    uint32_t *bits;
+    int32_t bit_count, bit_capacity, first_free, free_count;
+    unsigned char hash[24];
+} SaveMap;
+_Static_assert(sizeof(SaveMap) == 0x50, "save map layout");
+
+static unsigned char *map_entry(const SaveMap *map, int32_t index, size_t stride) {
+    const uint32_t *bits = map->bits ? map->bits : map->inline_bits;
+    return (bits[index / 32] & (1u << (index % 32))) ? map->data + index * stride : NULL;
+}
+
+static bool trail_entry(const unsigned char *entry, const unsigned char *path) {
+    /* Top-level class path: both FNames, and an empty UTF-8 subobject path. */
+    return entry && !memcmp(entry + 0x10, path, 16)
+        && ((const NativeArray *)(entry + 0x20))->count == 0;
+}
+
+static int exclude_trails(unsigned char *snapshot, void *trail_class) {
+    if (!trail_class) return 0; /* Unloaded class cannot have live instances. */
+    unsigned char path[32];
+    ((void *(*)(void *, void **))(game + 0x15e5e80))(path, &trail_class);
+    SaveMap *records = (void *)(snapshot + 0xa0);
+    SaveMap *states = (void *)(snapshot + 0x190);
+    int removed = 0;
+    for (int32_t i = 0; i < records->count; ++i)
+        if (trail_entry(map_entry(records, i, 0x40), path)) ++removed;
+    /* The class is a top-level UObject; SoftObjectPath has no subpath allocation. */
+    if (!removed) return 0;
+    unsigned char *guids = malloc((size_t)removed * 16);
+    if (!guids) return -1;
+    unsigned char replacement[0x140];
+    ((void *(*)(void *))(game + 0x4a9c750))(replacement);
+    typedef void *(*Insert)(void *, const void *, const void *);
+    int n = 0;
+    for (int32_t i = 0; i < records->count; ++i) {
+        unsigned char *entry = map_entry(records, i, 0x40);
+        if (!entry) continue;
+        if (trail_entry(entry, path)) memcpy(guids + 16 * n++, entry, 16);
+        else ((Insert)(game + 0x4a973e0))(replacement, entry, entry + 16);
+    }
+    for (int32_t i = 0; i < states->count; ++i) {
+        unsigned char *entry = map_entry(states, i, 0x28);
+        if (!entry) continue;
+        int j = 0;
+        while (j < removed && memcmp(entry, guids + 16 * j, 16)) ++j;
+        if (j == removed)
+            ((Insert)(game + 0x4a97510))(replacement + 0xf0, entry, entry + 16);
+    }
+    free(guids);
+    SaveMap old_records = *records, old_states = *states;
+    *records = *(SaveMap *)replacement;
+    *states = *(SaveMap *)(replacement + 0xf0);
+    *(SaveMap *)replacement = old_records;
+    *(SaveMap *)(replacement + 0xf0) = old_states;
+    ((Destroy)(game + 0x4a9caa0))(replacement);
+    return removed;
+}
 
 static bool image_matches(uintptr_t base, DWORD timestamp, DWORD image_size) {
     if (!base) return false;
@@ -113,15 +179,19 @@ static int save(lua_State *L) {
     written_slot[0] = 0;
     save_thread = GetCurrentThreadId();
     ((Capture)(game + 0x5b123c0))(snapshot, world);
-    ((WriteCampaign)(game + 0x5b2c5e0))(session, world, snapshot);
+    void *trail_class = (void *)(uintptr_t)lua_tointegerx(L, 2, NULL);
+    int removed = exclude_trails(snapshot, trail_class);
+    if (removed >= 0) ((WriteCampaign)(game + 0x5b2c5e0))(session, world, snapshot);
     ((Destroy)(game + 0x59d8710))(snapshot);
     save_thread = 0;
+    if (removed < 0) return failure(L, "could not allocate bullet trail filter");
     lua_pushboolean(L, write_count == 1 && write_success);
     lua_pushstring(L, write_count == 1 ? (write_success ? "native write succeeded" : "native write failed")
                                       : "expected exactly one native campaign write");
     lua_pushstring(L, written_slot);
     lua_pushinteger(L, write_count);
-    return 4;
+    lua_pushinteger(L, removed);
+    return 5;
 }
 
 __declspec(dllexport) int luaopen_frostrail_autosave(lua_State *L) {

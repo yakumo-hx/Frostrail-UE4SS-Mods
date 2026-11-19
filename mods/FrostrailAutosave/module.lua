@@ -65,7 +65,8 @@ function M:save(pc,reason)
     self.saving=true
     self.status="saving"
     self:message(pc,C.text("正在保存…","Saving…"))
-    local called,ok,detail,slot,writes=pcall(self.native,pc:GetAddress())
+    local trail=C.class("/Game/Frostrail/Blueprints/Projectiles/BulletTrails/BP_BulletTrailBase.BP_BulletTrailBase_C")
+    local called,ok,detail,slot,writes,excluded=pcall(self.native,pc:GetAddress(),C.valid(trail) and trail:GetAddress() or 0)
     self.saving=false
     if not called then detail=ok; ok=false end
     ok=ok==true
@@ -73,7 +74,7 @@ function M:save(pc,reason)
     self.elapsed=0
     self.last_time=self.gameplay:GetTimeSeconds(pc)
     C.log(self.id,"save reason="..reason.." success="..tostring(ok).." writes="..tostring(writes)
-        .." slot="..tostring(slot).." detail="..tostring(detail))
+        .." slot="..tostring(slot).." excluded_trails="..tostring(excluded).." detail="..tostring(detail))
     self:message(pc,ok and C.text("已保存","Saved") or C.text("保存失败","Save failed"),not ok)
     return ok
 end

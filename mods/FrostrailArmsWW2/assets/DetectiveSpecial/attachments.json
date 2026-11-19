@@ -1,0 +1,18 @@
+{
+  "rig": "SK_Revolver_Tier_2_Receiver",
+  "offset": [
+    5.3,
+    0,
+    2.3
+  ],
+  "sightHeight": 9.3,
+  "muzzle": [
+    15.3,
+    0,
+    7.87
+  ],
+  "bones": {
+    "Cylinder": "roll",
+    "CylinderHinge": "bullet_slid"
+  }
+}

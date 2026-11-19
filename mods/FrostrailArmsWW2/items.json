@@ -1,0 +1,193 @@
+[
+  {
+    "id": "LeeEnfield",
+    "name": {
+      "zh": "李-恩菲尔德 No.4",
+      "en": "Lee-Enfield No.4"
+    },
+    "description": {
+      "zh": "十发栓动步枪，每次射击后拉栓。",
+      "en": "A ten-round bolt-action rifle. Cycle the bolt between shots."
+    },
+    "template": "BoltActionRifle",
+    "ammo": "ISCH_Ammo_Rifle_Regular",
+    "stats": {
+      "damage": 115,
+      "capacity": 10,
+      "spread": 0.2,
+      "fireRate": 1,
+      "loudness": 1
+    },
+    "recipe": {
+      "ISCH_SlagMetal": 8,
+      "ISCH_MetalPipe": 2
+    },
+    "shell": "assets/LeeEnfield"
+  },
+  {
+    "id": "DetectiveSpecial",
+    "name": {
+      "zh": "柯尔特侦探左轮",
+      "en": "Colt Detective Special"
+    },
+    "description": {
+      "zh": "六发短管左轮，枪声较轻，适合近距离。",
+      "en": "A compact six-shot revolver with a subdued report and short reach."
+    },
+    "template": "Revolver",
+    "ammo": "ISCH_Ammo_Pistol_Regular",
+    "stats": {
+      "damage": 40,
+      "capacity": 6,
+      "spread": 0.6,
+      "fireRate": 2,
+      "loudness": 0.6,
+      "falloffMeters": [
+        10,
+        16
+      ]
+    },
+    "recipe": {
+      "ISCH_SlagMetal": 8
+    },
+    "shell": "assets/DetectiveSpecial"
+  },
+  {
+    "id": "MauserC96",
+    "name": {
+      "zh": "毛瑟 C96",
+      "en": "Mauser C96"
+    },
+    "description": {
+      "zh": "十发半自动手枪，散布小，适合稍远的目标。",
+      "en": "A ten-round semiautomatic pistol with a tight spread and longer reach."
+    },
+    "template": "MagFedPistol",
+    "ammo": "ISCH_Ammo_Pistol_Regular",
+    "stats": {
+      "damage": 34,
+      "capacity": 10,
+      "spread": 0.18,
+      "fireRate": 4,
+      "loudness": 0.7,
+      "falloffMeters": [
+        20,
+        30
+      ]
+    },
+    "recipe": {
+      "ISCH_MetalIngot": 8
+    },
+    "shell": "assets/MauserC96"
+  },
+  {
+    "id": "M1911A1",
+    "name": {
+      "zh": "M1911A1",
+      "en": "M1911A1"
+    },
+    "description": {
+      "zh": "七发半自动手枪，单发伤害较高。",
+      "en": "A hard-hitting semiautomatic pistol with a seven-round magazine."
+    },
+    "template": "MagFedPistol",
+    "ammo": "ISCH_Ammo_Pistol_Regular",
+    "stats": {
+      "damage": 46,
+      "capacity": 7,
+      "spread": 0.35,
+      "fireRate": 4,
+      "loudness": 0.8
+    },
+    "recipe": {
+      "ISCH_MetalIngot": 8
+    },
+    "shell": "assets/M1911A1"
+  },
+  {
+    "id": "M1Garand",
+    "name": {
+      "zh": "M1 加兰德",
+      "en": "M1 Garand"
+    },
+    "description": {
+      "zh": "八发半自动步枪，使用步枪弹。",
+      "en": "An eight-round semiautomatic rifle that takes rifle ammunition."
+    },
+    "template": "PipeRifle",
+    "ammo": "ISCH_Ammo_Rifle_Regular",
+    "stats": {
+      "damage": 60,
+      "capacity": 8,
+      "spread": 0.3,
+      "fireRate": 3,
+      "loudness": 1,
+      "falloffMeters": [
+        80,
+        120
+      ]
+    },
+    "recipe": {
+      "ISCH_MetalPlate": 8,
+      "ISCH_MetalPipe": 2
+    },
+    "shell": "assets/M1Garand"
+  },
+  {
+    "id": "ShortDoubleBarrelShotgun",
+    "name": {
+      "zh": "短管双管猎枪",
+      "en": "Short Double-Barrel Shotgun"
+    },
+    "description": {
+      "zh": "两发短管猎枪。每发打出十二颗弹丸，散布较宽。",
+      "en": "A short two-shot shotgun. Each shell fires twelve pellets in a wide spread."
+    },
+    "template": "DoubleBarrelShotgun",
+    "ammo": "ISCH_Ammo_Shotgun_Regular",
+    "stats": {
+      "damage": 10,
+      "capacity": 2,
+      "spread": 6.5,
+      "fireRate": 4,
+      "loudness": 1,
+      "falloffMeters": [
+        4,
+        9
+      ],
+      "pellets": 12
+    },
+    "recipe": {
+      "ISCH_SlagMetal": 8,
+      "ISCH_MetalPipe": 4
+    },
+    "shell": "assets/ShortDoubleBarrelShotgun"
+  },
+  {
+    "id": "PPSh41",
+    "name": {
+      "zh": "PPSh-41",
+      "en": "PPSh-41"
+    },
+    "description": {
+      "zh": "使用冲锋枪弹的连发枪，弹鼓容量七十一发。",
+      "en": "An automatic firearm with a 71-round drum. Takes SMG ammunition."
+    },
+    "template": "PipeRifle",
+    "ammo": "ISCH_Ammo_SMG_Regular",
+    "stats": {
+      "damage": 20,
+      "capacity": 71,
+      "spread": 1.2,
+      "fireRate": 10,
+      "loudness": 1,
+      "reloadSpeed": -0.3,
+      "automatic": true
+    },
+    "recipe": {
+      "ISCH_MetalPlate": 8,
+      "ISCH_MetalPipe": 2
+    },
+    "shell": "assets/PPSh41"
+  }
+]

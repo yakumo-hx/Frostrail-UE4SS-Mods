@@ -2,11 +2,13 @@
 
 只支持 Frostrail Demo Build `25985740` 和 UE4SS `3.0.1-1183-gcdbc0b66`。这是 Lua 包通过 `package.loadlib` 加载的辅助库，不是 UE4SS 的 `dlls/main.dll` 入口。
 
-DLL 导出 `luaopen_frostrail_autosave`，成功时返回一个保存函数。调用方必须在游戏线程传入现查的本地房主控制器地址。函数返回 `成功布尔值、说明、原生槽名、观察到的写盘次数`；前置条件失败时返回 `false、说明`。它不缓存 UObject，不计时，不处理退出或界面。
+DLL 导出 `luaopen_frostrail_autosave`，成功时返回一个保存函数。调用方必须在游戏线程传入现查的本地房主控制器地址，以及按完整路径查到的原版 `BP_BulletTrailBase_C` 类地址（尚未加载时为 0）。函数返回 `成功布尔值、说明、原生槽名、观察到的写盘次数、排除的拖尾数`；前置条件失败时返回 `false、说明`。它不缓存 UObject，不计时，不处理退出或界面。
 
 初始化先核对 EXE 与 UE4SS 的 PE 时间戳、镜像大小及 x64 标识。任一不符直接返回零个 Lua 结果，不绑定 Lua 地址、不挂 Hook。Lua 入口收到空结果后记录停用原因，跳过整个功能初始化。没有哈希或特征码扫描。
 
 保存使用原生当前世界采集、战役编号与写盘、快照析构。上层写盘函数忽略底层 bool，因此用 MinHook 原样转发底层调用，只收集本次同步保存线程及指定返回地址的结果；恰好一次且为 true 才报告成功。原生历史淘汰和出生点规则保持原样。
+
+0.1.2 在采集与写盘之间排除子弹拖尾。快照 `+0xa0` 是生成记录表（元素 0x40 字节），`+0x190` 是对象状态表（元素 0x28 字节）。按类的完整 SoftObjectPath 匹配生成记录，再按同 GUID 排除对象状态；只有命中时才用游戏的构造、插入和析构函数替换这两张表。其他快照字段、场上 Actor 和序列化子系统登记表不动。没有命中时快照原样写盘。定时与两种退出共用此路径，不处理读档或原版道岔保存。
 
 ## 构建
 
@@ -25,4 +27,4 @@ python scripts/package.py --only FrostrailAutosave --output build/autosave-packa
 
 DLL 输出到 `build/FrostrailAutosave/autosave.dll`，包内位置为 `FrostrailAutosave/native/autosave.dll`。玩家不需要编译器、Python 或另一份 Lua。自有代码用仓库 MIT 许可，包根另附 MinHook 许可。
 
-私有开发仓库可运行 `python scripts/build_autosave.py --test` 与 `python scripts/check_autosave.py`。测试只覆盖版本拒绝及 Lua 边界，不能替代游戏内写盘和读档。
+私有开发仓库可运行 `python scripts/build_autosave.py --test` 与 `python scripts/check_autosave.py`。测试覆盖版本拒绝、稀疏表遍历、类路径匹配及 Lua 边界，不能替代游戏内写盘和读档。

@@ -1,0 +1,17 @@
+{
+  "rig": "SK_Rifle_Bolt_Receiver_01",
+  "offset": [
+    19.1,
+    0.37,
+    1.1
+  ],
+  "sightHeight": 9.15,
+  "muzzle": [
+    64.1,
+    0.0,
+    6.61
+  ],
+  "bones": {
+    "Bolt": "bolt_01"
+  }
+}

@@ -1,0 +1,21 @@
+{
+  "rig": "SK_Pistol_MagazineFed",
+  "offset": [
+    12.1,
+    0,
+    2.55
+  ],
+  "sightHeight": 10.45,
+  "muzzle": [
+    26.6,
+    0,
+    8.67
+  ],
+  "bones": {
+    "Trigger": "trigger",
+    "Slide": "lock_bolt"
+  },
+  "sockets": {
+    "Magazine": "magazine_slot"
+  }
+}

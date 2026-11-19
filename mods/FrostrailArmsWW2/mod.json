@@ -1,0 +1,27 @@
+{
+  "id": "FrostrailArmsWW2",
+  "name": {
+    "zh": "二战枪械",
+    "en": "WWII Arms"
+  },
+  "version": "0.1.0",
+  "author": "Yuuka",
+  "update": "https://github.com/yakumo-hx/Frostrail-UE4SS-Mods",
+  "description": {
+    "zh": "在武器工作台制作七支二战枪械，使用原版弹药，可在组装站换装原版配件。",
+    "en": "Craft seven WWII firearms at the Arms Workbench. They use stock ammunition and take stock parts at the Assembly Station."
+  },
+  "requires": [
+    "FrostrailCore"
+  ],
+  "notices": {
+    "disable": {
+      "zh": "停用后读档会失去本包枪械和枪内余弹。背包中的散装弹药保留。请先卸下想保留的原版配件。",
+      "en": "Loading a save with this mod disabled removes its firearms and their loaded rounds. Loose ammunition stays in your inventory. Remove any stock parts you want to keep first."
+    },
+    "uninstall": {
+      "zh": "卸载后读档会失去本包枪械和枪内余弹。背包中的散装弹药保留。请先卸下想保留的原版配件。",
+      "en": "Loading a save after uninstalling removes these firearms and their loaded rounds. Loose ammunition stays in your inventory. Remove any stock parts you want to keep first."
+    }
+  }
+}

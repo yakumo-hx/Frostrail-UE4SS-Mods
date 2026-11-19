@@ -1,0 +1,18 @@
+{
+  "rig": "SK_Shotgun_DoubleBarrel_Receiver",
+  "offset": [
+    18.3,
+    0,
+    2.0
+  ],
+  "sightHeight": 10.8,
+  "muzzle": [
+    47.3,
+    0,
+    8.85
+  ],
+  "bones": {
+    "Barrel": "roll",
+    "Trigger": "trigger"
+  }
+}
