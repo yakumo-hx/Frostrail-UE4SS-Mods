@@ -26,6 +26,9 @@ venv/
 *.uasset
 *.uexp
 *.ubulk
+!mods/FrostrailSkins/assets/**/*.pak
+!mods/FrostrailSkins/assets/**/*.utoc
+!mods/FrostrailSkins/assets/**/*.ucas
 *.usmap
 *.jmap
 *.sav

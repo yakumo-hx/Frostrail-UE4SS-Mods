@@ -15,6 +15,7 @@ Frostrail（Steam Demo）的 Mod 和 Mod 管理器。作者 Yuuka。
 - **伐木**：用近战武器砍站立的树，留下树桩并获得原木、树枝。F8 可改每棵树的产量。
 - **尸变**：靠近玩家尸体时可能起身成为近战僵尸，携带剩余遗物；站着的旧尸体也会尸变，F8 可改概率和外观。
 - **二战枪械**：七支二战枪械，在武器工作台直接制作，用原版弹药，可在组装站换原版配件；PPSh-41 可按住连射。配方、数值和配件见[包内说明](mods/FrostrailArmsWW2/README.md)。
+- **人物皮肤**：六款人物外观，在背包里试穿和切换，只改自己看到的样子。模型来源和许可见[包内说明](mods/FrostrailSkins/README.md)。
 
 ## 玩家
 
@@ -24,7 +25,9 @@ Frostrail（Steam Demo）的 Mod 和 Mod 管理器。作者 Yuuka。
 
 从旧版换过来，先在管理器里卸载快存与格子锁、房主菜单暂停、同列车供料、种植、堆叠、分拣台这六个旧包，再装新的辅助和容量。旧包设置、锁格位置不转入新包；需要的改键请在游戏里重新设置。
 
-多人游戏和存档兼容还没有完整测过，建议先备份存档。容量包关闭、卸载或调低设置前，先拆开超量堆叠、清空分拣台额外格子，再保存，否则可能丢东西。
+**联机：** 新物品、伐木、二战枪械要所有人都装；自动保存、控制台、Demo 续玩、尸变房主装就行，容量建议所有人都装。R 拿取、快存、回列车、同列车供料和控制台只对房主生效；客机要用二段跳，房主和客机都要装辅助并开启二段跳。人物皮肤只改自己看到的样子。各包的情况见[多人联机](docs/安装与配置.md#多人联机)，只在局域网里测过。
+
+存档兼容还没有完整测过，建议先备份存档。容量包关闭、卸载或调低设置前，先拆开超量堆叠、清空分拣台额外格子，再保存，否则可能丢东西。
 
 ## Mod 作者
 
@@ -55,17 +58,19 @@ python scripts/package.py --only FrostrailCapacity
 - **自动保存**：先用 `python scripts/build_autosave.py` 构建 `build/FrostrailAutosave/autosave.dll`。固定工具版本、原生接口和构建步骤见 [DLL 说明](native/FrostrailAutosave/README.md)。
 - **新物品**：`build/FrostrailItems_P.pak`、`.utoc`、`.ucas`。公开仓库不含资源重建工具，发布后可从对应的新物品 Release ZIP 取得。
 - **伐木**：`build/FrostrailWoodcutting_P.pak`、`.utoc`、`.ucas`。公开仓库不含资源重建工具，可从对应的伐木 Release ZIP 取得。
+- **二战枪械**的三份 `FrostrailArmsWW2_P` 容器从同版本 Release ZIP 根目录取出，放进 `build/`。
+- **人物皮肤**的模型容器和贴图随同版本 Release ZIP 分发。将 ZIP 根的 `.pak`、`.utoc`、`.ucas` 放到 `mods/FrostrailSkins/assets/`，再把 ZIP 内 `FrostrailSkins/assets/` 的 PNG 按原子目录放回该目录。
 
 其余功能包可直接从仓库打包。锁图标和管理器图标已有成品，日常构建无需重新生成；修改图标时使用对应的 Python 脚本，需要 Pillow。
 
 ## 许可
 
-自有源码使用 MIT 许可（[LICENSE](LICENSE)）。UE4SS、MinHook 和 `mods/shared/Frostrail/json.lua` 保留各自的许可。辅助、新物品和伐木包里的游戏派生资源不适用 MIT。
+自有源码使用 MIT 许可（[LICENSE](LICENSE)）。UE4SS、MinHook 和 `mods/shared/Frostrail/json.lua` 保留各自的许可。辅助、新物品和伐木包里的游戏派生资源不适用 MIT。二战枪械和人物皮肤里的模型沿用各自作者的许可，见包内说明。
 
 ## English
 
 Unofficial Frostrail Steam Demo mods and a portable Windows mod manager, not affiliated with the game developer. Download the manager EXE and the Core / feature ZIPs from [Releases](https://github.com/yakumo-hx/Frostrail-UE4SS-Mods/releases/latest). Close the game, then drag the ZIPs into the manager. See the [installation guide](docs/安装与配置.md) and [package specification](docs/包规范-v2.md) (Chinese).
 
-Building the manager requires Windows, a .NET SDK and the .NET Framework 4.8 Developer Pack; run `scripts/Build-Manager.ps1`. Mod packaging uses `python scripts/package.py`. Core requires the pinned UE4SS binaries; Assist and Items require prebuilt game assets, neither included in this repository. Original code is MIT-licensed; third-party code and game-derived assets retain their own terms. Multiplayer and full save compatibility are unverified. Split oversized stacks before disabling, uninstalling or reducing Capacity settings; empty added recycler slots and save first.
+Building the manager requires Windows, a .NET SDK and the .NET Framework 4.8 Developer Pack; run `scripts/Build-Manager.ps1`. Mod packaging uses `python scripts/package.py`. Core requires the pinned UE4SS binaries; Assist and Items require prebuilt game assets, neither included in this repository. Original code is MIT-licensed; third-party code and game-derived assets retain their own terms. In multiplayer, everyone needs Items, Woodcutting and WWII Arms; Autosave, Console, Demo Continue and Reanimation only need the host, and everyone installing Capacity is safer. Character Skins change only what you see. Multiplayer was tested on LAN only, and full save compatibility is unverified. Split oversized stacks before disabling, uninstalling or reducing Capacity settings; empty added recycler slots and save first.
 
 For the merged packages, uninstall the six old Quickstash, Pause, Train Supply, Farming, Stacks and Recycler packages before installing Assist and Capacity. Reconfigure settings, slot locks and keys as needed.

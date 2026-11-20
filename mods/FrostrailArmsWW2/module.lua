@@ -100,23 +100,45 @@ function M:init()
             end
         end
     end)
-    C.hook("/Script/Frostrail.CraftingComponent:GetSessionSchematicSelectionList",function(ctx)
-        if not self.recipes_ready and C.pawn_valid() and C.player:HasAuthority()
-            and C.same(ctx:get(),C.pawn.CraftingComponent) then
+end
+
+function M:distribute()
+    local C=self.core
+    if not C.player_valid() or not C.player:HasAuthority() then return end
+    local game=C.class("/Script/Engine.Default__GameplayStatics")
+    local state=game:GetGameState(C.player)
+    if not C.valid(state) then return end
+    local seen={}
+    state.PlayerArray:ForEach(function(_,ref)
+        local player=ref:get()
+        if not C.valid(player) then return end
+        local pawn=player:GetPawn()
+        if not C.valid(pawn) then return end
+        local pc=pawn:GetController()
+        if not C.valid(pc) or not C.same(pc:GetBoundCharacterPawn(),pawn) then return end
+        local name=pc:GetFullName()
+        if not C.instance(self.granted[name],name) or not C.same(self.granted[name],pc) then
             local list={table.unpack(self.recipes)}
             if self.cfg.unlock_stock_ammo then
                 for _,ammo in ipairs(self.stock_ammo) do list[#list+1]=ammo end
             end
-            C.player:TryUnlockSchematicViaQuesting(list,{},false)
-            self.recipes_ready=true
+            pc:TryUnlockSchematicViaQuesting(list,{},false)
         end
+        seen[name]=pc
     end)
+    self.granted=seen
 end
 
 function M:player_ready(pc)
     self.shells:load_icons(pc)
+    if not pc:HasAuthority() then return end
+    self.granted={}
+    self.timer=LoopInGameThreadWithDelay(1000,function() self.core.run(self.id,function() self:distribute() end) end)
 end
 
-function M:player_left() self.recipes_ready=false end
-function M:changed() self.recipes_ready=false end
+function M:player_left()
+    if self.timer then CancelDelayedAction(self.timer); self.timer=nil end
+    self.granted={}
+end
+function M:changed() self.granted={} end
 return M

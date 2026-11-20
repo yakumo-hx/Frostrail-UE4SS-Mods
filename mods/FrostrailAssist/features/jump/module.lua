@@ -23,23 +23,64 @@ function M:apply()
     pawn.JumpMaxCount=2
 end
 
-function M:air_jump(pawn)
-    local C=self.core
-    if not self.cfg.enabled or not C.pawn_valid() or not C.same(pawn,C.pawn) then return end
+local jumpAbility="Ability_Player_Jump_C"
+
+local function jumpHandle(abilities)
+    local handle
+    abilities.ActivatableAbilities.Items:ForEach(function(_,ref)
+        local spec=ref:get()
+        if spec.Ability:IsValid() and spec.Ability:GetClass():GetFName():ToString()==jumpAbility then
+            handle=spec.Handle.Handle
+            return true
+        end
+    end)
+    return handle
+end
+
+-- The local jump ability accepts the press before either side calls launch.
+-- DoJump needs a walkable floor, so supply the second impulse on both copies.
+local function launch(pawn)
     local move=pawn.CharacterMovement
-    if not move:IsFalling() or not pawn:CanJump() then return end
-    -- Frostrail's DoJump requires a walkable CurrentFloor even in midair.
-    -- The original ability already accepted this press (including its carry /
-    -- encumbrance restrictions). Supply only the missing second launch, using
-    -- native count/reset and retaining horizontal velocity from the first jump.
     local speed=math.max(move.JumpZVelocity,pawn:GetVelocity().Z)
     pawn:StopJumping()
     pawn.JumpCurrentCount=2
     pawn:LaunchCharacter({X=0,Y=0,Z=speed},false,true)
 end
 
+function M:air_jump(pawn)
+    local C=self.core
+    if not self.cfg.enabled or not C.pawn_valid() or not C.same(pawn,C.pawn) then return end
+    if not pawn.CharacterMovement:IsFalling() or not pawn:CanJump() then return end
+    launch(pawn)
+    if not pawn:HasAuthority() then
+        local abilities=pawn.AbilitySystemComponent
+        local handle=jumpHandle(abilities)
+        if handle then
+            abilities:ServerSetInputPressed({Handle=handle})
+            abilities:ServerSetInputReleased({Handle=handle})
+        end
+    end
+end
+
+function M:remote_press(abilities,handle)
+    if not self.cfg.enabled then return end
+    local C=self.core
+    local pawn=abilities:GetOwner()
+    if not C.valid(pawn) or not pawn:HasAuthority() or not pawn:IsA("/Script/Frostrail.PlayerCharacter")
+        or not pawn.bIsAlive or pawn:IsLocallyControlled() or not pawn.CharacterMovement:IsFalling()
+        or pawn.JumpCurrentCount>=2 or jumpHandle(abilities)~=handle then return end
+    local limit=pawn.JumpMaxCount
+    pawn.JumpMaxCount=2
+    local can=pawn:CanJump()
+    pawn.JumpMaxCount=limit
+    if can then launch(pawn) end
+end
+
 function M:init()
     local C=self.core
+    C.hook("/Script/GameplayAbilities.AbilitySystemComponent:ServerSetInputPressed",function(ctx,handle)
+        if not self.failed then C.run(C.id,function() self:remote_press(ctx:get(),handle:get().Handle) end) end
+    end)
     C.hook("/Script/Engine.Character:Jump",nil,function(ctx)
         if not self.failed then C.run(C.id,function() self:air_jump(ctx:get()) end) end
     end)
