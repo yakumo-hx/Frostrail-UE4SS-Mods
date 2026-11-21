@@ -1,11 +1,11 @@
 {
   "id": "FrostrailSkins",
   "name": {"zh": "人物皮肤", "en": "Character Skins"},
-  "version": "0.2.0",
+  "version": "0.3.0",
   "author": "Yuuka",
   "description": {
-    "zh": "在背包里试穿六款人物皮肤，给本机角色换装，也可以换回原版。",
-    "en": "Try on six character skins in your inventory and apply one to your local character, or switch back to the original appearance."
+    "zh": "在背包里试穿人物皮肤，给自己的角色换装，也可以换回原版。带七款人物，扩展包可以加更多。",
+    "en": "Try on character skins in your inventory and apply one to your character, or switch back. Includes seven characters; add-on packages add more."
   },
   "requires": ["FrostrailCore"],
   "update": "https://github.com/yakumo-hx/Frostrail-UE4SS-Mods"

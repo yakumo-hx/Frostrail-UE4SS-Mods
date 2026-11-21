@@ -2,7 +2,41 @@ local C = require("Frostrail.runtime").create({settings=false})
 local M = {}
 local runtime, firstPerson, ui
 local api, byId = {}, {}
-local skins = C.config.read(C.dir.."/skins.json")
+-- Lua opens narrow Windows paths in the C locale, while Unreal takes UTF-8.
+-- For a non-ASCII filename, use the UTF-8 locale only while opening the handle.
+function C.readSkinJson(path)
+    local fullPath = C.dir.."/"..path
+    if not fullPath:find("[\128-\255]") then return C.config.read(fullPath) end
+    local previous = os.setlocale(nil,"ctype")
+    assert(os.setlocale(".UTF8","ctype"))
+    local file, err = io.open(fullPath,"rb")
+    os.setlocale(previous,"ctype")
+    assert(file,err)
+    local body = file:read("*a")
+    file:close()
+    return require("Frostrail.json").decode(body:gsub("^\239\187\191",""))
+end
+
+local skins = C.readSkinJson("skins.json")
+local folders = {}
+-- Windows PowerShell can list Unicode names even when the game has no console.
+-- All shell input is literal. The game sets its working directory to Win64.
+local listing = assert(io.popen([[powershell.exe -NoProfile -NonInteractive -Command "]]..
+    [[[Console]::OutputEncoding = [Text.UTF8Encoding]::new($false); ]]..
+    [[Get-ChildItem -LiteralPath ue4ss/Mods/FrostrailSkins/addons -Directory -ErrorAction SilentlyContinue | ]]..
+    [[Where-Object { [IO.File]::Exists([IO.Path]::Combine($_.FullName,'skins.json')) } | ForEach-Object { $_.Name }"]]))
+for name in listing:lines() do folders[#folders+1] = name end
+listing:close()
+table.sort(folders)
+for _,name in ipairs(folders) do
+    local prefix = "addons/"..name.."/"
+    for _,skin in ipairs(C.readSkinJson(prefix.."skins.json")) do
+        for _,field in ipairs({"albedo","surface","reference","stockReference"}) do
+            if skin[field] then skin[field] = prefix..skin[field] end
+        end
+        skins[#skins+1] = skin
+    end
+end
 for _,skin in ipairs(skins) do byId[skin.id] = skin end
 local candidate
 

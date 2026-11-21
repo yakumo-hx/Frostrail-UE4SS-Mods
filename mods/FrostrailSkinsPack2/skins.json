@@ -1,0 +1,237 @@
+[
+  {
+    "id": "ao",
+    "name": {
+      "zh": "Ao",
+      "en": "Ao"
+    },
+    "mesh": "/Game/Frostrail/SkeletalMeshes/BaseBody_Skeleton/SK_AoMaid_World",
+    "firstPersonMesh": "/Game/Frostrail/SkeletalMeshes/BaseBody_Skeleton/SK_AoMaid_Hands",
+    "firstPersonBodyMesh": "/Game/Frostrail/SkeletalMeshes/BaseBody_Skeleton/SK_AoMaid_Torso",
+    "firstPersonBodyLean": -24,
+    "hideFirstPersonBodyWhenCrouched": true,
+    "albedo": "assets/ao/albedo.png",
+    "surface": "assets/rough-nonmetal.png",
+    "reference": "assets/ao/bones.json",
+    "stockReference": "assets/stock-reference.json",
+    "boneCount": 74,
+    "hideBackByDefault": true
+  },
+  {
+    "id": "akumako-halloween",
+    "name": {
+      "zh": "AKUMAKO · 万圣节",
+      "en": "AKUMAKO · Halloween"
+    },
+    "mesh": "/Game/Frostrail/SkeletalMeshes/BaseBody_Skeleton/SK_AkumaH_World",
+    "firstPersonMesh": "/Game/Frostrail/SkeletalMeshes/BaseBody_Skeleton/SK_AkumaH_Hands",
+    "firstPersonBodyMesh": "/Game/Frostrail/SkeletalMeshes/BaseBody_Skeleton/SK_AkumaH_Torso",
+    "firstPersonBodyLean": -24,
+    "hideFirstPersonBodyWhenCrouched": true,
+    "albedo": "assets/akumako-halloween/albedo.png",
+    "surface": "assets/rough-nonmetal.png",
+    "reference": "assets/akumako-halloween/bones.json",
+    "stockReference": "assets/stock-reference.json",
+    "boneCount": 74,
+    "hideBackByDefault": true
+  },
+  {
+    "id": "arisu",
+    "name": {
+      "zh": "波覇ありす",
+      "en": "波覇ありす"
+    },
+    "mesh": "/Game/Frostrail/SkeletalMeshes/BaseBody_Skeleton/SK_Arisu1_World",
+    "firstPersonMesh": "/Game/Frostrail/SkeletalMeshes/BaseBody_Skeleton/SK_Arisu1_Hands",
+    "firstPersonBodyMesh": "/Game/Frostrail/SkeletalMeshes/BaseBody_Skeleton/SK_Arisu1_Torso",
+    "firstPersonBodyLean": -24,
+    "hideFirstPersonBodyWhenCrouched": true,
+    "albedo": "assets/arisu/albedo.png",
+    "surface": "assets/rough-nonmetal.png",
+    "reference": "assets/arisu/bones.json",
+    "stockReference": "assets/stock-reference.json",
+    "boneCount": 74,
+    "hideBackByDefault": true
+  },
+  {
+    "id": "succubus-isozaki",
+    "name": {
+      "zh": "SuccubuS",
+      "en": "SuccubuS"
+    },
+    "mesh": "/Game/Frostrail/SkeletalMeshes/BaseBody_Skeleton/SK_Succo1_World",
+    "firstPersonMesh": "/Game/Frostrail/SkeletalMeshes/BaseBody_Skeleton/SK_Succo1_Hands",
+    "firstPersonBodyMesh": "/Game/Frostrail/SkeletalMeshes/BaseBody_Skeleton/SK_Succo1_Torso",
+    "firstPersonBodyLean": -24,
+    "hideFirstPersonBodyWhenCrouched": true,
+    "albedo": "assets/succubus-isozaki/albedo.png",
+    "surface": "assets/rough-nonmetal.png",
+    "reference": "assets/succubus-isozaki/bones.json",
+    "stockReference": "assets/stock-reference.json",
+    "boneCount": 74,
+    "hideBackByDefault": true
+  },
+  {
+    "id": "female-knight",
+    "name": {
+      "zh": "女骑士",
+      "en": "Female Knight"
+    },
+    "mesh": "/Game/Frostrail/SkeletalMeshes/BaseBody_Skeleton/SK_FKnigh_World",
+    "firstPersonMesh": "/Game/Frostrail/SkeletalMeshes/BaseBody_Skeleton/SK_FKnigh_Hands",
+    "firstPersonBodyMesh": "/Game/Frostrail/SkeletalMeshes/BaseBody_Skeleton/SK_FKnigh_Torso",
+    "firstPersonBodyLean": -24,
+    "hideFirstPersonBodyWhenCrouched": true,
+    "albedo": "assets/female-knight/albedo.png",
+    "surface": "assets/rough-nonmetal.png",
+    "reference": "assets/female-knight/bones.json",
+    "stockReference": "assets/stock-reference.json",
+    "boneCount": 74,
+    "hideBackByDefault": true
+  },
+  {
+    "id": "kiyria",
+    "name": {
+      "zh": "kiyria",
+      "en": "kiyria"
+    },
+    "mesh": "/Game/Frostrail/SkeletalMeshes/BaseBody_Skeleton/SK_Kiyria_World",
+    "firstPersonMesh": "/Game/Frostrail/SkeletalMeshes/BaseBody_Skeleton/SK_Kiyria_Hands",
+    "firstPersonBodyMesh": "/Game/Frostrail/SkeletalMeshes/BaseBody_Skeleton/SK_Kiyria_Torso",
+    "firstPersonBodyLean": -24,
+    "hideFirstPersonBodyWhenCrouched": true,
+    "albedo": "assets/kiyria/albedo.png",
+    "surface": "assets/rough-nonmetal.png",
+    "reference": "assets/kiyria/bones.json",
+    "stockReference": "assets/stock-reference.json",
+    "boneCount": 74,
+    "hideBackByDefault": true
+  },
+  {
+    "id": "ayame-remi",
+    "name": {
+      "zh": "Ayame Remi · 魔女",
+      "en": "Ayame Remi · Witch"
+    },
+    "mesh": "/Game/Frostrail/SkeletalMeshes/BaseBody_Skeleton/SK_AyameR_World",
+    "firstPersonMesh": "/Game/Frostrail/SkeletalMeshes/BaseBody_Skeleton/SK_AyameR_Hands",
+    "firstPersonBodyMesh": "/Game/Frostrail/SkeletalMeshes/BaseBody_Skeleton/SK_AyameR_Torso",
+    "firstPersonBodyLean": -24,
+    "hideFirstPersonBodyWhenCrouched": true,
+    "albedo": "assets/ayame-remi/albedo.png",
+    "surface": "assets/rough-nonmetal.png",
+    "reference": "assets/ayame-remi/bones.json",
+    "stockReference": "assets/stock-reference.json",
+    "boneCount": 74,
+    "hideBackByDefault": true
+  },
+  {
+    "id": "epsilon-note",
+    "name": {
+      "zh": "エプシロン・ノート",
+      "en": "EpsilonNought"
+    },
+    "mesh": "/Game/Frostrail/SkeletalMeshes/BaseBody_Skeleton/SK_EpsiNo_World",
+    "firstPersonMesh": "/Game/Frostrail/SkeletalMeshes/BaseBody_Skeleton/SK_EpsiNo_Hands",
+    "firstPersonBodyMesh": "/Game/Frostrail/SkeletalMeshes/BaseBody_Skeleton/SK_EpsiNo_Torso",
+    "firstPersonBodyLean": -24,
+    "hideFirstPersonBodyWhenCrouched": true,
+    "albedo": "assets/epsilon-note/albedo.png",
+    "surface": "assets/rough-nonmetal.png",
+    "reference": "assets/epsilon-note/bones.json",
+    "stockReference": "assets/stock-reference.json",
+    "boneCount": 74,
+    "hideBackByDefault": true
+  },
+  {
+    "id": "ogura-komachi",
+    "name": {
+      "zh": "小倉小町",
+      "en": "Ogura Komachi"
+    },
+    "mesh": "/Game/Frostrail/SkeletalMeshes/BaseBody_Skeleton/SK_OguraK_World",
+    "firstPersonMesh": "/Game/Frostrail/SkeletalMeshes/BaseBody_Skeleton/SK_OguraK_Hands",
+    "firstPersonBodyMesh": "/Game/Frostrail/SkeletalMeshes/BaseBody_Skeleton/SK_OguraK_Torso",
+    "firstPersonBodyLean": -24,
+    "hideFirstPersonBodyWhenCrouched": true,
+    "albedo": "assets/ogura-komachi/albedo.png",
+    "surface": "assets/rough-nonmetal.png",
+    "reference": "assets/ogura-komachi/bones.json",
+    "stockReference": "assets/stock-reference.json",
+    "boneCount": 74,
+    "hideBackByDefault": true
+  },
+  {
+    "id": "yata-miruku",
+    "name": {
+      "zh": "八咫みるく",
+      "en": "Yata Miruku"
+    },
+    "mesh": "/Game/Frostrail/SkeletalMeshes/BaseBody_Skeleton/SK_YataMi_World",
+    "firstPersonMesh": "/Game/Frostrail/SkeletalMeshes/BaseBody_Skeleton/SK_YataMi_Hands",
+    "firstPersonBodyMesh": "/Game/Frostrail/SkeletalMeshes/BaseBody_Skeleton/SK_YataMi_Torso",
+    "firstPersonBodyLean": -24,
+    "hideFirstPersonBodyWhenCrouched": true,
+    "albedo": "assets/yata-miruku/albedo.png",
+    "surface": "assets/rough-nonmetal.png",
+    "reference": "assets/yata-miruku/bones.json",
+    "stockReference": "assets/stock-reference.json",
+    "boneCount": 74,
+    "hideBackByDefault": true
+  },
+  {
+    "id": "himeme-hime",
+    "name": {
+      "zh": "姫廻ヒメ",
+      "en": "Himeme Hime"
+    },
+    "mesh": "/Game/Frostrail/SkeletalMeshes/BaseBody_Skeleton/SK_Himeme_World",
+    "firstPersonMesh": "/Game/Frostrail/SkeletalMeshes/BaseBody_Skeleton/SK_Himeme_Hands",
+    "firstPersonBodyMesh": "/Game/Frostrail/SkeletalMeshes/BaseBody_Skeleton/SK_Himeme_Torso",
+    "firstPersonBodyLean": -24,
+    "hideFirstPersonBodyWhenCrouched": true,
+    "albedo": "assets/himeme-hime/albedo.png",
+    "surface": "assets/rough-nonmetal.png",
+    "reference": "assets/himeme-hime/bones.json",
+    "stockReference": "assets/stock-reference.json",
+    "previewWeaponOnBack": true,
+    "boneCount": 74,
+    "hideBackByDefault": true
+  },
+  {
+    "id": "waka",
+    "name": {
+      "zh": "羽霞 Waka",
+      "en": "Waka"
+    },
+    "mesh": "/Game/Frostrail/SkeletalMeshes/BaseBody_Skeleton/SK_Waka01_World",
+    "firstPersonMesh": "/Game/Frostrail/SkeletalMeshes/BaseBody_Skeleton/SK_Waka01_Hands",
+    "firstPersonBodyMesh": "/Game/Frostrail/SkeletalMeshes/BaseBody_Skeleton/SK_Waka01_Torso",
+    "firstPersonBodyLean": -24,
+    "hideFirstPersonBodyWhenCrouched": true,
+    "albedo": "assets/waka/albedo.png",
+    "surface": "assets/rough-nonmetal.png",
+    "reference": "assets/waka/bones.json",
+    "stockReference": "assets/stock-reference.json",
+    "boneCount": 74,
+    "hideBackByDefault": true
+  },
+  {
+    "id": "meruha",
+    "name": {
+      "zh": "めるは",
+      "en": "Meruha"
+    },
+    "mesh": "/Game/Frostrail/SkeletalMeshes/BaseBody_Skeleton/SK_Meruha_World",
+    "firstPersonMesh": "/Game/Frostrail/SkeletalMeshes/BaseBody_Skeleton/SK_Meruha_Hands",
+    "firstPersonBodyMesh": "/Game/Frostrail/SkeletalMeshes/BaseBody_Skeleton/SK_Meruha_Torso",
+    "firstPersonBodyLean": -24,
+    "hideFirstPersonBodyWhenCrouched": true,
+    "albedo": "assets/meruha/albedo.png",
+    "surface": "assets/rough-nonmetal.png",
+    "reference": "assets/meruha/bones.json",
+    "stockReference": "assets/stock-reference.json",
+    "boneCount": 74,
+    "hideBackByDefault": true
+  }
+]

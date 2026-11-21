@@ -1,0 +1,12 @@
+{
+  "id": "FrostrailSkinsPack2",
+  "name": {"zh": "人物皮肤 · 扩展二", "en": "Character Skins · Pack 2"},
+  "version": "0.1.0",
+  "author": "Yuuka",
+  "description": {
+    "zh": "给人物皮肤菜单加十三款人物，包括 Ao、波覇ありす、SuccubuS、姫廻ヒメ和めるは。",
+    "en": "Add thirteen characters to the Character Skins menu, including Ao, 波覇ありす, SuccubuS, Himeme Hime and Meruha."
+  },
+  "requires": ["FrostrailSkins"],
+  "update": "https://github.com/yakumo-hx/Frostrail-UE4SS-Mods"
+}

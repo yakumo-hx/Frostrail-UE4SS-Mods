@@ -6,6 +6,7 @@ local renderer=C.class("/Script/Engine.Default__KismetRenderingLibrary")
 local skeletal=C.class("/Script/Engine.SkeletalMeshComponent")
 local poseable=C.class("/Script/Engine.PoseableMeshComponent")
 local none=FName("None")
+local handSockets={S_Weapon_R=FName("S_Weapon_R"),S_Weapon_L=FName("S_Weapon_L")}
 local identity={Rotation={X=0,Y=0,Z=0,W=1},Translation={X=0,Y=0,Z=0},Scale3D={X=1,Y=1,Z=1}}
 local materialPath="/Game/Frostrail/SkeletalMeshes/BaseBody_Skeleton/Materials/Clothes/Player/Tier2/LeatherSet/MI_Player_Leather_Set_01"
 local backSlotPath="/Game/Frostrail/Data/Types/EquipmentSlots/EquipmentSlot_Back.EquipmentSlot_Back_C"
@@ -118,10 +119,18 @@ local function hide(view,component,seen)
     end
 end
 
+local function restoreHeld(view,item)
+    if alive(item) and alive(view.follower) and alive(view.leader)
+        and C.same(item.object:GetAttachParent(),view.follower.object) then
+        item.object:K2_AttachToComponent(view.leader.object,item.socket,0,0,0,false)
+    end
+end
+
 local function release(key)
     local view=views[key]
     if not view then return end
     views[key]=nil
+    for _,item in pairs(view.held or {}) do restoreHeld(view,item) end
     if alive(view.follower) and alive(view.owner) then
         view.follower.object:K2_DestroyComponent(view.owner.object)
     end
@@ -152,6 +161,31 @@ local function attach(key,owner,leader,skin,world)
     end)
     if not ok then release(key); error(err) end
     return view
+end
+
+local function syncHeld(view,parts)
+    local leader,follower=view.leader.object,view.follower.object
+    local held={}
+    for _,part in ipairs(parts) do
+        local parent=part:GetAttachParent()
+        local socket=handSockets[part:GetAttachSocketName():ToString()]
+        if C.same(parent,follower) or (C.same(parent,leader) and follower:DoesSocketExist(socket)
+            and part:K2_AttachToComponent(follower,socket,0,0,0,false)) then
+            local item=remember(part)
+            item.socket=socket
+            held[item.name]=item
+        end
+    end
+    for key,item in pairs(view.held or {}) do
+        if not held[key] then restoreHeld(view,item) end
+    end
+    view.held=held
+    local carrying=next(held)~=nil
+    if carrying~=view.carrying then
+        if carrying then pose.hold(C,view.rig,follower)
+        elseif view.carrying then pose.update(view.rig,leader,follower) end
+    end
+    view.carrying=carrying
 end
 
 local function viewFor(key,owner,leader,skin,world)
@@ -194,6 +228,7 @@ local function syncPreview(display,owner)
     local view=viewFor(key,proxy,body,previewSkin,false)
     local outfits={}
     local seen={}
+    local held={}
     if view then
         if not view.stage then view.stage=display:GetLevel().OwningWorld:GetFName():ToString() end
         for _,field in ipairs({"HeadComponent","TorsoComponent","LegsComponent"}) do
@@ -212,6 +247,8 @@ local function syncPreview(display,owner)
         local socket=part:GetAttachSocketName():ToString()
         if socket=="S_Back" then
             if view and not showPreviewBack then hide(view,part,seen) end
+        elseif view and handSockets[socket] then
+            held[#held+1]=part
         elseif part:IsA(skeletal) then
             local mesh=part:GetSkinnedAsset()
             if C.valid(mesh) then
@@ -225,7 +262,10 @@ local function syncPreview(display,owner)
             end
         end
     end)
-    if view then finishHide(view,seen) end
+    if view then
+        syncHeld(view,held)
+        finishHide(view,seen)
+    end
 end
 
 local function refresh()
@@ -281,7 +321,7 @@ local function animate()
     for _,view in pairs(views) do
         local visible
         if view.world then visible=worldCouldShow(view) and view.follower.object:WasRecentlyRendered(0.20)
-        else visible=activeStage~=nil and view.stage==activeStage and alive(view.follower) end
+        else visible=not view.carrying and activeStage~=nil and view.stage==activeStage and alive(view.follower) end
         if visible and alive(view.leader) then pose.update(view.rig,view.leader.object,view.follower.object) end
     end
 end

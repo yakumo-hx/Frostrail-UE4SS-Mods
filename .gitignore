@@ -29,6 +29,9 @@ venv/
 !mods/FrostrailSkins/assets/**/*.pak
 !mods/FrostrailSkins/assets/**/*.utoc
 !mods/FrostrailSkins/assets/**/*.ucas
+!mods/FrostrailSkinsFan/assets/**/*.pak
+!mods/FrostrailSkinsFan/assets/**/*.utoc
+!mods/FrostrailSkinsFan/assets/**/*.ucas
 *.usmap
 *.jmap
 *.sav

@@ -1,0 +1,38 @@
+[
+  {
+    "id": "meltical-witch",
+    "name": {
+      "zh": "Meltical · 魔女",
+      "en": "Meltical · Witch"
+    },
+    "mesh": "/Game/Frostrail/SkeletalMeshes/BaseBody_Skeleton/SK_MeltWi_World",
+    "firstPersonMesh": "/Game/Frostrail/SkeletalMeshes/BaseBody_Skeleton/SK_MeltWi_Hands",
+    "firstPersonBodyMesh": "/Game/Frostrail/SkeletalMeshes/BaseBody_Skeleton/SK_MeltWi_Torso",
+    "firstPersonBodyLean": -24,
+    "hideFirstPersonBodyWhenCrouched": true,
+    "albedo": "assets/meltical-witch/albedo.png",
+    "surface": "assets/rough-nonmetal.png",
+    "reference": "assets/meltical-witch/bones.json",
+    "stockReference": "assets/stock-reference.json",
+    "boneCount": 74,
+    "hideBackByDefault": true
+  },
+  {
+    "id": "naiwa",
+    "name": {
+      "zh": "黄色奶蛙",
+      "en": "Yellow Milk Frog"
+    },
+    "mesh": "/Game/Frostrail/SkeletalMeshes/BaseBody_Skeleton/SK_NaiWa1_World",
+    "firstPersonMesh": "/Game/Frostrail/SkeletalMeshes/BaseBody_Skeleton/SK_NaiWa1_Hands",
+    "firstPersonBodyMesh": "/Game/Frostrail/SkeletalMeshes/BaseBody_Skeleton/SK_NaiWa1_Torso",
+    "firstPersonBodyLean": -24,
+    "hideFirstPersonBodyWhenCrouched": true,
+    "albedo": "assets/naiwa/albedo.png",
+    "surface": "assets/rough-nonmetal.png",
+    "reference": "assets/naiwa/bones.json",
+    "stockReference": "assets/stock-reference.json",
+    "boneCount": 74,
+    "hideBackByDefault": true
+  }
+]

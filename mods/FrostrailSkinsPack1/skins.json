@@ -1,0 +1,92 @@
+[
+  {
+    "id": "celeste",
+    "name": {
+      "zh": "Celeste",
+      "en": "Celeste"
+    },
+    "mesh": "/Game/Frostrail/SkeletalMeshes/BaseBody_Skeleton/SK_Celest_World",
+    "firstPersonMesh": "/Game/Frostrail/SkeletalMeshes/BaseBody_Skeleton/SK_Celest_Hands",
+    "firstPersonBodyMesh": "/Game/Frostrail/SkeletalMeshes/BaseBody_Skeleton/SK_Celest_Torso",
+    "firstPersonBodyLean": -24,
+    "hideFirstPersonBodyWhenCrouched": true,
+    "albedo": "assets/celeste/albedo.png",
+    "surface": "assets/rough-nonmetal.png",
+    "reference": "assets/celeste/bones.json",
+    "stockReference": "assets/stock-reference.json",
+    "boneCount": 74,
+    "hideBackByDefault": true
+  },
+  {
+    "id": "twf-2",
+    "name": {
+      "zh": "Twf 2.0",
+      "en": "Twf 2.0"
+    },
+    "mesh": "/Game/Frostrail/SkeletalMeshes/BaseBody_Skeleton/SK_Twf002_World",
+    "firstPersonMesh": "/Game/Frostrail/SkeletalMeshes/BaseBody_Skeleton/SK_Twf002_Hands",
+    "firstPersonBodyMesh": "/Game/Frostrail/SkeletalMeshes/BaseBody_Skeleton/SK_Twf002_Torso",
+    "firstPersonBodyLean": -24,
+    "hideFirstPersonBodyWhenCrouched": true,
+    "albedo": "assets/twf-2/albedo.png",
+    "surface": "assets/rough-nonmetal.png",
+    "reference": "assets/twf-2/bones.json",
+    "stockReference": "assets/stock-reference.json",
+    "boneCount": 74,
+    "hideBackByDefault": true
+  },
+  {
+    "id": "vfg-1",
+    "name": {
+      "zh": "Vfg 1.0",
+      "en": "Vfg 1.0"
+    },
+    "mesh": "/Game/Frostrail/SkeletalMeshes/BaseBody_Skeleton/SK_Vfg001_World",
+    "firstPersonMesh": "/Game/Frostrail/SkeletalMeshes/BaseBody_Skeleton/SK_Vfg001_Hands",
+    "firstPersonBodyMesh": "/Game/Frostrail/SkeletalMeshes/BaseBody_Skeleton/SK_Vfg001_Torso",
+    "firstPersonBodyLean": -24,
+    "hideFirstPersonBodyWhenCrouched": true,
+    "albedo": "assets/vfg-1/albedo.png",
+    "surface": "assets/rough-nonmetal.png",
+    "reference": "assets/vfg-1/bones.json",
+    "stockReference": "assets/stock-reference.json",
+    "boneCount": 74,
+    "hideBackByDefault": true
+  },
+  {
+    "id": "laverisse",
+    "name": {
+      "zh": "Laverisse",
+      "en": "Laverisse"
+    },
+    "mesh": "/Game/Frostrail/SkeletalMeshes/BaseBody_Skeleton/SK_Lavris_World",
+    "firstPersonMesh": "/Game/Frostrail/SkeletalMeshes/BaseBody_Skeleton/SK_Lavris_Hands",
+    "firstPersonBodyMesh": "/Game/Frostrail/SkeletalMeshes/BaseBody_Skeleton/SK_Lavris_Torso",
+    "firstPersonBodyLean": -24,
+    "hideFirstPersonBodyWhenCrouched": true,
+    "albedo": "assets/laverisse/albedo.png",
+    "surface": "assets/rough-nonmetal.png",
+    "reference": "assets/laverisse/bones.json",
+    "stockReference": "assets/stock-reference.json",
+    "boneCount": 74,
+    "hideBackByDefault": true
+  },
+  {
+    "id": "eld-1",
+    "name": {
+      "zh": "Eld 1.0",
+      "en": "Eld 1.0"
+    },
+    "mesh": "/Game/Frostrail/SkeletalMeshes/BaseBody_Skeleton/SK_Eld001_World",
+    "firstPersonMesh": "/Game/Frostrail/SkeletalMeshes/BaseBody_Skeleton/SK_Eld001_Hands",
+    "firstPersonBodyMesh": "/Game/Frostrail/SkeletalMeshes/BaseBody_Skeleton/SK_Eld001_Torso",
+    "firstPersonBodyLean": -24,
+    "hideFirstPersonBodyWhenCrouched": true,
+    "albedo": "assets/eld-1/albedo.png",
+    "surface": "assets/rough-nonmetal.png",
+    "reference": "assets/eld-1/bones.json",
+    "stockReference": "assets/stock-reference.json",
+    "boneCount": 74,
+    "hideBackByDefault": true
+  }
+]

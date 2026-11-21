@@ -22,9 +22,9 @@ local function correct(q,c,out)
 end
 
 function M.read(C,skin)
-    local original=C.config.read(C.dir.."/"..skin.stockReference).bones
-    local authored=C.config.read(C.dir.."/"..skin.reference).bones
-    local rig,byName={},{}
+    local original=C.readSkinJson(skin.stockReference).bones
+    local authored=C.readSkinJson(skin.reference).bones
+    local rig,byName={reference=authored,weaponOnBack=skin.previewWeaponOnBack},{}
     for i=1,skin.boneCount or #authored do
         local a,b=original[i],authored[i]
         assert(a.name==b.name and a.parent==b.parent,"Skin skeleton mismatch at "..b.name)
@@ -34,6 +34,85 @@ function M.read(C,skin)
         rig[i],byName[b.name]=bone,bone
     end
     return rig
+end
+
+local function xyzw(q) return {X=q[1],Y=q[2],Z=q[3],W=q[4]} end
+local function xyz(v) return {X=v[1],Y=v[2],Z=v[3]} end
+local function product(a,b)
+    local out={}
+    correct(a,{b.X,b.Y,b.Z,b.W},out)
+    return out
+end
+
+local function rotateBranch(joint,pivot,delta)
+    local t=joint.transform
+    local pos=t.Translation
+    local x,y,z=rotate(delta,pos.X-pivot.X,pos.Y-pivot.Y,pos.Z-pivot.Z)
+    t.Translation={X=pivot.X+x,Y=pivot.Y+y,Z=pivot.Z+z}
+    t.Rotation=product(delta,t.Rotation)
+    for _,child in ipairs(joint.children) do rotateBranch(child,pivot,delta) end
+end
+
+local function heldPose(C,rig)
+    local joints,byName={},{}
+    for i=1,#rig do
+        local bone=rig.reference[i]
+        local t={Rotation=xyzw(bone.rotation_xyzw),Translation=xyz(bone.translation_cm),Scale3D=xyz(bone.scale)}
+        local joint={transform=t,children={}}
+        local parent=byName[bone.parent]
+        if parent then
+            local p=parent.transform
+            local v,s=t.Translation,p.Scale3D
+            local x,y,z=rotate(p.Rotation,v.X*s.X,v.Y*s.Y,v.Z*s.Z)
+            t.Translation={X=p.Translation.X+x,Y=p.Translation.Y+y,Z=p.Translation.Z+z}
+            t.Rotation=product(p.Rotation,t.Rotation)
+            t.Scale3D={X=s.X*t.Scale3D.X,Y=s.Y*t.Scale3D.Y,Z=s.Z*t.Scale3D.Z}
+            parent.children[#parent.children+1]=joint
+        end
+        joints[i],byName[bone.name]=joint,joint
+    end
+    local mathLib=C.class("/Script/Engine.Default__KismetMathLibrary")
+    local function bend(joint,child,direction)
+        local pivot,to=joint.transform.Translation,child.transform.Translation
+        local delta=mathLib:Quat_FindBetweenVectors({X=to.X-pivot.X,Y=to.Y-pivot.Y,Z=to.Z-pivot.Z},direction)
+        rotateBranch(joint,pivot,delta)
+    end
+    for _,side in ipairs({"l","r"}) do
+        local sign=side=="l" and 1 or -1
+        local upper,elbow,hand=byName["upperarm_"..side],byName["lowerarm_"..side],byName["hand_"..side]
+        local grip=byName["weapon_"..side].transform
+        local along,up
+        if rig.weaponOnBack then
+            -- An outfit with hands in pockets can show the weapon against its back.
+            local shoulder=upper.transform.Translation
+            local hip=byName.pelvis.transform.Translation
+            grip.Translation={X=shoulder.X,Y=shoulder.Y-19,Z=(shoulder.Z+hip.Z)*.5+4}
+            along,up={X=sign*.42,Y=0,Z=-.91},{X=0,Y=-1,Z=0}
+        else
+            -- Lower the arms outside the torso using each mesh's authored arm lengths.
+            bend(upper,elbow,{X=sign*.51,Y=.14,Z=-.85})
+            bend(elbow,hand,{X=sign*.38,Y=.5,Z=-.77})
+            local wrist,knuckle=hand.transform.Translation,byName["middle_01_"..side].transform.Translation
+            -- Keep the stock and receiver to the outside of the forearm.
+            grip.Translation={X=(wrist.X+knuckle.X)*.5+sign*3,Y=(wrist.Y+knuckle.Y)*.5,Z=(wrist.Z+knuckle.Z)*.5}
+            along,up={X=-sign*.24,Y=.28,Z=-.93},{X=sign*.55,Y=0,Z=1}
+        end
+        local q=mathLib:Conv_RotatorToQuaternion(mathLib:MakeRotFromXZ(along,up))
+        grip.Rotation={X=q.X,Y=q.Y,Z=q.Z,W=q.W}
+    end
+    local transforms={}
+    for i,joint in ipairs(joints) do transforms[i]=joint.transform end
+    return transforms
+end
+
+function M.hold(C,rig,follower)
+    if not rig.held then
+        rig.held=heldPose(C,rig)
+        rig.reference=nil
+    end
+    for i,transform in ipairs(rig.held) do
+        follower:SetBoneTransformByName(rig[i].key,transform,1)
+    end
 end
 
 function M.update(rig,leader,follower)

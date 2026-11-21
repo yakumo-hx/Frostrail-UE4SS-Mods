@@ -1,5 +1,6 @@
 local M={title="辅助",marked={},materials={}}
 local outline_bits={items=8,containers=16,cellars=32,enemies=32}
+local salvageable_package="/Game/Frostrail/Blueprints/Interactables/Salvageables/BP_Salvageable_Base"
 local function stencil(mesh,bit,on)
     StaticFindObject("/Script/Frostrail.Default__FXUtils"):SetMeshStencilBit(mesh,bit,on,true)
 end
@@ -260,10 +261,20 @@ function M:scan()
             for _,a in ipairs(FindAllOf("GatherableActor") or {}) do
                 if not a.bHasGathered and a:CanGather() then mark(a,"items") end
             end
+            local salvageable
             for _,repair in ipairs(FindAllOf("RepairComponent") or {}) do
+                if not salvageable then
+                    -- A client can have repair components before any wild salvage class is loaded.
+                    -- Resolve the loaded class once this scan; IsA(path) repeats a costly miss for each owner.
+                    local library=C.class("/Script/Engine.Default__KismetSystemLibrary")
+                    local ref=library:Conv_SoftClassPathToSoftClassRef({AssetPath={
+                        PackageName=FName(salvageable_package),AssetName=FName("BP_Salvageable_Base_C")}})
+                    salvageable=library:Conv_SoftClassReferenceToClass(ref)
+                    if not C.valid(salvageable) then break end
+                end
                 local owner=repair:GetOwner()
                 if C.valid(owner)
-                    and owner:IsA("/Game/Frostrail/Blueprints/Interactables/Salvageables/BP_Salvageable_Base.BP_Salvageable_Base_C")
+                    and owner:IsA(salvageable)
                     and owner:GetDistanceTo(C.pawn)<=self.cfg.range_m*100
                     and self:has_salvage(repair) then mark(owner,"items") end
             end

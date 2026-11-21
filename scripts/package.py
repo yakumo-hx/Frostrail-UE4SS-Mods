@@ -9,6 +9,13 @@ BASE = Path('Frostrail/Binaries/Win64')
 RUNTIME = ROOT / 'tools/ue4ss-3.0.1-1183'
 
 
+SKIN_ADDONS = {
+    'FrostrailSkinsPack1': '01-pack1',
+    'FrostrailSkinsPack2': '02-pack2',
+    'FrostrailSkinsFan': '03-fan',
+}
+
+
 def build(package_id, output_dir=None):
     source_root = ROOT / 'mods' / package_id
     manifest = json.loads((source_root / 'mod.json').read_text(encoding='utf-8-sig'))
@@ -23,22 +30,28 @@ def build(package_id, output_dir=None):
         for source in (ROOT / 'mods/shared/Frostrail').rglob('*.lua'):
             add(source, BASE / 'ue4ss/Mods/shared/Frostrail' / source.relative_to(ROOT / 'mods/shared/Frostrail'))
     destination = BASE / 'ue4ss/Mods' / package_id if package_id == 'FrostrailCore' else Path(package_id)
+    if package_id in SKIN_ADDONS:
+        destination = BASE / 'ue4ss/Mods/FrostrailSkins/addons' / SKIN_ADDONS[package_id]
     if package_id == 'FrostrailDemoContinue':
         add(source_root / 'Scripts/main.lua', destination / 'Scripts/main.lua')
     else:
         for source in source_root.rglob('*'):
-            if package_id == 'FrostrailSkins' and source.is_file() and source.is_relative_to(source_root / 'assets'):
+            if package_id == 'FrostrailFumo' and source.is_relative_to(source_root / 'assets'):
+                continue  # The doll mesh, textures and inventory icon are in IoStore.
+            if (package_id == 'FrostrailSkins' or package_id in SKIN_ADDONS) and source.is_file() and source.is_relative_to(source_root / 'assets'):
                 if source.suffix in ('.pak', '.utoc', '.ucas'):
                     add(source, Path(source.name))
                     continue
                 if source.suffix == '.json':
                     add(source, destination / source.relative_to(source_root))
                     continue
+            if package_id in SKIN_ADDONS and source.name == 'mod.json':
+                continue
             if source.is_file() and (source.suffix in ('.lua', '.png') or source.name.endswith('.mesh.json') or source.name in
                                    ('mod.json', 'settings.json', 'defaults.json', 'items.json', 'skins.json') or
                                    package_id == 'FrostrailArmsWW2' and source.name == 'attachments.json'):
                 add(source, destination / source.relative_to(source_root))
-    if package_id in ('FrostrailAssist', 'FrostrailItems', 'FrostrailWoodcutting', 'FrostrailFirearms', 'FrostrailArmsWW2'):
+    if package_id in ('FrostrailAssist', 'FrostrailItems', 'FrostrailWoodcutting', 'FrostrailFirearms', 'FrostrailArmsWW2', 'FrostrailFumo'):
         for ext in ('pak', 'utoc', 'ucas'):
             source = ROOT / 'build' / (package_id + '_P.' + ext)
             add(source, Path(source.name))
@@ -72,5 +85,5 @@ if __name__ == '__main__':
     parser.add_argument('--only', nargs='+', help='Build only the specified package IDs.')
     parser.add_argument('--output', type=Path, help='Place packages with different versions in one delivery directory.')
     args = parser.parse_args()
-    for package_id in args.only or ['FrostrailCore', 'FrostrailAssist', 'FrostrailCapacity', 'FrostrailAutosave', 'FrostrailItems', 'FrostrailConsole', 'FrostrailWoodcutting', 'FrostrailReanimation', 'FrostrailArmsWW2', 'FrostrailSkins']:
+    for package_id in args.only or ['FrostrailCore', 'FrostrailAssist', 'FrostrailCapacity', 'FrostrailAutosave', 'FrostrailItems', 'FrostrailConsole', 'FrostrailWoodcutting', 'FrostrailReanimation', 'FrostrailArmsWW2', 'FrostrailSkins', *SKIN_ADDONS, 'FrostrailFumo']:
         build(package_id, args.output)

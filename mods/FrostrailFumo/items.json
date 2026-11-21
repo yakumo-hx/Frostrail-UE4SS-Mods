@@ -1,0 +1,26 @@
+{
+  "root": "/Game/FrostrailMods/FrostrailFumo/",
+  "prefix": "ISCH_FF_",
+  "pickup_class": "/Game/FrostrailMods/FrostrailFumo/BP_FF_YukariPickable.BP_FF_YukariPickable_C",
+  "loot_tables": [
+    "LT_Dungeon_Tier_1",
+    "LT_Dungeon_Tier_2",
+    "LT_Dungeon_Tier_3",
+    "LT_Dungeon_Tier_4",
+    "LT_Dungeon_Tier_5"
+  ],
+  "loot_weight": 0.02,
+  "items": [
+    {
+      "id": "Yukari",
+      "name": {"zh": "八云紫娃娃", "en": "Yukari Fumo"},
+      "description": {
+        "zh": "戴着红丝带睡帽的八云紫布偶。",
+        "en": "A Yukari Yakumo plush with a red-ribbon cap."
+      },
+      "category": "Item.Category.Decor",
+      "weight": 0.2,
+      "icon": "/Game/FrostrailMods/FrostrailFumo/Icons/T_FF_Yukari"
+    }
+  ]
+}

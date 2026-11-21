@@ -1,0 +1,26 @@
+{
+  "id": "FrostrailFumo",
+  "name": {
+    "zh": "八云紫娃娃",
+    "en": "Yukari Fumo"
+  },
+  "version": "0.2.0",
+  "author": "Yuuka",
+  "description": {
+    "zh": "八云紫娃娃可在苔原地窖和地表通用杂物中找到。分拣台拆 1 只得金属锭、精炼金属、油布、线各 24 个。热值 999，可投入伊甸引擎。拾取后用锤子在装饰菜单消耗 1 只摆上列车，可旋转、搬动。用撬棍长按“拆解”收回 1 只。东方 Project 同人作品。",
+    "en": "Find Yukari Fumo in tundra dungeons and generic surface junk. Recycle one for 24 each of Metal Ingot, Refined Metal, Oilcloth and Thread. Heat value 999 in the Eden Engine. Pick one up to unlock the hammer decoration. Spend one to place it on the train, rotate or relocate it, and use a crowbar to salvage it back into your inventory. A Touhou Project fan work."
+  },
+  "requires": [
+    "FrostrailCore"
+  ],
+  "notices": {
+    "disable": {
+      "zh": "读档时如果没有本包，背包里、地上和已经摆好的八云紫娃娃都会消失。",
+      "en": "Loading a save without this package removes inventory dolls, dropped dolls and placed doll decorations."
+    },
+    "uninstall": {
+      "zh": "读档时如果没有本包，背包里、地上和已经摆好的八云紫娃娃都会消失。",
+      "en": "Loading a save without this package removes inventory dolls, dropped dolls and placed doll decorations."
+    }
+  }
+}

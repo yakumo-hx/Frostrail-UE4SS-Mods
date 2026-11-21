@@ -1,0 +1,12 @@
+{
+  "id": "FrostrailSkinsPack1",
+  "name": {"zh": "人物皮肤 · 扩展一", "en": "Character Skins · Pack 1"},
+  "version": "0.1.0",
+  "author": "Yuuka",
+  "description": {
+    "zh": "给人物皮肤菜单加五款 JustAPal 制作的人物（Celeste 与 SR 合作）：Celeste、Twf 2.0、Vfg 1.0、Laverisse、Eld 1.0。",
+    "en": "Add five characters by JustAPal (with SR on Celeste) to the Character Skins menu: Celeste, Twf 2.0, Vfg 1.0, Laverisse and Eld 1.0."
+  },
+  "requires": ["FrostrailSkins"],
+  "update": "https://github.com/yakumo-hx/Frostrail-UE4SS-Mods"
+}

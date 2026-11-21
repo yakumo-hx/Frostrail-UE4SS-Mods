@@ -1,0 +1,12 @@
+{
+  "id": "FrostrailSkinsFan",
+  "name": {"zh": "人物皮肤 · 同人", "en": "Character Skins · Fan Works"},
+  "version": "0.1.0",
+  "author": "Yuuka",
+  "description": {
+    "zh": "给人物皮肤菜单加两款同人人物：Meltical · 魔女和黄色奶蛙。",
+    "en": "Add two fan-work characters to the Character Skins menu: Meltical · Witch and Yellow Milk Frog."
+  },
+  "requires": ["FrostrailSkins"],
+  "update": "https://github.com/yakumo-hx/Frostrail-UE4SS-Mods"
+}
