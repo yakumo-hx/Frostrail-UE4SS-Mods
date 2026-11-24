@@ -1,6 +1,13 @@
 local M={title="辅助",marked={},materials={}}
 local outline_bits={items=8,containers=16,cellars=32,enemies=32}
 local salvageable_package="/Game/Frostrail/Blueprints/Interactables/Salvageables/BP_Salvageable_Base"
+local frozen_body_package="/Game/Frostrail/Blueprints/Destructibles/FrozenBodies/BP_FrozenBody_Base"
+local function loaded_class(C,package_name,class_name)
+    local library=C.class("/Script/Engine.Default__KismetSystemLibrary")
+    local ref=library:Conv_SoftClassPathToSoftClassRef({AssetPath={
+        PackageName=FName(package_name),AssetName=FName(class_name)}})
+    return library:Conv_SoftClassReferenceToClass(ref)
+end
 local function stencil(mesh,bit,on)
     StaticFindObject("/Script/Frostrail.Default__FXUtils"):SetMeshStencilBit(mesh,bit,on,true)
 end
@@ -61,10 +68,34 @@ function M:init()
 end
 function M:restore_fill(entry)
     local C=self.core
+    if C.instance(entry.body_fill,entry.body_fill_name) then
+        entry.body_fill:K2_DestroyComponent(entry.body_fill:GetOwner())
+    end
+    entry.body_fill,entry.body_fill_name=nil,nil
     if entry.fill and C.instance(entry.mesh,entry.name) and C.same(entry.mesh.OverlayMaterial,self.materials[entry.category]) then
         entry.mesh:SetOverlayMaterial(C.instance(entry.original,entry.original_name) and entry.original or nil)
     end
     entry.fill,entry.original,entry.original_name=nil,nil,nil
+end
+function M:fill_frozen_body(entry)
+    local C=self.core
+    if C.instance(entry.body_fill,entry.body_fill_name) then return end
+    -- Geometry collections ignore OverlayMaterial. All 15 stock variants provide
+    -- one static mesh for the unbroken body, aligned to the destructible component.
+    local mesh=entry.mesh
+    local collection=mesh.RestCollection
+    if not C.valid(collection) or #collection.RootProxyData.ProxyMeshes==0 then return end
+    local shape=collection.RootProxyData.ProxyMeshes[1]
+    if not C.valid(shape) then return end
+    local fill=mesh:GetOwner():AddComponentByClass(C.class("/Script/Engine.StaticMeshComponent"),true,identity,false)
+    if not C.valid(fill) then return end
+    entry.body_fill,entry.body_fill_name=fill,fill:GetFullName()
+    fill:SetCollisionEnabled(0)
+    fill:SetGenerateOverlapEvents(false)
+    fill:SetCastShadow(false)
+    fill:K2_AttachToComponent(mesh,FName("None"),2,2,2,false)
+    fill:SetStaticMesh(shape)
+    for i=0,fill:GetNumMaterials()-1 do fill:SetMaterial(i,self.materials.containers) end
 end
 function M:restore_outline(entry)
     if entry.own and self.core.instance(entry.mesh,entry.name) then stencil(entry.mesh,entry.bit,false) end
@@ -266,10 +297,7 @@ function M:scan()
                 if not salvageable then
                     -- A client can have repair components before any wild salvage class is loaded.
                     -- Resolve the loaded class once this scan; IsA(path) repeats a costly miss for each owner.
-                    local library=C.class("/Script/Engine.Default__KismetSystemLibrary")
-                    local ref=library:Conv_SoftClassPathToSoftClassRef({AssetPath={
-                        PackageName=FName(salvageable_package),AssetName=FName("BP_Salvageable_Base_C")}})
-                    salvageable=library:Conv_SoftClassReferenceToClass(ref)
+                    salvageable=loaded_class(C,salvageable_package,"BP_Salvageable_Base_C")
                     if not C.valid(salvageable) then break end
                 end
                 local owner=repair:GetOwner()
@@ -280,6 +308,22 @@ function M:scan()
             end
         end
         if self.cfg.containers then
+            local frozen_body=loaded_class(C,frozen_body_package,"BP_FrozenBody_Base_C")
+            if C.valid(frozen_body) then
+                local bodies={}
+                C.class("/Script/Engine.Default__GameplayStatics"):GetAllActorsOfClass(C.pawn,frozen_body,bodies)
+                for _,ref in ipairs(bodies) do
+                    local body=ref:get()
+                    if body.bIsAlive and not body.bIsGeometryDestroyed and body.Rime>0
+                        and body:GetDistanceTo(C.pawn)<=self.cfg.range_m*100 then
+                        local mesh=body.DestructibleComponent
+                        if C.valid(mesh) then
+                            counts.containers=counts.containers+1
+                            desired[mesh:GetAddress()]={mesh=mesh,category="containers",frozen_body=true}
+                        end
+                    end
+                end
+            end
             for _,container in ipairs(FindAllOf("ContainerComponent") or {}) do
                 local owner,inv=container:GetOwner(),container:GetInventory()
                 if C.valid(owner) and C.valid(inv) and not inv:IsEmpty()
@@ -303,6 +347,7 @@ function M:scan()
     end
     for id,entry in pairs(self.marked) do
         if not C.instance(entry.mesh,entry.name) then
+            self:restore_fill(entry)
             self.marked[id]=nil
         elseif not desired[id] then
             self:restore_mark(entry)
@@ -319,13 +364,17 @@ function M:scan()
             mark.category=entry.category
         end
         if self.cfg.highlight_fill then
-            if not mark.fill then
-                mark.original=entry.mesh.OverlayMaterial
-                mark.original_name=C.valid(mark.original) and mark.original:GetFullName() or nil
-                mark.fill=true
-            end
-            if not C.same(entry.mesh.OverlayMaterial,self.materials[entry.category]) then
-                entry.mesh:SetOverlayMaterial(self.materials[entry.category])
+            if entry.frozen_body then
+                self:fill_frozen_body(mark)
+            else
+                if not mark.fill then
+                    mark.original=entry.mesh.OverlayMaterial
+                    mark.original_name=C.valid(mark.original) and mark.original:GetFullName() or nil
+                    mark.fill=true
+                end
+                if not C.same(entry.mesh.OverlayMaterial,self.materials[entry.category]) then
+                    entry.mesh:SetOverlayMaterial(self.materials[entry.category])
+                end
             end
         else
             self:restore_fill(mark)

@@ -32,7 +32,7 @@
       "zh": "描边高亮",
       "en": "Outline highlights"
     },
-    "help": {"zh": "物品青绿、容器黄、地窖和敌人红；使用游戏原样的描边粗细和穿墙效果。", "en": "Items are teal, containers yellow, cellars and enemies red. Uses the game's outline thickness and through-wall effect."},
+    "help": {"zh": "物品青绿，容器和寒霜冻尸黄色，地窖和敌人红色。使用游戏原样的描边粗细和穿墙效果。", "en": "Items are teal, containers and frozen bodies that grant Rime are yellow, and cellars and enemies are red. Uses the game's outline thickness and through-wall effect."},
     "live": true,
     "group": {"zh": "高亮", "en": "Highlights"}
   },
@@ -61,8 +61,8 @@
   {
     "key": "containers",
     "label": {
-      "zh": "非空战利品容器",
-      "en": "Non-empty loot containers"
+      "zh": "非空容器与寒霜冻尸",
+      "en": "Non-empty loot containers and Rime bodies"
     },
     "live": true,
     "group": {
